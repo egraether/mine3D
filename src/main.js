@@ -28,9 +28,7 @@ function init() {
 
 function draw() {
 
-	// requestAnimationFrame(run, canvas);
-
-	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+	requestAnimationFrame( draw, canvas );
 
 	Game.draw( gl );
 

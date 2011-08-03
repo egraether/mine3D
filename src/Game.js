@@ -14,9 +14,15 @@ var Game = {
 
 	draw : function( gl ) {
 
-		gl.matrix = Camera.getMvMatrix();
+		if ( Camera.update ) {
 
-		Grid.draw( gl );
+			gl.matrix = Camera.getMvMatrix();
+
+			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+			Grid.draw( gl );
+
+		}
 
 	}
 
