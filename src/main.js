@@ -24,7 +24,7 @@ function init() {
 
 	Game.init( gl );
 
-}
+};
 
 function draw() {
 
@@ -34,7 +34,7 @@ function draw() {
 
 	Game.draw( gl );
 
-}
+};
 
 window.onload = function () {
 

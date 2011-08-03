@@ -8,11 +8,13 @@ var Game = {
 		Camera.init( gl );
 		gl.uniformMatrix4fv( Cube.shader.pMatrixUniform, false, Camera.pMatrix );
 
+		InputHandler.init();
+
 	},
 
 	draw : function( gl ) {
 
-		gl.matrix = Camera.mvMatrix;
+		gl.matrix = Camera.getMvMatrix();
 
 		Grid.draw( gl );
 
