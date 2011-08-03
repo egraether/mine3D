@@ -22,6 +22,8 @@ function init() {
 	gl.enable( gl.DEPTH_TEST );
 
 
+	Cube.init();
+	Grid.init();
 	Game.init( gl );
 
 }
