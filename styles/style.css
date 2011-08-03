@@ -1,3 +1,9 @@
 body {
-	background-color : black;
+	overflow : hidden;
+}
+
+#container {
+	position : absolute;
+	top: 0px;
+	left: 0px;
 }
