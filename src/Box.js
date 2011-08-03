@@ -66,6 +66,17 @@ Box.prototype = {
 
 		}
 
+	},
+
+	draw : function( gl ) {
+
+		gl.pushMatrix();
+		mat4.translate(gl.matrix, this.position);
+
+		this.cube.draw( gl );
+
+		gl.popMatrix();
+
 	}
 
 };

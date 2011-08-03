@@ -274,6 +274,18 @@ var Grid = {
 
 		this.minesSet = true;
 
+	},
+
+	draw : function(gl) {
+
+		var i, elements = this.elements;
+
+		for ( i = 0; i < elements.length; i++ ) {
+
+			elements[i].draw( gl );
+
+		}
+
 	}
 
 };

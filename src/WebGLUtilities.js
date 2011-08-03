@@ -117,9 +117,15 @@ var WebGLUtilities = {
 
 	matrixStack : [],
 
-	pushMatrix : function( matrix ) {
+	matrix : null,
 
-		this.matrixStack.push( mat4.create( matrix ) );
+	pushMatrix : function() {
+
+		var m = mat4.create( this.matrix );
+
+		this.matrixStack.push( this.matrix );
+
+		this.matrix = m;
 
 	},
 
@@ -131,7 +137,7 @@ var WebGLUtilities = {
 
 		}
 
-		return this.matrixStack.pop();
+		this.matrix = this.matrixStack.pop();
 
 	},
 

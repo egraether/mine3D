@@ -22,8 +22,6 @@ function init() {
 	gl.enable( gl.DEPTH_TEST );
 
 
-	Cube.init();
-	Grid.init();
 	Game.init( gl );
 
 }
@@ -31,6 +29,8 @@ function init() {
 function draw() {
 
 	// requestAnimationFrame(run, canvas);
+
+	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
 	Game.draw( gl );
 

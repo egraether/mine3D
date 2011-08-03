@@ -1,14 +1,50 @@
 <!doctype html>
 <html lang=en>
 <head>
-    <meta name="author" content="Eberhard Gräther">
-    <title>mine3D</title>
-    
-    <link rel="stylesheet" media="all" href="styles/style.css"/>
+	<meta name="author" content="Eberhard Gräther">
+	<title>mine3D</title>
+	
+	<link rel="stylesheet" media="all" href="styles/style.css"/>
 </head>
 <body>
 
-    <div id="container"></div>
+	<div id="container"></div>
+	
+<script id="cube-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
+
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+
+	attribute vec3 aPosition;
+	attribute vec3 aColor;
+
+	varying vec4 vColor;
+
+	void main( void ) {
+
+		gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, 1.0 );
+
+		vColor = vec4( aColor, 1.0 );
+
+	}
+
+</script>
+
+<script id="cube-fragment-shader" type="x-shader/x-fragment" charset="utf-8">
+
+	#ifdef GL_ES
+		precision highp float;
+	#endif
+
+	varying vec4 vColor;
+
+	void main(void) {
+
+		gl_FragColor = vColor;
+
+	}
+
+</script>
 
 <script type="text/javascript" charset="utf-8" src="lib/requestAnimationFrame.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/glMatrix.js"></script>
@@ -20,6 +56,7 @@
 <script type="text/javascript" charset="utf-8" src="src/Face.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Box.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Grid.js"></script>
+<script type="text/javascript" charset="utf-8" src="src/Camera.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Game.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/main.js"></script>
 

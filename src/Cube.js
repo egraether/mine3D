@@ -2,6 +2,7 @@ var Cube = function( box ) {
 
 	this.box = box;
 	this.vertices = [];
+	// this.colors = [];
 
 	var i;
 
@@ -12,6 +13,8 @@ var Cube = function( box ) {
 			Cube.vertexVectors[i],
 			vec3.create()
 		) );
+
+		// this.colors.push( Cube.colors[Math.floor( i / 6 ) % 3] );
 
 	}
 
@@ -86,184 +89,308 @@ Cube.prototype = {
 
 		return false;
 
+	},
+
+	draw : function( gl ) {
+
+		var shader = Cube.shader;
+
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.vertexBuffer );
+		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.colorBuffer );
+		gl.vertexAttribPointer( shader.colorAttribute, 3, gl.FLOAT, false, 0, 0 );
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Cube.indexBuffer );
+		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
 	}
+
+	// updateToArray : function( values, array, offset ) {
+	// 
+	// 	var i, j,
+	// 		value;
+	// 
+	// 	for ( i = 0; i < 24; i++ ) {
+	// 
+	// 		j = i * 3 + offset;
+	// 		value = values[i];
+	// 
+	// 		array[j] = value[0];
+	// 		array[j + 1] = value[1];
+	// 		array[j + 2] = value[2];
+	// 
+	// 	}
+	// 
+	// },
+	// 
+	// updateToBuffer : function( gl, values, buffer ) {
+	// 
+	// 	var array = new Float32Array(  );
+	// 
+	// 	this.updateToArray( values, array, 0 );
+	// 
+	// 	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
+	// 	gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+	// 
+	// }
 
 };
 
-Cube.init = function() {
+extend( Cube, {
 
-	this.vertices = new Float32Array([
+	init : function( gl ) {
 
-		// front
-		1, 1, 1,
-		1, -1, 1,
-		1, -1, -1,
-		1, 1, -1,
+		this.initShader( gl );
+		this.initGeometry();
+		this.initBuffers( gl );
 
-		// back
-		-1, 1, 1,
-		-1, 1, -1,
-		-1, -1, -1,
-		-1, -1, 1,
+	},
 
-		// right
-		1, 1, 1,
-		1, 1, -1,
-		-1, 1, -1,
-		-1, 1, 1,
+	// setupArrays : function( gl, elements ) {
+	// 
+	// 	var i, cube, offset, len = elements.length;
+	// 
+	// 	this.vertexArray = new Float32Array( len * 72 );
+	// 	this.colorArray = new Float32Array( len * 72 );
+	// 
+	// 	this.indexArray = new Uint16Array( len * 36 );
+	// 	this.count = len;
+	// 
+	// 	for ( i = 0; i < len; i++ ) {
+	// 
+	// 		cube = elements[i].cube;
+	// 		offset = cube.index * 3;
+	// 
+	// 		cube.updateToArray( cube.vertices, this.vertexArray, offset );
+	// 		cube.updateToArray( cube.colors, this.colorArray, offset );
+	// 
+	// 	}
+	// 
+	// 	gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
+	// 	gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+	// 
+	// 	gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
+	// 	gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
+	// 
+	// 	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+	// 	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STREAM_DRAW);
+	// 
+	// },
 
-		// left
-		1, -1, 1,
-		-1, -1, 1,
-		-1, -1, -1,
-		1, -1, -1,
+	initShader : function( gl ) {
 
-		// top
-		1, 1, 1,
-		-1, 1, 1,
-		-1, -1, 1,
-		1, -1, 1,
+		var shader = gl.loadShader( "cube-vertex-shader", "cube-fragment-shader" );
+		gl.useProgram(shader);
 
-		// bottom
-		1, 1, -1,
-		1, -1, -1,
-		-1, -1, -1,
-		-1, 1, -1
+		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
+		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
 
-	]);
+		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
+		gl.enableVertexAttribArray( shader.positionAttribute );
 
-	var i;
+		shader.colorAttribute = gl.getAttribLocation( shader, "aColor" );
+		gl.enableVertexAttribArray( shader.colorAttribute );
 
-	for ( i = 0; i < 72; i++ ) {
+		this.shader = shader;
 
-		this.vertices[i] /= 2;
+	},
+
+	initGeometry : function() {
+
+		this.vertexArray = new Float32Array([
+
+			// front
+			1, 1, 1,
+			1, -1, 1,
+			1, -1, -1,
+			1, 1, -1,
+
+			// back
+			-1, 1, 1,
+			-1, 1, -1,
+			-1, -1, -1,
+			-1, -1, 1,
+
+			// right
+			1, 1, 1,
+			1, 1, -1,
+			-1, 1, -1,
+			-1, 1, 1,
+
+			// left
+			1, -1, 1,
+			-1, -1, 1,
+			-1, -1, -1,
+			1, -1, -1,
+
+			// top
+			1, 1, 1,
+			-1, 1, 1,
+			-1, -1, 1,
+			1, -1, 1,
+
+			// bottom
+			1, 1, -1,
+			1, -1, -1,
+			-1, -1, -1,
+			-1, 1, -1
+
+		]);
+
+		var i,
+			v = this.vertexArray;
+
+		for ( i = 0; i < 72; i++ ) {
+
+			v[i] /= 2;
+
+		}
+
+
+		this.vertexVectors = [];
+
+		var vV = this.vertexVectors,
+			j;
+
+		for ( i = 0; i < 24; i++ ) {
+
+			j = i * 3;
+
+			vV.push( vec3.assign(
+				vec3.create(), 
+				v[j],
+				v[j + 1],
+				v[j + 2]
+			) );
+
+		}
+
+
+		this.normals = new Float32Array([
+
+			// front
+			1, 0, 0,
+			1, 0, 0,
+			1, 0, 0,
+			1, 0, 0,
+
+			// back
+			-1, 0, 0,
+			-1, 0, 0,
+			-1, 0, 0,
+			-1, 0, 0,
+
+			// right
+			0, 1, 0,
+			0, 1, 0,
+			0, 1, 0,
+			0, 1, 0,
+
+			// left
+			0, -1, 0,
+			0, -1, 0,
+			0, -1, 0,
+			0, -1, 0,
+
+			// top
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+
+			// bottom
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1
+
+		]);
+
+		this.normalVectors = [];
+
+		var nV = this.normalVectors,
+			n = this.normals;
+
+		for ( i = 0; i < 24; i++ ) {
+
+			j = i * 12;
+
+			nV.push( vec3.assign(
+				vec3.create(), 
+				n[j],
+				n[j + 1],
+				n[j + 2]
+			) );
+
+		}
+
+
+		this.indexArray = new Uint16Array([
+
+			// front
+			0, 1, 2, 0, 2, 3,
+
+			// back
+			4, 5, 6, 4, 6, 7,
+
+			// right
+			8, 9, 10, 8, 10, 11,
+
+			// left
+			12, 13, 14, 12, 14, 15,
+
+			// top
+			16, 17, 18, 16, 18, 19,
+
+			// bottom
+			20, 21, 22, 20, 22, 23
+
+		]);
+
+		this.colors = [
+
+			vec3.assign( vec3.create(), 0.7, 0.7, 0.7 ),
+			vec3.assign( vec3.create(), 0.6, 0.6, 0.6 ),
+			vec3.assign( vec3.create(), 0.8, 0.8, 0.8 )
+
+		];
+
+		this.colorArray = new Float32Array( 72 );
+
+		var c = this.colors,
+			cA = this.colorArray,
+			col;
+
+		for ( i = 0; i < 24; i++ ) {
+
+			col = c[Math.floor( i / 4 ) % 3];
+
+			cA[i * 3] = col[0];
+			cA[i * 3 + 1] = col[1];
+			cA[i * 3 + 2] = col[2];
+
+		}
+
+	},
+
+	initBuffers : function( gl ) {
+
+		this.vertexBuffer = gl.createBuffer();
+		this.colorBuffer = gl.createBuffer();
+		this.indexBuffer = gl.createBuffer();
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);
 
 	}
 
-
-	this.vertexVectors = [];
-
-	var vV = this.vertexVectors,
-		v = this.vertices,
-		j;
-
-	for ( i = 0; i < 24; i++ ) {
-
-		j = i * 3;
-
-		vV.push( vec3.assign(
-			vec3.create(), 
-			v[j],
-			v[j + 1],
-			v[j + 2]
-		) );
-
-	}
-
-
-	this.normals = new Float32Array([
-
-		// front
-		1, 0, 0,
-		1, 0, 0,
-		1, 0, 0,
-		1, 0, 0,
-
-		// back
-		-1, 0, 0,
-		-1, 0, 0,
-		-1, 0, 0,
-		-1, 0, 0,
-
-		// right
-		0, 1, 0,
-		0, 1, 0,
-		0, 1, 0,
-		0, 1, 0,
-
-		// left
-		0, -1, 0,
-		0, -1, 0,
-		0, -1, 0,
-		0, -1, 0,
-
-		// top
-		0, 0, 1,
-		0, 0, 1,
-		0, 0, 1,
-		0, 0, 1,
-
-		// bottom
-		0, 0, -1,
-		0, 0, -1,
-		0, 0, -1,
-		0, 0, -1
-
-	]);
-
-	this.normalVectors = [];
-
-	var nV = this.normalVectors,
-		n = this.normals;
-
-	for ( i = 0; i < 24; i++ ) {
-
-		j = i * 12;
-
-		nV.push( vec3.assign(
-			vec3.create(), 
-			n[j],
-			n[j + 1],
-			n[j + 2]
-		) );
-
-	}
-
-
-	this.indices = new Uint16Array([
-
-		// front
-		0, 1, 2, 0, 2, 3,
-
-		// back
-		4, 5, 6, 4, 6, 7,
-
-		// right
-		8, 9, 10, 8, 10, 11,
-
-		// left
-		12, 13, 14, 12, 14, 15,
-
-		// top
-		16, 17, 18, 16, 18, 19,
-
-		// bottom
-		20, 21, 22, 20, 22, 23
-
-	]);
-
-	// this.vertexBuffer = gl.createBuffer();
-	// 
-	// gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-	// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	// 
-	// this.normalBuffer = gl.createBuffer();
-	// 
-	// gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-	// 
-	// this.indexBuffer = gl.createBuffer();
-	// 
-	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-	// gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STREAM_DRAW);
-	// 
-	// this.indexBuffer.count = indices.length;
-	// 
-	// this.lineIndexBuffer = gl.createBuffer();
-	// 
-	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer);
-	// gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(lineIndices), gl.STREAM_DRAW);
-	// 
-	// this.lineIndexBuffer.count = lineIndices.length;
-	
-};
+} );
