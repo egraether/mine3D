@@ -6,7 +6,7 @@ var Game = {
 		Grid.init( gl );
 
 		Camera.init( gl );
-		gl.uniformMatrix4fv( Cube.shader.pMatrixUniform, false, Camera.pMatrix );
+		gl.uniformMatrix4fv( Cube.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 		InputHandler.init();
 
@@ -15,13 +15,13 @@ var Game = {
 	draw : function( gl ) {
 
 		if ( Camera.update ) {
-
+		
 			gl.matrix = Camera.getMvMatrix();
-
+		
 			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-
+		
 			Grid.draw( gl );
-
+		
 		}
 
 	}

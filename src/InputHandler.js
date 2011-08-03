@@ -129,7 +129,7 @@ var InputHandler = {
 		event.preventDefault();
 
 		var delta = event.wheelDelta || (event.detail * -5);
-		delta = 1 + delta * 0.0002;
+		delta = 1 - delta * 0.0002;
 
 		Camera.zoom( delta );
 
