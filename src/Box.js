@@ -19,7 +19,8 @@ Box.states = {
 	cube : 0,
 	flag : 1,
 	number : 2,
-	mine : 3
+	mine : 3,
+	opened : 4
 };
 
 Box.prototype = {
@@ -70,12 +71,37 @@ Box.prototype = {
 
 	draw : function( gl ) {
 
-		gl.pushMatrix();
-		mat4.translate(gl.matrix, this.position);
+		if ( this.state == Box.states.cube ) {
 
-		this.cube.draw( gl );
+			gl.pushMatrix();
+			mat4.translate(gl.matrix, this.position);
 
-		gl.popMatrix();
+			this.cube.draw( gl );
+
+			gl.popMatrix();
+
+		}
+
+	},
+
+	open : function( openNeighbors ) {
+
+		var i,
+			neighbors;
+
+		if ( openNeighbors ) {
+
+			neighbors = this.neighbors;
+
+			for ( i = 0; i < neighbors.length; i++ ) {
+
+				neighbors[i].open( false );
+
+			}
+
+		}
+
+		this.state = Box.states.opened;
 
 	}
 

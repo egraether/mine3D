@@ -110,7 +110,15 @@ var InputHandler = {
 
 	onClick : function( ) {
 
-		var m = this.oldMouse;
+		if ( this.button == 0 ) {
+
+			Grid.clicked = true;
+
+		} else if ( this.button == 2 ) {
+
+			Grid.flagged = true;
+
+		}
 
 	},
 

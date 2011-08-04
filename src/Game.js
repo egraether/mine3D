@@ -14,7 +14,7 @@ var Game = {
 
 	draw : function( gl ) {
 
-		var redraw = false;
+		var redraw = Grid.update();
 
 		if ( Camera.updatedRay ) {
 

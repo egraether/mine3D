@@ -10,11 +10,12 @@ var Grid = {
 	minesLeft : 0,
 	minesSet : false,
 
-	
+	clicked : false,
+	flagged : false,
 
 	init : function() {
 
-		vec3.assign( this.dimensions, 5, 5, 5 );
+		vec3.assign( this.dimensions, 10, 10, 10 );
 		this.mineAmount = 10;
 
 		this.createGrid();
@@ -278,6 +279,29 @@ var Grid = {
 
 	},
 
+	update : function() {
+
+		var clicked = this.clicked,
+			boxInRay = this.boxInRay,
+			stateChanged = false;
+
+		if ( clicked && boxInRay ) {
+
+			boxInRay.open( true );
+
+			this.getCubeInRay( Camera.getMouseRay() );
+
+			stateChanged = true;
+
+		}
+
+		this.clicked = false;
+		this.flagged = false;
+
+		return stateChanged;
+
+	},
+
 	draw : function( gl ) {
 
 		var i, elements = this.elements;
@@ -290,7 +314,7 @@ var Grid = {
 
 	},
 
-	cubeInRay : null,
+	boxInRay : null,
 
 	getCubeInRay : function( ray ) {
 
@@ -326,7 +350,7 @@ var Grid = {
 					if ( !(distanceToRay > 0.75) && 
 						(distanceToRay < 0.25 || cube.intersectsRay( origin, direction )) ) {
 
-						nearest = cube;
+						nearest = element;
 						min = distanceFromOrigin;
 
 					}
@@ -337,19 +361,19 @@ var Grid = {
 
 		}
 
-		if ( this.cubeInRay ) {
+		if ( this.boxInRay ) {
 
-			this.cubeInRay.highlight = false;
+			this.boxInRay.cube.highlight = false;
 
 			imageChanged = true;
 
 		}
 
-		this.cubeInRay = nearest;
+		this.boxInRay = nearest;
 
 		if ( nearest ) {
 
-			nearest.highlight = true;
+			nearest.cube.highlight = true;
 
 			imageChanged = true;
 
