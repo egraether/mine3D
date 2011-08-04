@@ -102,7 +102,7 @@ var InputHandler = {
 
 		} else {
 
-			Camera.find( mouse );
+			Camera.calculateMouseRay( mouse );
 
 		}
 

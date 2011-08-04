@@ -9,31 +9,41 @@ var Camera = ( function() {
 		pMatrix = mat4.create(),
 		mvMatrix = mat4.create(),
 
-		rotMatrix = mat4.create(),
-
 		radius = 0,
+		zoomDelta = 1,
 
 		start = vec3.create(),
 		end = vec3.create(),
 
+		ray = {
+			origin : null,
+			direction : null
+		}
+
+		near = new glMatrixArrayType(4),
+		far = new glMatrixArrayType(4),
+
 		vector = vec3.create(),
 		vector2 = vec3.create(),
-		vector3 = vec3.create();
+		vector3 = vec3.create(),
 
-	this.update = true;
+		matrix = mat4.create();
+
+	this.updatedMatrix = true;
+	this.updatedRay = false;
 
 	this.init = function( gl ) {
 
 		vec3.assign( eye, 8, 8, 8 );
 		vec3.assign( up, 0, 0, 1 );
-		
+
 		vec3.zero( center );
-		
+
 		vec3.normalize( vec3.cross( up, eye, right ) );
 		vec3.normalize( vec3.cross( eye, right, up ) );
 
 		mat4.perspective( 45, canvas.width / canvas.height, 0.1, 1000, pMatrix );
-		
+
 		radius = ( canvas.width + canvas.height ) / 4;
 
 	};
@@ -46,13 +56,9 @@ var Camera = ( function() {
 
 	this.getMvMatrix = function() {
 
-		if ( this.update ) {
+		mat4.lookAt( vec3.add( eye, center, vector ), center, up, mvMatrix );
 
-			mat4.lookAt( vec3.add( eye, center, vector ), center, up, mvMatrix );
-
-			this.update = false;
-
-		}
+		this.updatedMatrix = false;
 
 		return mvMatrix;
 
@@ -110,17 +116,17 @@ var Camera = ( function() {
 
 			axis = vec3.cross( end, start, vector );
 
-			mat4.identity( rotMatrix );
-			mat4.rotate( rotMatrix, angle, axis );
+			mat4.identity( matrix );
+			mat4.rotate( matrix, angle, axis );
 
-			mat4.multiplyVec3( rotMatrix, eye );
-			mat4.multiplyVec3( rotMatrix, up );
-			mat4.multiplyVec3( rotMatrix, right );
+			mat4.multiplyVec3( matrix, eye );
+			mat4.multiplyVec3( matrix, up );
+			mat4.multiplyVec3( matrix, right );
 
-			mat4.multiplyVec3( rotMatrix, end );
+			mat4.multiplyVec3( matrix, end );
 			vec3.set( end, start );
 
-			this.update = true;
+			this.updatedMatrix = true;
 
 		}
 
@@ -150,7 +156,7 @@ var Camera = ( function() {
 
 			vec3.set( end, start );
 
-			this.update = true;
+			this.updatedMatrix = true;
 
 		}
 
@@ -163,15 +169,48 @@ var Camera = ( function() {
 		vec3.normalize( eye );
 		vec3.scale( eye, len * delta );
 
-		this.update = true;
+		this.updatedMatrix = true;
 
 	};
 
-	this.find = function( mouse ) {
+	function invertPoint( point, matrix ) {
 
-		
+		mat4.multiplyVec4( matrix, point );
+
+		point[0] /= point[3];
+		point[1] /= point[3];
+		point[2] /= point[3];
 
 	};
+
+	this.calculateMouseRay = function( mouse ) {
+
+		mat4.multiply( pMatrix, mvMatrix, matrix );
+		mat4.inverse( matrix );
+
+		near[0] = far[0] = mouse[0] / canvas.width * 2 - 1;
+		near[1] = far[1] = mouse[1] / canvas.height * -2 + 1;
+
+		near[2] = 0; far[2] = 1;
+		near[3] = far[3] = 1;
+
+		invertPoint( near, matrix );
+		invertPoint( far, matrix );
+
+		ray.origin = near;
+		ray.direction = vec3.direction( far, near, far );
+
+		this.updatedRay = true;
+
+	};
+
+	this.getMouseRay = function() {
+
+		this.updatedRay = false;
+
+		return ray;
+
+	}
 
 	return this;
 

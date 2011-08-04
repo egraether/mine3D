@@ -18,6 +18,8 @@ var Cube = function( box ) {
 
 	}
 
+	this.highlight = false;
+
 };
 
 Cube.prototype = {
@@ -28,12 +30,15 @@ Cube.prototype = {
 
 	distanceToRay : function( origin, direction ) {
 
-		vec3.subtract( this.box.position, origin, this.vector );
-		vec3.scale( direction, vec3.dot( direction, this.vector ), this.vector2 );
+		var vector = this.vector,
+			vector2 = this.vector2;
 
-		vec3.subtract( this.vector, this.vector2 );
+		vec3.subtract( this.box.position, origin, vector );
+		vec3.scale( direction, vec3.dot( direction, vector ), vector2 );
 
-		return vec3.lengthSquared( this.vector );
+		vec3.subtract( vector, vector2 );
+
+		return vec3.lengthSquared( vector );
 
 	},
 
@@ -97,6 +102,12 @@ Cube.prototype = {
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
+		if ( this.highlight ) {
+
+			gl.enableAlpha();
+
+		}
+
 		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.vertexBuffer );
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 
@@ -105,6 +116,12 @@ Cube.prototype = {
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Cube.indexBuffer );
 		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
+		if ( this.highlight ) {
+
+			gl.disableAlpha();
+
+		}
 
 	}
 

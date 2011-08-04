@@ -14,14 +14,28 @@ var Game = {
 
 	draw : function( gl ) {
 
-		if ( Camera.update ) {
-		
+		var redraw = false;
+
+		if ( Camera.updatedRay ) {
+
+			redraw = Grid.getCubeInRay( Camera.getMouseRay() );
+
+		}
+
+		if ( Camera.updatedMatrix ) {
+
 			gl.matrix = Camera.getMvMatrix();
-		
+
+			redraw = true;
+
+		}
+
+		if ( redraw ) {
+
 			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-		
+
 			Grid.draw( gl );
-		
+
 		}
 
 	}

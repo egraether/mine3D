@@ -10,6 +10,8 @@ var Grid = {
 	minesLeft : 0,
 	minesSet : false,
 
+	
+
 	init : function() {
 
 		vec3.assign( this.dimensions, 5, 5, 5 );
@@ -276,7 +278,7 @@ var Grid = {
 
 	},
 
-	draw : function(gl) {
+	draw : function( gl ) {
 
 		var i, elements = this.elements;
 
@@ -286,6 +288,75 @@ var Grid = {
 
 		}
 
-	}
+	},
+
+	cubeInRay : null,
+
+	getCubeInRay : function( ray ) {
+
+		var i,
+			min = Infinity,
+			elements = this.elements,
+			element,
+			cube,
+			distanceFromOrigin,
+			distanceToRay,
+			nearest = null,
+			vector = vec3.create(),
+			cubeState = Box.states.cube,
+			origin = ray.origin,
+			direction = ray.direction,
+			imageChanged = false;
+
+		for ( i = 0; i < elements.length; i++ ) {
+
+			element = elements[i];
+
+			if ( element.state == cubeState ) {
+
+				vec3.subtract( element.position, origin, vector );
+				distanceFromOrigin = vec3.lengthSquared( vector );
+
+				if ( distanceFromOrigin < min ) {
+
+					cube = element.cube;
+
+					distanceToRay = cube.distanceToRay( origin, direction );
+
+					if ( !(distanceToRay > 0.75) && 
+						(distanceToRay < 0.25 || cube.intersectsRay( origin, direction )) ) {
+
+						nearest = cube;
+						min = distanceFromOrigin;
+
+					}
+
+				}
+
+			}
+
+		}
+
+		if ( this.cubeInRay ) {
+
+			this.cubeInRay.highlight = false;
+
+			imageChanged = true;
+
+		}
+
+		this.cubeInRay = nearest;
+
+		if ( nearest ) {
+
+			nearest.highlight = true;
+
+			imageChanged = true;
+
+		}
+
+		return imageChanged;
+
+	},
 
 };
