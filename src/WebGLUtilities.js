@@ -124,28 +124,41 @@ var WebGLUtilities = {
 
 
 	matrixStack : [],
-
-	matrix : null,
+	stackPosition : 0,
+	matrix : mat4.create(),
 
 	pushMatrix : function() {
 
-		var m = mat4.create( this.matrix );
+		var pos = this.stackPosition,
+			stack = this.matrixStack,
+			matrix = this.matrix;
 
-		this.matrixStack.push( this.matrix );
+		if ( pos < stack.length ) {
 
-		this.matrix = m;
+			mat4.set( matrix, stack[pos] );
+
+		} else {
+
+			stack.push( mat4.create( matrix ) );
+
+		}
+
+		this.stackPosition++;
 
 	},
 
 	popMatrix : function() {
 
-		if ( !this.matrixStack.length ) {
+		var pos = --this.stackPosition,
+			stack = this.matrixStack;
+
+		if ( !stack.length ) {
 
 			throw "error: popMatrix failed";
 
 		}
 
-		this.matrix = this.matrixStack.pop();
+		mat4.set( stack[pos], this.matrix );
 
 	},
 

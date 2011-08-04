@@ -64,6 +64,24 @@ var Camera = ( function() {
 
 	};
 
+	this.getEye = function() {
+
+		return eye;
+
+	};
+
+	this.getUp = function() {
+
+		return up;
+
+	};
+
+	this.getRight = function() {
+
+		return right;
+
+	};
+
 	function getMouseOnScreen( mouse, vector ) {
 
 		return vec3.assign(
@@ -109,7 +127,7 @@ var Camera = ( function() {
 
 		getMouseOnBall( mouse, end );
 		
-		var angle = Math.acos( vec3.dot( start, end ) / vec3.length( start ) / vec3.length( end ) ),
+		var angle = vec3.angle( start, end ),
 			axis;
 
 		if ( angle ) {
@@ -209,6 +227,38 @@ var Camera = ( function() {
 		this.updatedRay = false;
 
 		return ray;
+
+	}
+
+	this.updateFaceDirections = function( gl, vertexArray, vertexBuffer ) {
+
+		mat4.identity( matrix );
+		mat4.rotate( matrix, Math.PI / 2, eye );
+
+		vec3.add( up, right, vector );
+		vec3.normalize( vector );
+		vec3.scale( vector, Math.sqrt( 0.5 ) );
+
+		vertexArray[0] = vector[0];
+		vertexArray[1] = vector[1];
+		vertexArray[2] = vector[2];
+
+		vertexArray[6] = -vector[0];
+		vertexArray[7] = -vector[1];
+		vertexArray[8] = -vector[2];
+
+		mat4.multiplyVec3( matrix, vector );
+
+		vertexArray[3] = vector[0];
+		vertexArray[4] = vector[1];
+		vertexArray[5] = vector[2];
+
+		vertexArray[9] = -vector[0];
+		vertexArray[10] = -vector[1];
+		vertexArray[11] = -vector[2];
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW );
 
 	}
 

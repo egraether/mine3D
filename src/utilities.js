@@ -49,3 +49,9 @@ vec3.lengthSquared = function( vec ) {
 	return x*x + y*y + z*z;
 
 };
+
+vec3.angle = function( vec, vec2 ) {
+
+	return Math.acos( this.dot( vec, vec2 ) / this.length( vec ) / vec3.length( vec2 ) );
+
+};

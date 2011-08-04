@@ -32,7 +32,8 @@ var Game = {
 
 		if ( Camera.updatedMatrix ) {
 
-			gl.matrix = Camera.getMvMatrix();
+			mat4.set( Camera.getMvMatrix(), gl.matrix );
+			Camera.updateFaceDirections( gl, Face.vertexArray, Face.vertexBuffer );
 
 			redraw = true;
 
