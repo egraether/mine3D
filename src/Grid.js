@@ -15,7 +15,7 @@ var Grid = {
 
 	init : function() {
 
-		vec3.assign( this.dimensions, 10, 10, 10 );
+		vec3.assign( this.dimensions, 5, 5, 5 );
 		this.mineAmount = 10;
 
 		this.createGrid();
@@ -220,33 +220,27 @@ var Grid = {
 
 	},
 
-	removeBox : function( box ) {
-
-		this.elements[box.index] = null;
-		box.active = false;
-
-	},
-
 	setMines : function( box ) {
 
-		var i, counter = 1,
+		var i, index,
 			neighbors = box.neighbors,
 			dim = this.dimensions,
 			boxAmount = dim[0] * dim[1] * dim[2],
 			mines = this.mineAmount,
+			openBoxIndices = [],
+			elements = this.elements,
 			box;
 
-		this.removeBox( box );
+		openBoxIndices.push( box.index );
 
 		for ( i = 0; i < neighbors.length; i++ ) {
 
-			this.removeBox( neighbors[i] );
-			counter++;
+			openBoxIndices.push( neighbors[i].index );
 
 		}
 
 
-		var boxesLeft = boxAmount - counter;
+		var boxesLeft = boxAmount - openBoxIndices.length;
 
 		if ( boxesLeft < 0 ) {
 
@@ -262,11 +256,23 @@ var Grid = {
 		this.minesLeft = mines;
 
 
-		while ( mines ) {
+		mineWhile: while ( mines ) {
 
-			box = elements[Math.floor( Math.random() * boxAmount )];
+			index = Math.floor( Math.random() * boxAmount );
 
-			if ( box && !box.isMine ) {
+			for ( i = 0; i < openBoxIndices.length; i++ ) {
+
+				if ( openBoxIndices[i] == index ) {
+
+					continue mineWhile;
+
+				}
+
+			}
+
+			box = elements[index];
+
+			if ( !box.isMine ) {
 
 				box.setMine();
 				mines--;
@@ -287,7 +293,13 @@ var Grid = {
 
 		if ( clicked && boxInRay ) {
 
-			boxInRay.open( true );
+			if ( !this.minesSet ) {
+
+				this.setMines( boxInRay );
+
+			}
+
+			boxInRay.open();
 
 			this.getCubeInRay( Camera.getMouseRay() );
 
@@ -327,7 +339,6 @@ var Grid = {
 			distanceToRay,
 			nearest = null,
 			vector = vec3.create(),
-			cubeState = Box.states.cube,
 			origin = ray.origin,
 			direction = ray.direction,
 			imageChanged = false;
@@ -336,7 +347,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( element.state == cubeState ) {
+			if ( element.state == "cube" ) {
 
 				vec3.subtract( element.position, origin, vector );
 				distanceFromOrigin = vec3.lengthSquared( vector );

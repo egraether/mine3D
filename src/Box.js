@@ -1,7 +1,7 @@
 var Box = function( index, position ) {
 
 	this.index = index;
-	this.state = Box.states.cube;
+	this.state = "cube";
 
 	this.position = position;
 
@@ -10,18 +10,18 @@ var Box = function( index, position ) {
 
 	this.neighbors = [];
 
-	this.active = true;
+	this.value = 0;
 	this.isMine = false;
 
 }
 
-Box.states = {
-	cube : 0,
-	flag : 1,
-	number : 2,
-	mine : 3,
-	opened : 4
-};
+/** states:
+  * - cube
+  * - number
+  * - flag
+  * - mine
+  * - open
+  */
 
 Box.prototype = {
 
@@ -47,7 +47,7 @@ Box.prototype = {
 
 		this.value--;
 
-		if ( this.state == Box.states.number ) {
+		if ( this.state == "number" ) {
 
 			this.face.valueChanged( this.value );
 
@@ -71,7 +71,7 @@ Box.prototype = {
 
 	draw : function( gl ) {
 
-		if ( this.state == Box.states.cube ) {
+		if ( this.state == "cube" ) {
 
 			gl.pushMatrix();
 			mat4.translate(gl.matrix, this.position);
@@ -84,24 +84,36 @@ Box.prototype = {
 
 	},
 
-	open : function( openNeighbors ) {
+	open : function() {
 
 		var i,
 			neighbors;
 
-		if ( openNeighbors ) {
+		if ( this.state == "cube" ) {
 
-			neighbors = this.neighbors;
+			if ( this.isMine ) {
 
-			for ( i = 0; i < neighbors.length; i++ ) {
+				Game.over( this );
 
-				neighbors[i].open( false );
+			} else if ( this.value ) {
+
+				this.state = "number";
+
+			} else {
+
+				this.state = "open";
+
+				neighbors = this.neighbors;
+
+				for ( i = 0; i < neighbors.length; i++ ) {
+
+					neighbors[i].open();
+
+				}
 
 			}
 
 		}
-
-		this.state = Box.states.opened;
 
 	}
 

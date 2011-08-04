@@ -1,5 +1,7 @@
 var Game = {
 
+	gameover : false,
+
 	init : function( gl ) {
 
 		Cube.init( gl );
@@ -14,7 +16,13 @@ var Game = {
 
 	draw : function( gl ) {
 
-		var redraw = Grid.update();
+		var redraw = false;
+
+		if ( !this.gameover ) {
+
+			redraw = Grid.update();
+
+		}
 
 		if ( Camera.updatedRay ) {
 
@@ -37,6 +45,12 @@ var Game = {
 			Grid.draw( gl );
 
 		}
+
+	},
+
+	over : function( box ) {
+
+		this.gameover = true;
 
 	}
 
