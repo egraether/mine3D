@@ -13,6 +13,8 @@ var Grid = {
 	clicked : false,
 	flagged : false,
 
+	redraw : false,
+
 	init : function() {
 
 		vec3.assign( this.dimensions, 5, 5, 5 );
@@ -285,11 +287,33 @@ var Grid = {
 
 	},
 
+	showMines : function() {
+
+		var i,
+			element,
+			elements = this.elements;
+
+		for ( i = 0; i < elements.length; i++ ) {
+
+			element = elements[i];
+
+			if ( element.isMine ) {
+
+				element.showMine();
+
+			}
+
+		}
+
+		this.redraw = true;
+
+	},
+
 	update : function() {
 
 		var clicked = this.clicked,
 			boxInRay = this.boxInRay,
-			stateChanged = false;
+			stateChanged = this.redraw;
 
 		if ( clicked && boxInRay ) {
 
@@ -309,6 +333,7 @@ var Grid = {
 
 		this.clicked = false;
 		this.flagged = false;
+		this.redraw = false;
 
 		return stateChanged;
 

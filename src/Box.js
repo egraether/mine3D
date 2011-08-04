@@ -71,6 +71,15 @@ Box.prototype = {
 
 	},
 
+	showMine : function() {
+
+		this.state = "mine";
+
+		this.value = 28;
+		this.face.updateValue = true;
+
+	},
+
 	draw : function( gl ) {
 
 		gl.pushMatrix();
@@ -99,7 +108,7 @@ Box.prototype = {
 
 			if ( this.isMine ) {
 
-				Game.over( this );
+				Grid.showMines();
 
 			} else if ( this.value ) {
 
