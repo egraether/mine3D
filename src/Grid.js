@@ -23,6 +23,8 @@ var Grid = {
 		this.createGrid();
 		this.setNeighbors();
 
+		BSPTree.createPartition( this.elements.concat() );
+
 	},
 
 	createGrid : function( ) {
@@ -341,21 +343,7 @@ var Grid = {
 
 	draw : function( gl ) {
 
-		var i,
-			element,
-			elements = this.elements;
-
-		for ( i = 0; i < elements.length; i++ ) {
-
-			element = elements[i];
-
-			if ( element.state != "open" ) {
-
-				element.draw( gl );
-
-			}
-
-		}
+		BSPTree.draw( gl, Camera.getPosition() );
 
 	},
 

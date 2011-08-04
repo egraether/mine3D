@@ -82,20 +82,26 @@ Box.prototype = {
 
 	draw : function( gl ) {
 
-		gl.pushMatrix();
-		mat4.translate(gl.matrix, this.position);
+		var state = this.state;
 
-		if ( this.state == "number" || this.state == "mine" ) {
+		if ( state != "open" ) {
 
-			this.face.draw( gl );
+			gl.pushMatrix();
+			mat4.translate(gl.matrix, this.position);
 
-		} else {
+			if ( state == "number" || state == "mine" ) {
 
-			this.cube.draw( gl );
+				this.face.draw( gl );
+
+			} else {
+
+				this.cube.draw( gl );
+
+			}
+
+			gl.popMatrix();
 
 		}
-
-		gl.popMatrix();
 
 	},
 

@@ -82,6 +82,12 @@ var Camera = ( function() {
 
 	};
 
+	this.getPosition = function() {
+
+		return vec3.add( center, eye, vector );
+
+	};
+
 	function getMouseOnScreen( mouse, vector ) {
 
 		return vec3.assign(
