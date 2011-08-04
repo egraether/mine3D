@@ -32,7 +32,7 @@ var Camera = ( function() {
 	this.updatedMatrix = true;
 	this.updatedRay = false;
 
-	this.init = function( gl ) {
+	this.init = function() {
 
 		vec3.assign( eye, 8, 8, 8 );
 		vec3.assign( up, 0, 0, 1 );

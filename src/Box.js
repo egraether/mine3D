@@ -45,11 +45,13 @@ Box.prototype = {
 
 	decreaseValue : function() {
 
-		this.value--;
+		if ( --this.value ) {
 
-		if ( this.state == "number" ) {
+			this.face.updateValue = true;
 
-			this.face.valueChanged( this.value );
+		} else {
+
+			this.state = "open";
 
 		}
 
@@ -71,16 +73,20 @@ Box.prototype = {
 
 	draw : function( gl ) {
 
-		if ( this.state == "cube" ) {
+		gl.pushMatrix();
+		mat4.translate(gl.matrix, this.position);
 
-			gl.pushMatrix();
-			mat4.translate(gl.matrix, this.position);
+		if ( this.state == "number" || this.state == "mine" ) {
+
+			this.face.draw( gl );
+
+		} else {
 
 			this.cube.draw( gl );
 
-			gl.popMatrix();
-
 		}
+
+		gl.popMatrix();
 
 	},
 

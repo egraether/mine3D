@@ -100,6 +100,7 @@ Cube.prototype = {
 
 		var shader = Cube.shader;
 
+		gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		if ( this.highlight ) {
@@ -163,6 +164,8 @@ extend( Cube, {
 		this.initShader( gl );
 		this.initGeometry();
 		this.initBuffers( gl );
+
+		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 	},
 

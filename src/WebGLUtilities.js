@@ -114,6 +114,14 @@ var WebGLUtilities = {
 
 	},
 
+	passTexture : function( texture, textureUniform ) {
+
+		this.activeTexture( this["TEXTURE" + texture.ID] );
+		this.bindTexture( this.TEXTURE_2D, texture );
+		this.uniform1i( textureUniform, texture.ID );
+
+	},
+
 
 	matrixStack : [],
 

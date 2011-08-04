@@ -316,11 +316,19 @@ var Grid = {
 
 	draw : function( gl ) {
 
-		var i, elements = this.elements;
+		var i,
+			element,
+			elements = this.elements;
 
 		for ( i = 0; i < elements.length; i++ ) {
 
-			elements[i].draw( gl );
+			element = elements[i];
+
+			if ( element.state != "open" ) {
+
+				element.draw( gl );
+
+			}
 
 		}
 

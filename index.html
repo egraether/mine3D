@@ -9,7 +9,7 @@
 <body>
 
 	<div id="container"></div>
-	
+
 <script id="cube-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 
 	uniform mat4 uMVMatrix;
@@ -41,6 +41,44 @@
 	void main(void) {
 
 		gl_FragColor = vColor;
+
+	}
+
+</script>
+
+<script id="face-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
+
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+
+	attribute vec3 aPosition;
+	attribute vec2 aTextureCoord;
+
+	varying vec2 vTextureCoord;
+
+	void main( void ) {
+
+		gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, 1.0 );
+
+		vTextureCoord = aTextureCoord;
+
+	}
+
+</script>
+
+<script id="face-fragment-shader" type="x-shader/x-fragment" charset="utf-8">
+
+	#ifdef GL_ES
+		precision highp float;
+	#endif
+
+	uniform sampler2D uTexture;
+
+	varying vec2 vTextureCoord;
+
+	void main(void) {
+
+		gl_FragColor = texture2D( uTexture, vTextureCoord );
 
 	}
 

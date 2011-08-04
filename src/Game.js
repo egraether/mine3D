@@ -4,12 +4,12 @@ var Game = {
 
 	init : function( gl ) {
 
+		Camera.init();
+
 		Cube.init( gl );
-		Grid.init( gl );
+		Face.init( gl );
 
-		Camera.init( gl );
-		gl.uniformMatrix4fv( Cube.shader.pMatrixUniform, false, Camera.getPMatrix() );
-
+		Grid.init();
 		InputHandler.init();
 
 	},
