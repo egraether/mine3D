@@ -51,13 +51,17 @@ BSPNode.prototype = {
 
 			direction = ( direction + 1 ) % 3;
 
-			if ( frontElements.length ) {
+			if ( !frontElements.length ) {
+
+				this.init( backElements, direction );
+
+			} else if ( !backElements.length ) {
+
+				this.init( frontElements, direction );
+
+			} else {
 
 				this.front = new BSPNode().init( frontElements, direction );
-
-			}
-
-			if ( backElements.length ) {
 
 				this.back = new BSPNode().init( backElements, direction );
 
@@ -71,10 +75,10 @@ BSPNode.prototype = {
 
 	getAveragePosition : function( elements, direction ) {
 
-		var sum = vec3.zero(vec3.create()),
+		var sum = vec3.zero( vec3.create() ),
 			number = 0,
 			epsilon = .3,
-			pos, i, j;
+			pos, i;
 
 		for ( i = 0; i < elements.length; i++ ) {
 
@@ -88,7 +92,6 @@ BSPNode.prototype = {
 		for ( i = 0; i < elements.length; i++ ) {
 
 			pos = elements[i].position;
-			j = ( direction == "x" ? 0 : ( direction == "y" ? 1 : 2 ) );
 
 			if ( sum[direction] + epsilon > pos[direction] && 
 				sum[direction] - epsilon < pos[direction] ) {
@@ -117,19 +120,15 @@ BSPNode.prototype = {
 			dir = this.direction;
 			inFront = ( position[dir] > this.position[dir] );
 
-			if ( inFront && this.back ) {
+			if ( inFront ) {
 
 				this.back.draw( gl, position );
 
 			}
 
-			if ( this.front ) {
+			this.front.draw( gl, position )
 
-				this.front.draw( gl, position )
-
-			}
-
-			if ( !inFront && this.back ) {
+			if ( !inFront ) {
 
 				this.back.draw( gl, position );
 
@@ -141,8 +140,7 @@ BSPNode.prototype = {
 
 	remove : function( element ) {
 
-		var inFront, dir,
-			front, back;
+		var dir;
 
 		if ( this.element ) {
 
@@ -150,14 +148,17 @@ BSPNode.prototype = {
 
 				return 0;
 
+			} else {
+
+				console.log("wtf");
+
 			}
 
 		} else {
 
 			dir = this.direction;
-			inFront = ( element.position[dir] > this.position[dir] );
 
-			if ( inFront && this.front ) {
+			if ( element.position[dir] > this.position[dir] ) {
 
 				this.front = this.front.remove( element );
 
@@ -167,9 +168,7 @@ BSPNode.prototype = {
 
 				}
 
-			}
-
-			if ( !inFront && this.back ) {
+			} else {
 
 				this.back = this.back.remove( element );
 
@@ -195,21 +194,7 @@ BSPNode.prototype = {
 
 		}
 
-		var sum = 0;
-
-		if ( this.front ) {
-
-			sum += this.front.count();
-
-		}
-
-		if ( this.back ) {
-
-			sum += this.back.count();
-
-		}
-
-		return sum;
+		return this.front.count() + this.back.count();
 
 	},
 
@@ -228,16 +213,10 @@ BSPNode.prototype = {
 
 			console.log( str + vec3.str(this.element.position) );
 
-		}
-
-		if ( this.front ) {
+		} else {
 
 			console.log( str + "front" );
 			this.front.print( depth + 1 );
-
-		}
-
-		if ( this.back ) {
 
 			console.log( str + "back");
 			this.back.print( depth + 1 );

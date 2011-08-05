@@ -126,35 +126,6 @@ Cube.prototype = {
 
 	}
 
-	// updateToArray : function( values, array, offset ) {
-	// 
-	// 	var i, j,
-	// 		value;
-	// 
-	// 	for ( i = 0; i < 24; i++ ) {
-	// 
-	// 		j = i * 3 + offset;
-	// 		value = values[i];
-	// 
-	// 		array[j] = value[0];
-	// 		array[j + 1] = value[1];
-	// 		array[j + 2] = value[2];
-	// 
-	// 	}
-	// 
-	// },
-	// 
-	// updateToBuffer : function( gl, values, buffer ) {
-	// 
-	// 	var array = new Float32Array(  );
-	// 
-	// 	this.updateToArray( values, array, 0 );
-	// 
-	// 	gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-	// 	gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
-	// 
-	// }
-
 };
 
 extend( Cube, {
@@ -168,37 +139,6 @@ extend( Cube, {
 		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 	},
-
-	// setupArrays : function( gl, elements ) {
-	// 
-	// 	var i, cube, offset, len = elements.length;
-	// 
-	// 	this.vertexArray = new Float32Array( len * 72 );
-	// 	this.colorArray = new Float32Array( len * 72 );
-	// 
-	// 	this.indexArray = new Uint16Array( len * 36 );
-	// 	this.count = len;
-	// 
-	// 	for ( i = 0; i < len; i++ ) {
-	// 
-	// 		cube = elements[i].cube;
-	// 		offset = cube.index * 3;
-	// 
-	// 		cube.updateToArray( cube.vertices, this.vertexArray, offset );
-	// 		cube.updateToArray( cube.colors, this.colorArray, offset );
-	// 
-	// 	}
-	// 
-	// 	gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
-	// 	gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
-	// 
-	// 	gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
-	// 	gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
-	// 
-	// 	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-	// 	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STREAM_DRAW);
-	// 
-	// },
 
 	initShader : function( gl ) {
 
@@ -404,9 +344,11 @@ extend( Cube, {
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+		// gl.vertexAttribPointer( this.shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
+		// gl.vertexAttribPointer( this.shader.colorAttribute, 3, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);
