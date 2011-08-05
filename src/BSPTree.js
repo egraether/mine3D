@@ -18,6 +18,18 @@ var BSPTree = {
 
 	},
 
+	remove : function( element ) {
+
+		this.root = this.root.remove( element );
+
+	},
+
+	count : function() {
+
+		return this.root.count();
+
+	},
+
 	print : function() {
 
 		console.log("root " + vec3.str(this.root.position));

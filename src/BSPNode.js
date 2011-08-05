@@ -139,6 +139,80 @@ BSPNode.prototype = {
 
 	},
 
+	remove : function( element ) {
+
+		var inFront, dir,
+			front, back;
+
+		if ( this.element ) {
+
+			if ( this.element.index == element.index ) {
+
+				return 0;
+
+			}
+
+		} else {
+
+			dir = this.direction;
+			inFront = ( element.position[dir] > this.position[dir] );
+
+			if ( inFront && this.front ) {
+
+				this.front = this.front.remove( element );
+
+				if ( !this.front ) {
+
+					return this.back;
+
+				}
+
+			}
+
+			if ( !inFront && this.back ) {
+
+				this.back = this.back.remove( element );
+
+				if ( !this.back ) {
+
+					return this.front;
+
+				}
+
+			}
+
+		}
+
+		return this;
+
+	},
+
+	count : function() {
+
+		if ( this.element ) {
+
+			return 1;
+
+		}
+
+		var sum = 0;
+
+		if ( this.front ) {
+
+			sum += this.front.count();
+
+		}
+
+		if ( this.back ) {
+
+			sum += this.back.count();
+
+		}
+
+		return sum;
+
+	},
+
 	print : function( depth ) {
 
 		var str = "",
@@ -158,14 +232,14 @@ BSPNode.prototype = {
 
 		if ( this.front ) {
 
-			console.log( str + "front " + vec3.str(this.position) );
+			console.log( str + "front" );
 			this.front.print( depth + 1 );
 
 		}
 
 		if ( this.back ) {
 
-			console.log( str + "back " + vec3.str(this.position) );
+			console.log( str + "back");
 			this.back.print( depth + 1 );
 
 		}

@@ -84,24 +84,20 @@ Box.prototype = {
 
 		var state = this.state;
 
-		if ( state != "open" ) {
+		gl.pushMatrix();
+		mat4.translate(gl.matrix, this.position);
 
-			gl.pushMatrix();
-			mat4.translate(gl.matrix, this.position);
+		if ( state == "number" || state == "mine" ) {
 
-			if ( state == "number" || state == "mine" ) {
+			this.face.draw( gl );
 
-				this.face.draw( gl );
+		} else {
 
-			} else {
-
-				this.cube.draw( gl );
-
-			}
-
-			gl.popMatrix();
+			this.cube.draw( gl );
 
 		}
+
+		gl.popMatrix();
 
 	},
 
@@ -123,6 +119,8 @@ Box.prototype = {
 			} else {
 
 				this.state = "open";
+
+				BSPTree.remove( this );
 
 				neighbors = this.neighbors;
 
