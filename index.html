@@ -10,63 +10,30 @@
 
 	<div id="container"></div>
 
-<script id="cube-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
+<script id="vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 
 	uniform mat4 uMVMatrix;
 	uniform mat4 uPMatrix;
 
 	attribute vec3 aPosition;
-	attribute vec3 aColor;
-
-	varying vec4 vColor;
-
-	void main( void ) {
-
-		gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, 1.0 );
-
-		vColor = vec4( aColor, 0.7 );
-
-	}
-
-</script>
-
-<script id="cube-fragment-shader" type="x-shader/x-fragment" charset="utf-8">
-
-	#ifdef GL_ES
-		precision highp float;
-	#endif
-
-	varying vec4 vColor;
-
-	void main(void) {
-
-		gl_FragColor = vColor;
-
-	}
-
-</script>
-
-<script id="face-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
-
-	uniform mat4 uMVMatrix;
-	uniform mat4 uPMatrix;
-
-	attribute vec3 aPosition;
+	attribute vec4 aColor;
 	attribute vec2 aTextureCoord;
 
+	varying vec4 vColor;
 	varying vec2 vTextureCoord;
 
 	void main( void ) {
 
 		gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, 1.0 );
 
+		vColor = aColor;
 		vTextureCoord = aTextureCoord;
 
 	}
 
 </script>
 
-<script id="face-fragment-shader" type="x-shader/x-fragment" charset="utf-8">
+<script id="fragment-shader" type="x-shader/x-fragment" charset="utf-8">
 
 	#ifdef GL_ES
 		precision highp float;
@@ -74,11 +41,14 @@
 
 	uniform sampler2D uTexture;
 
+	varying vec4 vColor;
 	varying vec2 vTextureCoord;
 
 	void main(void) {
 
-		gl_FragColor = texture2D( uTexture, vTextureCoord );
+		vec4 texColor = texture2D( uTexture, vTextureCoord );
+
+		gl_FragColor = mix( vColor, texColor, texColor.a );
 
 	}
 

@@ -21,6 +21,8 @@ function init() {
 	gl.enable( gl.CULL_FACE );
 	// gl.enable( gl.DEPTH_TEST );
 
+	gl.enableAlpha();
+
 
 	Game.init( gl );
 

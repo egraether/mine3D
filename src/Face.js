@@ -38,13 +38,14 @@ Face.prototype = {
 
 		var shader = Face.shader;
 
-		gl.enableAlpha();
-
-		gl.useProgram( shader );
+		// gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Face.vertexBuffer );
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, Face.colorBuffer );
+		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Face.texCoordBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.STATIC_DRAW );
@@ -52,8 +53,6 @@ Face.prototype = {
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Face.indexBuffer );
 		gl.drawElements( gl.TRIANGLE_FAN, 4, gl.UNSIGNED_SHORT, 0 );
-
-		gl.disableAlpha();
 
 	}
 
@@ -73,14 +72,15 @@ extend( Face, {
 
 	initShader : function( gl ) {
 
-		var shader = gl.loadShader( "face-vertex-shader", "face-fragment-shader" );
-		gl.useProgram( shader );
+		var shader = Cube.shader;
+		// var shader = gl.loadShader( "face-vertex-shader", "face-fragment-shader" );
+		// gl.useProgram( shader );
 
-		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
-		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
+		// shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
+		// shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
 
-		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
-		gl.enableVertexAttribArray( shader.positionAttribute );
+		// shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
+		// gl.enableVertexAttribArray( shader.positionAttribute );
 
 		shader.texCoordAttribute = gl.getAttribLocation( shader, "aTextureCoord" );
 		gl.enableVertexAttribArray( shader.texCoordAttribute );
@@ -95,7 +95,7 @@ extend( Face, {
 
 		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
 
-			gl.useProgram( Face.shader );
+			// gl.useProgram( Face.shader );
 			gl.passTexture( texture, Face.shader.textureUniform );
 
 		});
@@ -113,6 +113,15 @@ extend( Face, {
 
 		]);
 
+		this.colorArray = new Float32Array([
+
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0
+
+		]);
+
 		this.indexArray = new Uint16Array([
 
 			0, 1, 2, 3
@@ -120,11 +129,15 @@ extend( Face, {
 		]);
 
 		this.vertexBuffer = gl.createBuffer();
+		this.colorBuffer = gl.createBuffer();
 		this.texCoordBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);

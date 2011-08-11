@@ -100,29 +100,20 @@ Cube.prototype = {
 
 		var shader = Cube.shader;
 
-		gl.useProgram( shader );
+		// gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
-
-		if ( this.highlight ) {
-
-			gl.enableAlpha();
-
-		}
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.vertexBuffer );
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.colorBuffer );
-		gl.vertexAttribPointer( shader.colorAttribute, 3, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 0 );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.texCoordBuffer );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Cube.indexBuffer );
 		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
-
-		if ( this.highlight ) {
-
-			gl.disableAlpha();
-
-		}
 
 	}
 
@@ -142,7 +133,7 @@ extend( Cube, {
 
 	initShader : function( gl ) {
 
-		var shader = gl.loadShader( "cube-vertex-shader", "cube-fragment-shader" );
+		var shader = gl.loadShader( "vertex-shader", "fragment-shader" );
 		gl.useProgram(shader);
 
 		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
@@ -318,7 +309,7 @@ extend( Cube, {
 
 		];
 
-		this.colorArray = new Float32Array( 72 );
+		this.colorArray = new Float32Array( 96 );
 
 		var c = this.colors,
 			cA = this.colorArray,
@@ -328,9 +319,18 @@ extend( Cube, {
 
 			col = c[Math.floor( i / 4 ) % 3];
 
-			cA[i * 3] = col[0];
-			cA[i * 3 + 1] = col[1];
-			cA[i * 3 + 2] = col[2];
+			cA[i * 4] = col[0];
+			cA[i * 4 + 1] = col[1];
+			cA[i * 4 + 2] = col[2];
+			cA[i * 4 + 3] = 1.0;
+
+		}
+
+		this.texCoordArray = new Float32Array( 48 );
+
+		for ( i = 0; i < 48; i++ ) {
+
+			this.texCoordArray[i] = 0;
 
 		}
 
@@ -340,6 +340,7 @@ extend( Cube, {
 
 		this.vertexBuffer = gl.createBuffer();
 		this.colorBuffer = gl.createBuffer();
+		this.texCoordBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
@@ -349,6 +350,9 @@ extend( Cube, {
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
 		// gl.vertexAttribPointer( this.shader.colorAttribute, 3, gl.FLOAT, false, 0, 0 );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.texCoordBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.STATIC_DRAW );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);
