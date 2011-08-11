@@ -6,7 +6,6 @@ var Element = function( index, position ) {
 	this.position = position;
 
 	this.cube = new Cube( this );
-	this.face = new Face( this );
 
 	this.neighbors = [];
 
@@ -85,11 +84,11 @@ Element.prototype = {
 
 		if ( state == "number" || state == "mine" ) {
 
-			this.face.draw( gl, this.value );
+			Face.draw( gl, Element.shader, this.value );
 
 		} else {
 
-			this.cube.draw( gl, this.state == "flag", this.highlight );
+			Cube.draw( gl, Element.shader, this.state == "flag", this.highlight );
 
 		}
 
@@ -176,3 +175,54 @@ Element.prototype = {
 	}
 
 };
+
+extend( Element, {
+
+	init : function( gl ) {
+
+		this.initShader( gl );
+
+		this.initTextures( gl );
+
+		Cube.initBuffers( gl );
+		Face.initBuffers( gl );
+
+		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
+
+	},
+
+	initShader : function( gl ) {
+
+		var shader = gl.loadShader( "vertex-shader", "fragment-shader" );
+		gl.useProgram(shader);
+
+		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
+		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
+
+		shader.textureUniform = gl.getUniformLocation( shader, "uTexture" );
+
+		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
+		gl.enableVertexAttribArray( shader.positionAttribute );
+
+		shader.colorAttribute = gl.getAttribLocation( shader, "aColor" );
+		gl.enableVertexAttribArray( shader.colorAttribute );
+		
+		shader.texCoordAttribute = gl.getAttribLocation( shader, "aTextureCoord" );
+		gl.enableVertexAttribArray( shader.texCoordAttribute );
+
+		this.shader = shader;
+
+	},
+
+	initTextures : function( gl ) {
+
+		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
+
+			gl.passTexture( texture, Element.shader.textureUniform );
+			Camera.updateView = true;
+
+		});
+
+	}
+
+});

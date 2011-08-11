@@ -1,72 +1,19 @@
-var Face = function( element ) {
+var Face = {
 
-	this.element = element;
+	size : 0.3,
 
-}
-
-Face.prototype = {
-
-	draw : function( gl, value ) {
-
-		var shader = Face.shader;
+	draw : function( gl, shader, value ) {
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, Face.attributeBuffer );
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 12 * 4 );
 		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (12 + 16 + value * 8) * 4 );
 
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Face.indexBuffer );
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.drawElements( gl.TRIANGLE_FAN, 4, gl.UNSIGNED_SHORT, 0 );
-
-	}
-
-};
-
-extend( Face, {
-
-	size : 0.3,
-
-	init : function( gl ) {
-
-		this.initShader( gl );
-		this.initTexture( gl );
-		this.initBuffers( gl );
-
-	},
-
-	initShader : function( gl ) {
-
-		var shader = Cube.shader;
-		// var shader = gl.loadShader( "face-vertex-shader", "face-fragment-shader" );
-		// gl.useProgram( shader );
-
-		// shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
-		// shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
-
-		// shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
-		// gl.enableVertexAttribArray( shader.positionAttribute );
-
-		shader.texCoordAttribute = gl.getAttribLocation( shader, "aTextureCoord" );
-		gl.enableVertexAttribArray( shader.texCoordAttribute );
-
-		shader.textureUniform = gl.getUniformLocation( shader, "uTexture" );
-
-		this.shader = shader;
-
-	},
-
-	initTexture : function( gl ) {
-
-		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
-
-			// gl.useProgram( Face.shader );
-			gl.passTexture( texture, Face.shader.textureUniform );
-			Camera.updateView = true;
-
-		});
 
 	},
 
@@ -124,4 +71,4 @@ extend( Face, {
 
 	}
 
-});
+};

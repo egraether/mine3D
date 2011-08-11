@@ -6,10 +6,9 @@ var Game = {
 
 		Camera.init();
 
-		Cube.init( gl );
-		Face.init( gl );
-
+		Element.init( gl );
 		Grid.init();
+
 		InputHandler.init();
 
 	},

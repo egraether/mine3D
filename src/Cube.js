@@ -89,55 +89,26 @@ Cube.prototype = {
 
 		return false;
 
-	},
-
-	draw : function( gl, flag, highlight ) {
-
-		var shader = Cube.shader,
-			colorOffset = flag ? highlight ? (72 + 3 * 96) * 4 : (72 + 2 * 96) * 4 : highlight ? (72 + 96) * 4 : 72 * 4;
-
-		// gl.useProgram( shader );
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.attributeBuffer );
-
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (72 + 4 * 96) * 4 );
-
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Cube.indexBuffer );
-		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
-
 	}
 
 };
 
 extend( Cube, {
 
-	init : function( gl ) {
+	draw : function( gl, shader, flag, highlight ) {
 
-		this.initShader( gl );
-		this.initBuffers( gl );
+		var colorOffset = flag ? highlight ? (72 + 3 * 96) * 4 : (72 + 2 * 96) * 4 : highlight ? (72 + 96) * 4 : 72 * 4;
 
-		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
-	},
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
-	initShader : function( gl ) {
+		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (72 + 4 * 96) * 4 );
 
-		var shader = gl.loadShader( "vertex-shader", "fragment-shader" );
-		gl.useProgram(shader);
-
-		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
-		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
-
-		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
-		gl.enableVertexAttribArray( shader.positionAttribute );
-
-		shader.colorAttribute = gl.getAttribLocation( shader, "aColor" );
-		gl.enableVertexAttribArray( shader.colorAttribute );
-
-		this.shader = shader;
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
 
 	},
 
