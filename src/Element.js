@@ -45,11 +45,7 @@ Element.prototype = {
 
 	decreaseValue : function() {
 
-		if ( --this.value ) {
-
-			this.face.updateValue = true;
-
-		} else {
+		if ( !(--this.value) ) {
 
 			this.state = "open";
 
@@ -76,7 +72,6 @@ Element.prototype = {
 		this.state = "mine";
 
 		this.value = 28;
-		this.face.updateValue = true;
 
 	},
 
@@ -89,7 +84,7 @@ Element.prototype = {
 
 		if ( state == "number" || state == "mine" ) {
 
-			this.face.draw( gl );
+			this.face.draw( gl, this.value );
 
 		} else {
 

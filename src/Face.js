@@ -2,53 +2,21 @@ var Face = function( element ) {
 
 	this.element = element;
 
-	this.updateValue = true;
-
-	this.texCoordArray = new Float32Array([
-		1, 1,
-		0, 1,
-		0, 0,
-		1, 0
-	]);
-
 }
 
 Face.prototype = {
 
-	updateTexCoords : function( value ) {
-
-		var texCoords = this.texCoordArray,
-			value = this.element.value,
-			step = 1 / 32,
-			top = 1 - value * step,
-			bottom = 1 - ( value + 1 ) * step;
-
-		texCoords[1] = texCoords[3] = top;
-		texCoords[5] = texCoords[7] = bottom;
-
-	},
-
-	draw : function( gl ) {
-
-		if ( this.updateValue ) {
-
-			this.updateTexCoords();
-
-		}
+	draw : function( gl, value ) {
 
 		var shader = Face.shader;
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, Face.vertexBuffer );
+		gl.bindBuffer( gl.ARRAY_BUFFER, Face.attributeBuffer );
+
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, Face.colorBuffer );
-		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 0 );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, Face.texCoordBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.DYNAMIC_DRAW );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 12 * 4 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (12 + 16 + value * 8) * 4 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Face.indexBuffer );
 		gl.drawElements( gl.TRIANGLE_FAN, 4, gl.UNSIGNED_SHORT, 0 );
@@ -64,8 +32,6 @@ extend( Face, {
 		this.initShader( gl );
 		this.initTexture( gl );
 		this.initBuffers( gl );
-
-		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 	},
 
@@ -104,7 +70,7 @@ extend( Face, {
 
 	initBuffers : function( gl ) {
 
-		this.vertexArray = new Float32Array([
+		this.vertices = new Float32Array([
 
 			0,  0.5,  0.5,
 			0, -0.5,  0.5,
@@ -113,7 +79,7 @@ extend( Face, {
 
 		]);
 
-		this.colorArray = new Float32Array([
+		var colors = new Float32Array([
 
 			0, 0, 0, 0,
 			0, 0, 0, 0,
@@ -122,25 +88,35 @@ extend( Face, {
 
 		]);
 
-		this.indexArray = new Uint16Array([
+		var texCoords = new Float32Array( 29 * 8 ),
+			step = 1 / 32,
+			top, botton, i;
 
-			0, 1, 2, 3
+		for ( i = 0; i < 29; i++ ) {
 
-		]);
+			top = 1 - i * step;
+			bottom = 1 - ( i + 1 ) * step;
 
-		this.vertexBuffer = gl.createBuffer();
-		this.colorBuffer = gl.createBuffer();
-		this.texCoordBuffer = gl.createBuffer();
+			texCoords[i * 8] = texCoords[i * 8 + 6] = 1;
+			texCoords[i * 8 + 2] = texCoords[i * 8 + 4] = 0;
+
+			texCoords[i * 8 + 1] = texCoords[i * 8 + 3] = top;
+			texCoords[i * 8 + 5] = texCoords[i * 8 + 7] = bottom;
+
+		}
+
+		this.attributeBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, (12 + 16 + 29 * 8) * 4, gl.STATIC_DRAW );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
+		gl.bufferSubData( gl.ARRAY_BUFFER, 0, this.vertices );
+		gl.bufferSubData( gl.ARRAY_BUFFER, 12 * 4, colors );
+		gl.bufferSubData( gl.ARRAY_BUFFER, (12 + 16) * 4, texCoords);
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( [0, 1, 2, 3] ), gl.STATIC_DRAW);
 
 	}
 

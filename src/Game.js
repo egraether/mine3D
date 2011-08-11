@@ -24,7 +24,7 @@ var Game = {
 
 			if ( Camera.updateRotation ) {
 
-				Camera.updateFaceDirections( gl, Face.vertexArray, Face.vertexBuffer );
+				Camera.updateFaceDirections( gl, Face.vertices, Face.attributeBuffer );
 
 			}
 

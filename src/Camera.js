@@ -292,7 +292,7 @@ var Camera = ( function() {
 
 	}
 
-	this.updateFaceDirections = function( gl, vertexArray, vertexBuffer ) {
+	this.updateFaceDirections = function( gl, vertices, buffer ) {
 
 		mat4.identity( matrix );
 		mat4.rotate( matrix, Math.PI / 2, eye );
@@ -301,26 +301,26 @@ var Camera = ( function() {
 		vec3.normalize( vector );
 		vec3.scale( vector, Math.sqrt( 0.5 ) );
 
-		vertexArray[0] = vector[0];
-		vertexArray[1] = vector[1];
-		vertexArray[2] = vector[2];
+		vertices[0] = vector[0];
+		vertices[1] = vector[1];
+		vertices[2] = vector[2];
 
-		vertexArray[6] = -vector[0];
-		vertexArray[7] = -vector[1];
-		vertexArray[8] = -vector[2];
+		vertices[6] = -vector[0];
+		vertices[7] = -vector[1];
+		vertices[8] = -vector[2];
 
 		mat4.multiplyVec3( matrix, vector );
 
-		vertexArray[3] = vector[0];
-		vertexArray[4] = vector[1];
-		vertexArray[5] = vector[2];
+		vertices[3] = vector[0];
+		vertices[4] = vector[1];
+		vertices[5] = vector[2];
 
-		vertexArray[9] = -vector[0];
-		vertexArray[10] = -vector[1];
-		vertexArray[11] = -vector[2];
+		vertices[9] = -vector[0];
+		vertices[10] = -vector[1];
+		vertices[11] = -vector[2];
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW );
+		gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
+		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertices );
 
 		this.updateRotation = false;
 
