@@ -4,7 +4,15 @@ var BSPTree = {
 
 	createPartition : function( elements ) {
 
-		this.root = new BSPNode().init( elements, 0 );
+		if ( elements.length > 1 ) {
+
+			this.root = new BSPNode().init( elements, 0 );
+
+		} else if ( elements.length == 1 ) {
+
+			this.root = elements[0];
+
+		}
 
 	},
 
@@ -20,20 +28,33 @@ var BSPTree = {
 
 	remove : function( element ) {
 
-		this.root = this.root.remove( element );
+		if ( this.root ) {
+
+			this.root = this.root.remove( element );
+
+		}
 
 	},
 
 	count : function() {
 
-		return this.root.count();
+		if ( this.root ) {
+
+			return this.root.count();
+
+		} else {
+
+			return 0;
+
+		}
 
 	},
 
 	print : function() {
 
-		console.log("root " + vec3.str(this.root.position));
-		this.root.print( 1 );
+		console.log( "root " + vec3.str( this.root.position ) );
+
+		this.root.print( "" );
 
 	}
 

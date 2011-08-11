@@ -3,8 +3,6 @@ var BSPNode = function() {
 	this.front = null;
 	this.back = null;
 
-	this.element = null;
-
 	this.position = null;
 	this.direction = null; // 0 : "x", 1 : "y", 2 : "z"
 
@@ -16,52 +14,58 @@ BSPNode.prototype = {
 
 		var frontElements,
 			backElements,
-			element,
-			pos;
+			element;
 
 		this.direction = direction;
+		this.position = this.getAveragePosition( elements, direction );
 
-		if ( elements.length == 1 ) {
+		frontElements = [];
+		backElements = [];
 
-			this.element = elements[0];
+		while ( elements.length ) {
 
-		} else {
+			element = elements.pop();
+			pos = element.position;
 
-			this.position = this.getAveragePosition( elements, direction );
+			if ( pos[direction] < this.position[direction] ) {
 
-			frontElements = [];
-			backElements = [];
+				backElements.push( element );
 
-			while ( elements.length ) {
+			} else {
 
-				element = elements.pop();
-				pos = element.position;
-
-				if ( pos[direction] < this.position[direction] ) {
-
-					backElements.push( element );
-
-				} else {
-
-					frontElements.push( element );
-
-				}
+				frontElements.push( element );
 
 			}
 
-			direction = ( direction + 1 ) % 3;
+		}
 
-			if ( !frontElements.length ) {
+		direction = ( direction + 1 ) % 3;
 
-				this.init( backElements, direction );
+		if ( !frontElements.length ) {
 
-			} else if ( !backElements.length ) {
+			this.init( backElements, direction );
 
-				this.init( frontElements, direction );
+		} else if ( !backElements.length ) {
+
+			this.init( frontElements, direction );
+
+		} else {
+
+			if ( frontElements.length == 1 ) {
+
+				this.front = frontElements[0];
 
 			} else {
 
 				this.front = new BSPNode().init( frontElements, direction );
+
+			}
+
+			if ( backElements.length == 1 ) {
+
+				this.back = backElements[0];
+
+			} else {
 
 				this.back = new BSPNode().init( backElements, direction );
 
@@ -109,30 +113,17 @@ BSPNode.prototype = {
 
 	draw : function( gl, position ) {
 
-		var dir, inFront;
+		var dir = this.direction;
 
-		if ( this.element ) {
+		if ( position[dir] > this.position[dir] ) {
 
-			this.element.draw( gl );
+			this.back.draw( gl, position );
+			this.front.draw( gl, position );
 
 		} else {
 
-			dir = this.direction;
-			inFront = ( position[dir] > this.position[dir] );
-
-			if ( inFront ) {
-
-				this.back.draw( gl, position );
-
-			}
-
-			this.front.draw( gl, position )
-
-			if ( !inFront ) {
-
-				this.back.draw( gl, position );
-
-			}
+			this.front.draw( gl, position );
+			this.back.draw( gl, position );
 
 		}
 
@@ -140,43 +131,25 @@ BSPNode.prototype = {
 
 	remove : function( element ) {
 
-		var dir;
+		var dir = this.direction;
 
-		if ( this.element ) {
+		if ( element.position[dir] > this.position[dir] ) {
 
-			if ( this.element.index == element.index ) {
+			this.front = this.front.remove( element );
 
-				return 0;
+			if ( !this.front ) {
 
-			} else {
-
-				console.log("wtf");
+				return this.back;
 
 			}
 
 		} else {
 
-			dir = this.direction;
+			this.back = this.back.remove( element );
 
-			if ( element.position[dir] > this.position[dir] ) {
+			if ( !this.back ) {
 
-				this.front = this.front.remove( element );
-
-				if ( !this.front ) {
-
-					return this.back;
-
-				}
-
-			} else {
-
-				this.back = this.back.remove( element );
-
-				if ( !this.back ) {
-
-					return this.front;
-
-				}
+				return this.front;
 
 			}
 
@@ -188,40 +161,19 @@ BSPNode.prototype = {
 
 	count : function() {
 
-		if ( this.element ) {
-
-			return 1;
-
-		}
-
 		return this.front.count() + this.back.count();
 
 	},
 
-	print : function( depth ) {
+	print : function( str ) {
 
-		var str = "",
-			i;
+		str += "    ";
 
-		for ( i = 0; i < depth; i++ ) {
+		console.log( str + "front" );
+		this.front.print( str );
 
-			str += "    ";
-
-		}
-
-		if ( this.element ) {
-
-			console.log( str + vec3.str(this.element.position) );
-
-		} else {
-
-			console.log( str + "front" );
-			this.front.print( depth + 1 );
-
-			console.log( str + "back");
-			this.back.print( depth + 1 );
-
-		}
+		console.log( str + "back");
+		this.back.print( str );
 
 	}
 

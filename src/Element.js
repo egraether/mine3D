@@ -144,6 +144,35 @@ Element.prototype = {
 
 		}
 
+	},
+
+	remove : function( element ) {
+
+		if ( this.index == element.index ) {
+
+			return 0;
+
+		} else {
+
+			console.log("wtf");
+			throw "wtf";
+
+		}
+
+	},
+
+	count : function() {
+
+		return 1;
+
+	},
+
+	print : function( str ) {
+
+		str += "    ";
+
+		console.log( str + vec3.str( this.position ) );
+
 	}
 
 };
