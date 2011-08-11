@@ -72,6 +72,8 @@ var InputHandler = {
 
 		this.state = "up";
 
+		Camera.calculateMouseRay();
+
 	},
 
 	onMouseMove : function( event ) {

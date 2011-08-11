@@ -299,7 +299,7 @@ var Camera = ( function() {
 
 		vec3.add( up, right, vector );
 		vec3.normalize( vector );
-		vec3.scale( vector, Math.sqrt( 0.5 ) );
+		vec3.scale( vector, Math.sqrt( Face.size ) );
 
 		vertices[0] = vector[0];
 		vertices[1] = vector[1];

@@ -327,8 +327,6 @@ var Grid = {
 
 				elementInRay.open();
 
-				this.getCubeInRay( Camera.getMouseRay() );
-
 				stateChanged = true;
 
 			} else if ( this.flagged && this.minesSet ) {
@@ -401,26 +399,34 @@ var Grid = {
 
 		}
 
-		if ( this.elementInRay ) {
-
-			this.elementInRay.cube.highlight = false;
-
-			imageChanged = true;
-
-		}
-
-		this.elementInRay = nearest;
-
-		if ( nearest ) {
-
-			nearest.cube.highlight = true;
-
-			imageChanged = true;
-
-		}
-
-		return imageChanged;
+		return this.setElementInRay( nearest );
 
 	},
+
+	setElementInRay : function( element ) {
+
+		var screenChanged = false;
+
+		if ( this.elementInRay ) {
+
+			this.elementInRay.highlight = false;
+
+			screenChanged = true;
+
+		}
+
+		this.elementInRay = element;
+
+		if ( element ) {
+
+			element.highlight = true;
+
+			screenChanged = true;
+
+		}
+
+		return screenChanged;
+
+	}
 
 };

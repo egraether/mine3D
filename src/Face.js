@@ -27,6 +27,8 @@ Face.prototype = {
 
 extend( Face, {
 
+	size : 0.3,
+
 	init : function( gl ) {
 
 		this.initShader( gl );
@@ -70,12 +72,14 @@ extend( Face, {
 
 	initBuffers : function( gl ) {
 
+		var s = this.size;
+
 		this.vertices = new Float32Array([
 
-			0,  0.5,  0.5,
-			0, -0.5,  0.5,
-			0, -0.5, -0.5,
-			0,  0.5, -0.5
+			0,  s,  s,
+			0, -s,  s,
+			0, -s, -s,
+			0,  s, -s
 
 		]);
 

@@ -12,6 +12,7 @@ var Element = function( index, position ) {
 
 	this.value = 0;
 	this.isMine = false;
+	this.highlight = false;
 
 }
 
@@ -88,7 +89,7 @@ Element.prototype = {
 
 		} else {
 
-			this.cube.draw( gl, this.state == "flag" );
+			this.cube.draw( gl, this.state == "flag", this.highlight );
 
 		}
 

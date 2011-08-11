@@ -28,6 +28,8 @@ var Game = {
 
 			}
 
+			Grid.setElementInRay( null );
+
 			redraw = true;
 
 		}

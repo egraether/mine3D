@@ -2,7 +2,6 @@ var Cube = function( element ) {
 
 	this.element = element;
 	this.vertices = [];
-	// this.colors = [];
 
 	var i;
 
@@ -15,8 +14,6 @@ var Cube = function( element ) {
 		) );
 
 	}
-
-	this.highlight = false;
 
 };
 
@@ -94,10 +91,10 @@ Cube.prototype = {
 
 	},
 
-	draw : function( gl, flag ) {
+	draw : function( gl, flag, highlight ) {
 
 		var shader = Cube.shader,
-			colorOffset = flag ? this.highlight ? (72 + 3 * 96) * 4 : (72 + 2 * 96) * 4 : this.highlight ? (72 + 96) * 4 : 72 * 4;
+			colorOffset = flag ? highlight ? (72 + 3 * 96) * 4 : (72 + 2 * 96) * 4 : highlight ? (72 + 96) * 4 : 72 * 4;
 
 		// gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
