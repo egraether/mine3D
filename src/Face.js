@@ -93,17 +93,10 @@ extend( Face, {
 
 	initTexture : function( gl ) {
 
-		// this.texture = gl.loadTexture( "textures/ebsi.png", bind( this, function( gl ) {
-		// 
-		// 	gl.useProgram( this.shader );
-		// 	gl.passTexture( this.texture, this.shader.textureUniform );
-		// 
-		// }));
-
-		this.texture = gl.loadTexture( "textures/numbers.png", function( gl ) {
+		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
 
 			gl.useProgram( Face.shader );
-			gl.passTexture( Face.texture, Face.shader.textureUniform );
+			gl.passTexture( texture, Face.shader.textureUniform );
 
 		});
 

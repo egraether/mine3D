@@ -20,7 +20,7 @@ var InputHandler = {
 		document.addEventListener("mousewheel", bind( this, this.onScroll ), false);
 
 		canvas.addEventListener( 'contextmenu', function( event ) { event.preventDefault(); }, false );
-		canvas.onselectstart = function() {return false;};
+		canvas.onselectstart = function() { return false; };
 
 		vec3.zero( this.oldMouse );
 		vec3.zero( this.mouse );
@@ -37,6 +37,8 @@ var InputHandler = {
 	},
 
 	onMouseDown : function(event) {
+
+		event.stopPropagation();
 
 		this.state = "down";
 		this.button = event.button;
@@ -59,6 +61,8 @@ var InputHandler = {
 
 	onMouseUp : function( event ) {
 
+		event.stopPropagation();
+
 		if ( this.state == "down" ) {
 
 			this.onClick( event );
@@ -71,6 +75,8 @@ var InputHandler = {
 	},
 
 	onMouseMove : function( event ) {
+
+		event.stopPropagation();
 
 		var mouse = this.getMouse( event, this.mouse ),
 			len, ray;
@@ -92,17 +98,17 @@ var InputHandler = {
 
 			if ( this.button == 0 ) {
 
-				Camera.rotate( mouse );
+				Camera.rotate();
 
 			} else if ( this.button == 2 ) {
 
-				Camera.pan( mouse );
+				Camera.pan();
 
 			}
 
 		} else {
 
-			Camera.calculateMouseRay( mouse );
+			Camera.calculateMouseRay();
 
 		}
 
@@ -134,6 +140,7 @@ var InputHandler = {
 
 	onScroll : function(event) {
 
+		event.stopPropagation();
 		event.preventDefault();
 
 		var delta = event.wheelDelta || (event.detail * -5);

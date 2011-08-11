@@ -9,6 +9,9 @@ var Camera = ( function() {
 		pMatrix = mat4.create(),
 		mvMatrix = mat4.create(),
 
+		width = 0,
+		height = 0,
+
 		radius = 0,
 		zoomDelta = 1,
 
@@ -23,16 +26,24 @@ var Camera = ( function() {
 		near = new glMatrixArrayType(4),
 		far = new glMatrixArrayType(4),
 
+		isRotating = false,
+		isPanning = false,
+		isZooming = false,
+
 		vector = vec3.create(),
 		vector2 = vec3.create(),
 		vector3 = vec3.create(),
 
 		matrix = mat4.create();
 
-	this.updatedMatrix = true;
-	this.updatedRay = false;
+	this.updateRay = true;
+	this.updateView = true;
+	this.updateRotation = true;
 
 	this.init = function() {
+
+		width = canvas.width;
+		height = canvas.height;
 
 		vec3.assign( eye, 8, 8, 8 );
 		vec3.assign( up, 0, 0, 1 );
@@ -42,9 +53,41 @@ var Camera = ( function() {
 		vec3.normalize( vec3.cross( up, eye, right ) );
 		vec3.normalize( vec3.cross( eye, right, up ) );
 
-		mat4.perspective( 45, canvas.width / canvas.height, 0.1, 1000, pMatrix );
+		mat4.perspective( 45, width / height, 0.1, 1000, pMatrix );
 
-		radius = ( canvas.width + canvas.height ) / 4;
+		radius = ( width + height ) / 4;
+
+		mouse = InputHandler.mouse;
+
+	};
+
+	this.update = function() {
+
+		var updateView = isRotating || isPanning || isZooming || this.updateView;
+
+		if ( isZooming ) {
+
+			this.zoomCamera();
+
+		}
+
+		if ( isPanning ) {
+
+			this.panCamera();
+
+		}
+
+		if ( isRotating ) {
+
+			this.rotateCamera();
+
+			this.updateRotation = true;
+
+		}
+
+		this.updateView = isRotating = isPanning = isZooming = false;
+
+		return updateView;
 
 	};
 
@@ -57,8 +100,6 @@ var Camera = ( function() {
 	this.getMvMatrix = function() {
 
 		mat4.lookAt( vec3.add( eye, center, vector ), center, up, mvMatrix );
-
-		this.updatedMatrix = false;
 
 		return mvMatrix;
 
@@ -92,8 +133,8 @@ var Camera = ( function() {
 
 		return vec3.assign(
 			vector,
-			( mouse[0] - canvas.width * 0.5 ) / radius,
-			( canvas.height * 0.5 - mouse[1] ) / radius,
+			( mouse[0] - width * 0.5 ) / radius,
+			( height * 0.5 - mouse[1] ) / radius,
 			0.0
 		);
 
@@ -129,10 +170,16 @@ var Camera = ( function() {
 
 	};
 
-	this.rotate = function( mouse ) {
+	this.rotate = function() {
+
+		isRotating = true;
+
+	}
+
+	this.rotateCamera = function() {
 
 		getMouseOnBall( mouse, end );
-		
+
 		var angle = vec3.angle( start, end ),
 			axis;
 
@@ -150,8 +197,6 @@ var Camera = ( function() {
 			mat4.multiplyVec3( matrix, end );
 			vec3.set( end, start );
 
-			this.updatedMatrix = true;
-
 		}
 
 	};
@@ -162,7 +207,13 @@ var Camera = ( function() {
 
 	};
 
-	this.pan = function( mouse ) {
+	this.pan = function() {
+
+		isPanning = true;
+
+	};
+
+	this.panCamera = function() {
 
 		var pan = vector2;
 
@@ -180,20 +231,25 @@ var Camera = ( function() {
 
 			vec3.set( end, start );
 
-			this.updatedMatrix = true;
-
 		}
 
 	};
 
 	this.zoom = function( delta ) {
 
+		isZooming = true;
+		zoomDelta *= delta;
+
+	};
+
+	this.zoomCamera = function() {
+
 		var len = vec3.length( eye );
 
 		vec3.normalize( eye );
-		vec3.scale( eye, len * delta );
+		vec3.scale( eye, len * zoomDelta );
 
-		this.updatedMatrix = true;
+		zoomDelta = 1;
 
 	};
 
@@ -207,13 +263,19 @@ var Camera = ( function() {
 
 	};
 
-	this.calculateMouseRay = function( mouse ) {
+	this.calculateMouseRay = function() {
+
+		this.updateRay = true;
+
+	};
+
+	this.getMouseRay = function() {
 
 		mat4.multiply( pMatrix, mvMatrix, matrix );
 		mat4.inverse( matrix );
 
-		near[0] = far[0] = mouse[0] / canvas.width * 2 - 1;
-		near[1] = far[1] = mouse[1] / canvas.height * -2 + 1;
+		near[0] = far[0] = mouse[0] / width * 2 - 1;
+		near[1] = far[1] = mouse[1] / height * -2 + 1;
 
 		near[2] = 0; far[2] = 1;
 		near[3] = far[3] = 1;
@@ -224,13 +286,7 @@ var Camera = ( function() {
 		ray.origin = near;
 		ray.direction = vec3.direction( far, near, far );
 
-		this.updatedRay = true;
-
-	};
-
-	this.getMouseRay = function() {
-
-		this.updatedRay = false;
+		this.updateRay = false;
 
 		return ray;
 
@@ -265,6 +321,8 @@ var Camera = ( function() {
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW );
+
+		this.updateRotation = false;
 
 	}
 

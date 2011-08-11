@@ -16,24 +16,23 @@ var Game = {
 
 	draw : function( gl ) {
 
-		var redraw = false;
+		var redraw = Grid.update();
 
-		if ( !this.gameover ) {
-
-			redraw = Grid.update();
-
-		}
-
-		if ( Camera.updatedRay ) {
-
-			redraw = Grid.getCubeInRay( Camera.getMouseRay() );
-
-		}
-
-		if ( Camera.updatedMatrix ) {
+		if ( Camera.update() ) {
 
 			mat4.set( Camera.getMvMatrix(), gl.matrix );
-			Camera.updateFaceDirections( gl, Face.vertexArray, Face.vertexBuffer );
+
+			if ( Camera.updateRotation ) {
+
+				Camera.updateFaceDirections( gl, Face.vertexArray, Face.vertexBuffer );
+
+			}
+
+			redraw = true;
+
+		}
+
+		if ( Camera.updateRay && Grid.getCubeInRay( Camera.getMouseRay() ) ) {
 
 			redraw = true;
 
