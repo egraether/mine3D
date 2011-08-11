@@ -14,8 +14,6 @@ var Cube = function( element ) {
 			vec3.create()
 		) );
 
-		// this.colors.push( Cube.colors[Math.floor( i / 6 ) % 3] );
-
 	}
 
 	this.highlight = false;
@@ -96,21 +94,19 @@ Cube.prototype = {
 
 	},
 
-	draw : function( gl ) {
+	draw : function( gl, flag ) {
 
-		var shader = Cube.shader;
+		var shader = Cube.shader,
+			colorOffset = flag ? this.highlight ? (72 + 3 * 96) * 4 : (72 + 2 * 96) * 4 : this.highlight ? (72 + 96) * 4 : 72 * 4;
 
 		// gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.vertexBuffer );
+		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.attributeBuffer );
+
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.colorBuffer );
-		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 0 );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, Cube.texCoordBuffer );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (72 + 4 * 96) * 4 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Cube.indexBuffer );
 		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
@@ -124,7 +120,6 @@ extend( Cube, {
 	init : function( gl ) {
 
 		this.initShader( gl );
-		this.initGeometry();
 		this.initBuffers( gl );
 
 		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
@@ -149,9 +144,9 @@ extend( Cube, {
 
 	},
 
-	initGeometry : function() {
+	initBuffers : function( gl ) {
 
-		this.vertexArray = new Float32Array([
+		var vertices = new Float32Array([
 
 			// front
 			1, 1, 1,
@@ -191,12 +186,11 @@ extend( Cube, {
 
 		]);
 
-		var i,
-			v = this.vertexArray;
+		var i;
 
 		for ( i = 0; i < 72; i++ ) {
 
-			v[i] /= 2;
+			vertices[i] /= 2;
 
 		}
 
@@ -212,74 +206,73 @@ extend( Cube, {
 
 			vV.push( vec3.assign(
 				vec3.create(), 
-				v[j],
-				v[j + 1],
-				v[j + 2]
+				vertices[j],
+				vertices[j + 1],
+				vertices[j + 2]
 			) );
 
 		}
 
 
-		this.normals = new Float32Array([
-
+		var normals = new Float32Array([
+		
 			// front
 			1, 0, 0,
 			1, 0, 0,
 			1, 0, 0,
 			1, 0, 0,
-
+		
 			// right
 			0, 1, 0,
 			0, 1, 0,
 			0, 1, 0,
 			0, 1, 0,
-
+		
 			// top
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
-
+		
 			// back
 			-1, 0, 0,
 			-1, 0, 0,
 			-1, 0, 0,
 			-1, 0, 0,
-
+		
 			// left
 			0, -1, 0,
 			0, -1, 0,
 			0, -1, 0,
 			0, -1, 0,
-
+		
 			// bottom
 			0, 0, -1,
 			0, 0, -1,
 			0, 0, -1,
 			0, 0, -1
-
+		
 		]);
-
+		
 		this.normalVectors = [];
-
-		var nV = this.normalVectors,
-			n = this.normals;
-
+		
+		var nV = this.normalVectors;
+		
 		for ( i = 0; i < 24; i++ ) {
-
+		
 			j = i * 12;
-
+		
 			nV.push( vec3.assign(
 				vec3.create(), 
-				n[j],
-				n[j + 1],
-				n[j + 2]
+				normals[j],
+				normals[j + 1],
+				normals[j + 2]
 			) );
-
+		
 		}
 
 
-		this.indexArray = new Uint16Array([
+		var indices = new Uint16Array([
 
 			// front
 			0, 1, 2, 0, 2, 3,
@@ -301,7 +294,7 @@ extend( Cube, {
 
 		]);
 
-		this.colors = [
+		var colors = [
 
 			vec3.assign( vec3.create(), 0.7, 0.7, 0.7 ),
 			vec3.assign( vec3.create(), 0.6, 0.6, 0.6 ),
@@ -309,53 +302,53 @@ extend( Cube, {
 
 		];
 
-		this.colorArray = new Float32Array( 96 );
-
-		var c = this.colors,
-			cA = this.colorArray,
+		var bC = baseColors = new Float32Array( 96 ),
+			hC = highlightColors = new Float32Array( 96 ),
+			fC = flagColors = new Float32Array( 96 ),
+			fhC = flagHighlightColors = new Float32Array( 96 ),
 			col;
 
 		for ( i = 0; i < 24; i++ ) {
 
-			col = c[Math.floor( i / 4 ) % 3];
+			col = colors[Math.floor( i / 4 ) % 3];
 
-			cA[i * 4] = col[0];
-			cA[i * 4 + 1] = col[1];
-			cA[i * 4 + 2] = col[2];
-			cA[i * 4 + 3] = 1.0;
+			fC[i * 4] = fhC[i * 4] = bC[i * 4] = hC[i * 4] = col[0];
+
+			bC[i * 4 + 1] = hC[i * 4 + 1] = col[1];
+			bC[i * 4 + 2] = hC[i * 4 + 2] = col[2];
+
+			fhC[i * 4 + 1] = fC[i * 4 + 1] = col[1] / 4;
+			fhC[i * 4 + 2] = fC[i * 4 + 2] = col[2] / 4;
+
+			bC[i * 4 + 3] = fC[i * 4 + 3] = 1.0;
+			fhC[i * 4 + 3] = hC[i * 4 + 3] = 0.8;
 
 		}
 
-		this.texCoordArray = new Float32Array( 48 );
+		var texCoords = new Float32Array( 48 );
 
 		for ( i = 0; i < 48; i++ ) {
 
-			this.texCoordArray[i] = 0;
+			texCoords[i] = 0;
 
 		}
 
-	},
 
-	initBuffers : function( gl ) {
-
-		this.vertexBuffer = gl.createBuffer();
-		this.colorBuffer = gl.createBuffer();
-		this.texCoordBuffer = gl.createBuffer();
+		this.attributeBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.vertexBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW );
-		// gl.vertexAttribPointer( this.shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, (72 + 4 * 96 + 48) * 4, gl.STATIC_DRAW );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.colorBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.colorArray, gl.STATIC_DRAW );
-		// gl.vertexAttribPointer( this.shader.colorAttribute, 3, gl.FLOAT, false, 0, 0 );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.texCoordBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.STATIC_DRAW );
+		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertices );
+		gl.bufferSubData( gl.ARRAY_BUFFER, 72 * 4, baseColors );
+		gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 96) * 4, highlightColors );
+		gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 2 * 96) * 4, flagColors );
+		gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 3 * 96) * 4, flagHighlightColors );
+		gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 4 * 96) * 4, texCoords);
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indexArray, gl.STATIC_DRAW);
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
 	}
 

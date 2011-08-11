@@ -38,7 +38,6 @@ Face.prototype = {
 
 		var shader = Face.shader;
 
-		// gl.useProgram( shader );
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Face.vertexBuffer );
@@ -48,7 +47,7 @@ Face.prototype = {
 		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, Face.texCoordBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.STATIC_DRAW );
+		gl.bufferData( gl.ARRAY_BUFFER, this.texCoordArray, gl.DYNAMIC_DRAW );
 		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 0 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, Face.indexBuffer );
@@ -97,6 +96,7 @@ extend( Face, {
 
 			// gl.useProgram( Face.shader );
 			gl.passTexture( texture, Face.shader.textureUniform );
+			Camera.updateView = true;
 
 		});
 

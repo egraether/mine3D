@@ -312,23 +312,32 @@ var Grid = {
 
 	update : function() {
 
-		var clicked = this.clicked,
-			elementInRay = this.elementInRay,
+		var elementInRay = this.elementInRay,
 			stateChanged = this.redraw;
 
-		if ( clicked && elementInRay ) {
+		if ( elementInRay ) {
 
-			if ( !this.minesSet ) {
+			if ( this.clicked ) {
 
-				this.setMines( elementInRay );
+				if ( !this.minesSet ) {
+
+					this.setMines( elementInRay );
+
+				}
+
+				elementInRay.open();
+
+				this.getCubeInRay( Camera.getMouseRay() );
+
+				stateChanged = true;
+
+			} else if ( this.flagged && this.minesSet ) {
+
+				elementInRay.flag();
+
+				stateChanged = true;
 
 			}
-
-			elementInRay.open();
-
-			this.getCubeInRay( Camera.getMouseRay() );
-
-			stateChanged = true;
 
 		}
 
@@ -367,7 +376,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( element.state == "cube" ) {
+			if ( element.state == "cube" || element.state == "flag" ) {
 
 				vec3.subtract( element.position, origin, vector );
 				distanceFromOrigin = vec3.lengthSquared( vector );

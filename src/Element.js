@@ -93,7 +93,7 @@ Element.prototype = {
 
 		} else {
 
-			this.cube.draw( gl );
+			this.cube.draw( gl, this.state == "flag" );
 
 		}
 
@@ -131,6 +131,20 @@ Element.prototype = {
 				}
 
 			}
+
+		}
+
+	},
+
+	flag : function() {
+
+		if ( this.state == "cube" ) {
+
+			this.state = "flag";
+
+		} else {
+
+			this.state = "cube";
 
 		}
 
