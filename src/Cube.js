@@ -1,6 +1,6 @@
-var Cube = function( box ) {
+var Cube = function( element ) {
 
-	this.box = box;
+	this.element = element;
 	this.vertices = [];
 	// this.colors = [];
 
@@ -9,7 +9,7 @@ var Cube = function( box ) {
 	for ( i = 0; i < 24; i++ ) {
 
 		this.vertices.push( vec3.add(
-			box.position, 
+			element.position, 
 			Cube.vertexVectors[i],
 			vec3.create()
 		) );
@@ -33,7 +33,7 @@ Cube.prototype = {
 		var vector = this.vector,
 			vector2 = this.vector2;
 
-		vec3.subtract( this.box.position, origin, vector );
+		vec3.subtract( this.element.position, origin, vector );
 		vec3.scale( direction, vec3.dot( direction, vector ), vector2 );
 
 		vec3.subtract( vector, vector2 );

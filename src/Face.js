@@ -1,6 +1,6 @@
-var Face = function( box ) {
+var Face = function( element ) {
 
-	this.box = box;
+	this.element = element;
 
 	this.updateValue = true;
 
@@ -18,7 +18,7 @@ Face.prototype = {
 	updateTexCoords : function( value ) {
 
 		var texCoords = this.texCoordArray,
-			value = this.box.value,
+			value = this.element.value,
 			step = 1 / 32,
 			top = 1 - value * step,
 			bottom = 1 - ( value + 1 ) * step;

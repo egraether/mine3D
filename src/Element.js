@@ -1,4 +1,4 @@
-var Box = function( index, position ) {
+var Element = function( index, position ) {
 
 	this.index = index;
 	this.state = "cube";
@@ -23,7 +23,7 @@ var Box = function( index, position ) {
   * - open
   */
 
-Box.prototype = {
+Element.prototype = {
 
 	addNeighbor : function( neighbor, reverse ) {
 

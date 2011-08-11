@@ -76,7 +76,7 @@ var Grid = {
 
 					}
 
-					elements.push( new Box(
+					elements.push( new Element(
 						index,
 						vec3.create( position )
 					) );
@@ -110,7 +110,7 @@ var Grid = {
 			rightBorder, leftBorder,
 			k, j, i,
 			dim = this.dimensions,
-			box;
+			element;
 
 		for ( k = dim[2] - 1; k >= 0; k-- ) {
 
@@ -130,19 +130,19 @@ var Grid = {
 
 					leftBorder = ( i == 0 ? true : false );
 
-					box = elements[index];
+					element = elements[index];
 
 					if ( !leftBorder ) {
 
-						box.addNeighbor( elements[index + 1], true );
+						element.addNeighbor( elements[index + 1], true );
 
 						if ( !backBorder ) {
 
-							box.addNeighbor( elements[index + 1 + dim[0]], true );
+							element.addNeighbor( elements[index + 1 + dim[0]], true );
 
 							if ( !topBorder ) {
 
-								box.addNeighbor( elements[index + 1 + dim[0] - dim[0] * dim[1]], true );
+								element.addNeighbor( elements[index + 1 + dim[0] - dim[0] * dim[1]], true );
 
 							}
 
@@ -150,11 +150,11 @@ var Grid = {
 
 						if ( !frontBorder ) {
 
-							box.addNeighbor( elements[index + 1 - dim[0]], true );
+							element.addNeighbor( elements[index + 1 - dim[0]], true );
 
 							if ( !topBorder ) {
 
-								box.addNeighbor( elements[index + 1 - dim[0] - dim[0] * dim[1]], true );
+								element.addNeighbor( elements[index + 1 - dim[0] - dim[0] * dim[1]], true );
 
 							}
 
@@ -162,7 +162,7 @@ var Grid = {
 
 						if ( !topBorder ) {
 
-							box.addNeighbor( elements[index + 1 - dim[0] * dim[1]], true );
+							element.addNeighbor( elements[index + 1 - dim[0] * dim[1]], true );
 
 						}
 
@@ -170,11 +170,11 @@ var Grid = {
 
 					if ( !backBorder ) {
 
-						box.addNeighbor( elements[index + dim[0]], true );
+						element.addNeighbor( elements[index + dim[0]], true );
 
 						if (!topBorder) {
 
-							box.addNeighbor( elements[index + dim[0] - dim[0] * dim[1]], true);
+							element.addNeighbor( elements[index + dim[0] - dim[0] * dim[1]], true);
 
 						}
 
@@ -182,21 +182,21 @@ var Grid = {
 
 					if ( !bottomBorder ) {
 
-						box.addNeighbor( elements[index + dim[0] * dim[1]], true );
+						element.addNeighbor( elements[index + dim[0] * dim[1]], true );
 
 						if ( !leftBorder ) {
 
-							box.addNeighbor( elements[index + 1 + dim[0] * dim[1]], true );
+							element.addNeighbor( elements[index + 1 + dim[0] * dim[1]], true );
 
 							if ( !backBorder ) {
 
-								box.addNeighbor( elements[index + 1 + dim[0] + dim[0] * dim[1]], true );
+								element.addNeighbor( elements[index + 1 + dim[0] + dim[0] * dim[1]], true );
 
 							}
 
 							if ( !frontBorder ) {
 
-								box.addNeighbor( elements[index + 1 - dim[0] + dim[0] * dim[1]], true );
+								element.addNeighbor( elements[index + 1 - dim[0] + dim[0] * dim[1]], true );
 
 							}
 
@@ -204,7 +204,7 @@ var Grid = {
 
 						if ( !backBorder ) {
 
-							box.addNeighbor( elements[index + dim[0] + dim[0] * dim[1]], true );
+							element.addNeighbor( elements[index + dim[0] + dim[0] * dim[1]], true );
 
 						}
 
@@ -224,35 +224,34 @@ var Grid = {
 
 	},
 
-	setMines : function( box ) {
+	setMines : function( element ) {
 
 		var i, index,
-			neighbors = box.neighbors,
+			neighbors = element.neighbors,
 			dim = this.dimensions,
-			boxAmount = dim[0] * dim[1] * dim[2],
+			elementAmount = dim[0] * dim[1] * dim[2],
 			mines = this.mineAmount,
-			openBoxIndices = [],
-			elements = this.elements,
-			box;
+			openElementIndices = [],
+			elements = this.elements;
 
-		openBoxIndices.push( box.index );
+		openElementIndices.push( element.index );
 
 		for ( i = 0; i < neighbors.length; i++ ) {
 
-			openBoxIndices.push( neighbors[i].index );
+			openElementIndices.push( neighbors[i].index );
 
 		}
 
 
-		var boxesLeft = boxAmount - openBoxIndices.length;
+		var elementsLeft = elementAmount - openElementIndices.length;
 
-		if ( boxesLeft < 0 ) {
+		if ( elementsLeft < 0 ) {
 
 			mines = 0;
 
-		} else if ( boxesLeft < mines ) {
+		} else if ( elementsLeft < mines ) {
 
-			mines = boxesLeft;
+			mines = elementsLeft;
 
 		}
 
@@ -262,11 +261,11 @@ var Grid = {
 
 		mineWhile: while ( mines ) {
 
-			index = Math.floor( Math.random() * boxAmount );
+			index = Math.floor( Math.random() * elementAmount );
 
-			for ( i = 0; i < openBoxIndices.length; i++ ) {
+			for ( i = 0; i < openElementIndices.length; i++ ) {
 
-				if ( openBoxIndices[i] == index ) {
+				if ( openElementIndices[i] == index ) {
 
 					continue mineWhile;
 
@@ -274,11 +273,11 @@ var Grid = {
 
 			}
 
-			box = elements[index];
+			element = elements[index];
 
-			if ( !box.isMine ) {
+			if ( !element.isMine ) {
 
-				box.setMine();
+				element.setMine();
 				mines--;
 
 			}
@@ -314,18 +313,18 @@ var Grid = {
 	update : function() {
 
 		var clicked = this.clicked,
-			boxInRay = this.boxInRay,
+			elementInRay = this.elementInRay,
 			stateChanged = this.redraw;
 
-		if ( clicked && boxInRay ) {
+		if ( clicked && elementInRay ) {
 
 			if ( !this.minesSet ) {
 
-				this.setMines( boxInRay );
+				this.setMines( elementInRay );
 
 			}
 
-			boxInRay.open();
+			elementInRay.open();
 
 			this.getCubeInRay( Camera.getMouseRay() );
 
@@ -347,7 +346,7 @@ var Grid = {
 
 	},
 
-	boxInRay : null,
+	elementInRay : null,
 
 	getCubeInRay : function( ray ) {
 
@@ -393,15 +392,15 @@ var Grid = {
 
 		}
 
-		if ( this.boxInRay ) {
+		if ( this.elementInRay ) {
 
-			this.boxInRay.cube.highlight = false;
+			this.elementInRay.cube.highlight = false;
 
 			imageChanged = true;
 
 		}
 
-		this.boxInRay = nearest;
+		this.elementInRay = nearest;
 
 		if ( nearest ) {
 
