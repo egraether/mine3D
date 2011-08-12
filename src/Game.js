@@ -17,7 +17,7 @@ var Game = {
 
 		var redraw = Grid.update();
 
-		if ( Camera.update() ) {
+		if ( Camera.update() || Camera.updateRotation ) {
 
 			mat4.set( Camera.getMvMatrix(), gl.matrix );
 
@@ -46,6 +46,18 @@ var Game = {
 			Grid.draw( gl );
 
 		}
+
+	},
+
+	start : function() {
+
+		Grid.start();
+
+	},
+
+	restart : function() {
+
+		Grid.restart();
 
 	},
 

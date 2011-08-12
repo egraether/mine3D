@@ -13,7 +13,7 @@ var Grid = {
 	clicked : false,
 	flagged : false,
 
-	redraw : false,
+	redraw : true,
 
 	init : function() {
 
@@ -23,7 +23,48 @@ var Grid = {
 		this.createGrid();
 		this.setNeighbors();
 
+		this.reset();
+
+	},
+
+	reset : function() {
+
 		BSPTree.createPartition( this.elements.concat() );
+
+		this.redraw = true;
+		this.minesSet = false;
+
+		this.clicked = this.flagged = false;
+		this.elementInRay = null;
+
+	},
+
+	start : function() {
+
+		var i;
+
+		for ( i = 0; i < this.elements.length; i++ ) {
+
+			this.elements[i].reset();
+
+		}
+
+		this.reset();
+
+	},
+
+	restart : function() {
+
+		var i;
+
+		for ( i = 0; i < this.elements.length; i++ ) {
+
+			this.elements[i].restart();
+
+		}
+
+		this.reset();
+		this.minesSet = true;
 
 	},
 

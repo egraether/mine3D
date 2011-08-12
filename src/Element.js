@@ -1,19 +1,14 @@
 var Element = function( index, position ) {
 
 	this.index = index;
-	this.state = "cube";
-
 	this.position = position;
 
 	this.cube = new Cube( this );
-
 	this.neighbors = [];
 
-	this.value = 0;
-	this.isMine = false;
-	this.highlight = false;
+	this.reset();
 
-}
+};
 
 /** states:
   * - cube
@@ -24,6 +19,26 @@ var Element = function( index, position ) {
   */
 
 Element.prototype = {
+
+	reset : function() {
+
+		this.state = "cube";
+
+		this.value = 0;
+		this.maxValue = 0;
+		this.isMine = false;
+		this.highlight = false;
+
+	},
+
+	restart : function() {
+
+		this.state = "cube";
+
+		this.value = this.maxValue;
+		this.highlight = false;
+
+	},
 
 	addNeighbor : function( neighbor, reverse ) {
 
@@ -40,6 +55,7 @@ Element.prototype = {
 	increaseValue : function() {
 
 		this.value++;
+		this.maxValue++;
 
 	},
 
@@ -47,7 +63,8 @@ Element.prototype = {
 
 		if ( !(--this.value) ) {
 
-			this.state = "open";
+			this.state = "cube";
+			this.open();
 
 		}
 
@@ -219,7 +236,7 @@ extend( Element, {
 		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
 
 			gl.passTexture( texture, Element.shader.textureUniform );
-			Camera.updateView = true;
+			Grid.redraw = true;
 
 		});
 

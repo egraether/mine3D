@@ -37,7 +37,6 @@ var Camera = ( function() {
 		matrix = mat4.create();
 
 	this.updateRay = true;
-	this.updateView = true;
 	this.updateRotation = true;
 
 	this.init = function() {
@@ -63,7 +62,7 @@ var Camera = ( function() {
 
 	this.update = function() {
 
-		var updateView = isRotating || isPanning || isZooming || this.updateView;
+		var updateView = isRotating || isPanning || isZooming;
 
 		if ( isZooming ) {
 
@@ -85,7 +84,7 @@ var Camera = ( function() {
 
 		}
 
-		this.updateView = isRotating = isPanning = isZooming = false;
+		isRotating = isPanning = isZooming = false;
 
 		return updateView;
 
