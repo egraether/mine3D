@@ -99,7 +99,7 @@ var Camera = ( function() {
 		vec3.scale( eye, 1000 );
 		vec3.zero( panVector );
 
-		this.recenterView();
+		this.recenterView( false );
 
 	};
 
@@ -339,28 +339,64 @@ var Camera = ( function() {
 
 	};
 
-	this.recenterView = function() {
+	this.recenterView = function( animated ) {
 
-		var visionSize = BSPTree.getCenterAndVisionSize( center ),
+		var visionSize = BSPTree.getCenterAndVisionSize( vector ),
 			d = 2, k = 1,
-			minEyeLength = 8;
+			minEyeLength = 8,
+			tweenCenter, tweenEye;
 
 		visionSize += k * visionSize + d;
 		visionSize /= vec3.length( eye );
 
-		if ( visionSize < 1 && visionSize > 0 ) {
+		if ( !vec3.equal( vector, center ) || ( visionSize < 1 && visionSize > 0 ) ) {
 
-			vec3.scale( eye, visionSize );
+			vec3.set( eye, vector2 )
+			vec3.scale( vector2, visionSize );
+
+			if ( vec3.lengthSquared( vector2 ) < minEyeLength * minEyeLength ) {
+
+				vec3.scale( vec3.normalize( vector2 ), minEyeLength );
+
+			}
+
+			if ( animated ) {
+
+				tweenCenter = new TWEEN.Tween( center );
+				tweenEye = new TWEEN.Tween( eye );
+
+				tweenCenter.to( { 
+					0 : vector[0],
+					1 : vector[1],
+					2 : vector[2]
+				}, 500 );
+
+				tweenEye.to( { 
+					0 : vector2[0],
+					1 : vector2[1],
+					2 : vector2[2]
+				}, 500 );
+
+				tweenCenter.onUpdate( function() {
+					isRecentered = true;
+				});
+
+				tweenCenter.easing( TWEEN.Easing.Quadratic.EaseInOut );
+				tweenEye.easing( TWEEN.Easing.Quadratic.EaseInOut );
+
+				tweenCenter.start();
+				tweenEye.start();
+
+			} else {
+
+				vec3.set( vector, center );
+				vec3.set( vector2, eye );
+
+				isRecentered = true;
+
+			}
 
 		}
-
-		if ( vec3.lengthSquared( eye ) < minEyeLength * minEyeLength ) {
-
-			vec3.scale( vec3.normalize( eye ), minEyeLength );
-
-		}
-
-		isRecentered = true;
 
 	};
 

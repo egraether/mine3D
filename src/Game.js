@@ -23,11 +23,12 @@ var Game = {
 
 		if ( Grid.recenter && Settings.recenter ) {
 
-			Camera.recenterView();
+			Camera.recenterView( Settings.animations );
 
 			Grid.recenter = false;
 
 		}
+
 
 		if ( Camera.update() || Camera.updateRotation ) {
 
@@ -50,6 +51,16 @@ var Game = {
 			redraw = true;
 
 		}
+
+
+		if ( Settings.animations && TWEEN.getAll().length ) {
+
+			TWEEN.update();
+
+			redraw = true;
+
+		}
+
 
 		if ( redraw ) {
 

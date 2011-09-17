@@ -55,3 +55,9 @@ vec3.angle = function( vec, vec2 ) {
 	return Math.acos( this.dot( vec, vec2 ) / this.length( vec ) / vec3.length( vec2 ) );
 
 };
+
+vec3.equal = function( vec, vec2 ) {
+
+	return vec[0] == vec2[0] && vec[1] == vec2[1] && vec[2] == vec2[2];
+
+};
