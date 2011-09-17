@@ -65,8 +65,7 @@ var Game = {
 
 		this.gameover = false;
 
-		vec3.scale( Camera.getEye(), 100 );
-		Camera.recenterView();
+		Camera.reset();
 
 	},
 

@@ -6,6 +6,8 @@ var Camera = ( function() {
 		center = vec3.create(),
 		right = vec3.create(),
 
+		panVector = vec3.create(),
+
 		pMatrix = mat4.create(),
 		mvMatrix = mat4.create(),
 
@@ -49,6 +51,7 @@ var Camera = ( function() {
 		vec3.assign( up, 0, 0, 1 );
 
 		vec3.zero( center );
+		vec3.zero( panVector );
 
 		vec3.normalize( vec3.cross( up, eye, right ) );
 		vec3.normalize( vec3.cross( eye, right, up ) );
@@ -91,6 +94,15 @@ var Camera = ( function() {
 
 	};
 
+	this.reset = function() {
+
+		vec3.scale( eye, 1000 );
+		vec3.zero( panVector );
+
+		this.recenterView();
+
+	};
+
 	this.getPMatrix = function() {
 
 		return pMatrix;
@@ -99,7 +111,7 @@ var Camera = ( function() {
 
 	this.getMvMatrix = function() {
 
-		mat4.lookAt( vec3.add( eye, center, vector ), center, up, mvMatrix );
+		mat4.lookAt( this.getPosition(), vec3.add( center, panVector, vector2 ), up, mvMatrix );
 
 		return mvMatrix;
 
@@ -125,7 +137,7 @@ var Camera = ( function() {
 
 	this.getPosition = function() {
 
-		return vec3.add( center, eye, vector );
+		return vec3.add( vec3.add( center, panVector, vector ), eye );
 
 	};
 
@@ -228,7 +240,7 @@ var Camera = ( function() {
 			vec3.scale( right, vector[0], pan );
 			vec3.add( pan, vec3.scale( up, vector[1], vector ) );
 
-			vec3.add( center, pan );
+			vec3.add( panVector, pan );
 
 			vec3.set( end, start );
 
