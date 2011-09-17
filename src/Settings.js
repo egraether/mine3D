@@ -17,20 +17,18 @@ var Settings = {
 	},
 
 	currentLevel : null,
-
-	animated : false,
-	recenter : false,
-
 	mode : 'classic', // [ 'classic', 'sweep' ]
 
-	init : function() {
+	animations : false,
+	recenter : false,
 
-		this.currentLevel = this.levels.easy;
+	setFromMenu : function() {
 
-		this.animated = true;
-		this.recenter = true;
+		this.currentLevel = Menu.level;
+		this.mode = Menu.mode;
 
-		this.mode = 'sweep';
+		this.animations = Menu.animations;
+		this.recenter = Menu.recenter;
 
 	}
 

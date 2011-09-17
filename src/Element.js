@@ -110,7 +110,7 @@ Element.prototype = {
 
 			if ( this.isMine ) {
 
-				Game.over();
+				return Game.over();
 
 			} else if ( this.value ) {
 
@@ -121,6 +121,8 @@ Element.prototype = {
 				this.openEmpty();
 
 			}
+
+			Grid.cubeCount--;
 
 		}
 
@@ -176,6 +178,7 @@ Element.prototype = {
 				}
 
 				Grid.minesLeft--;
+				Grid.cubeCount--;
 
 			} else {
 

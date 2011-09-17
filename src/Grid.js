@@ -1,6 +1,7 @@
 var Grid = {
 
 	elements : [],
+	cubeCount : 0,
 
 	spacing : 0.1,
 
@@ -20,6 +21,8 @@ var Grid = {
 
 		this.elements = [];
 
+		Settings.setFromMenu();
+
 		this.createGrid();
 		this.setNeighbors();
 
@@ -30,6 +33,8 @@ var Grid = {
 	reset : function() {
 
 		BSPTree.createPartition( this.elements.concat() );
+
+		this.cubeCount = this.elements.length;
 
 		this.redraw = true;
 		this.recenter = true;
@@ -352,7 +357,8 @@ var Grid = {
 
 	update : function() {
 
-		var elementInRay = this.elementInRay;
+		var elementInRay = this.elementInRay,
+			newCubeCount = false;
 
 		if ( elementInRay ) {
 
@@ -367,6 +373,7 @@ var Grid = {
 				elementInRay.open();
 
 				this.redraw = true;
+				newCubeCount = true;
 
 			} else if ( this.rightClicked && this.minesSet ) {
 
@@ -377,6 +384,7 @@ var Grid = {
 				} else {
 
 					elementInRay.openMine();
+					newCubeCount = true;
 
 				}
 
@@ -393,6 +401,14 @@ var Grid = {
 		if ( this.minesSet && !Game.gameover ) {
 
 			Menu.setTime( new Date().getTime() - this.time );
+
+			if ( newCubeCount &&
+				( Settings.mode == 'classic' && this.cubeCount == Settings.currentLevel.mines ) ||
+				( Settings.mode == 'sweep' && this.cubeCount == this.minesLeft ) ) {
+
+				Game.over( true );
+
+			}
 
 		}
 

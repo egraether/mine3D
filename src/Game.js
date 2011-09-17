@@ -4,7 +4,6 @@ var Game = {
 
 	init : function( gl ) {
 
-		Settings.init();
 		Menu.init();
 
 		Camera.init();
@@ -88,11 +87,21 @@ var Game = {
 
 	},
 
-	over : function( box ) {
+	over : function( won ) {
 
 		this.gameover = true;
 
 		Grid.showMines();
+
+		if ( won ) {
+
+			Menu.win();
+
+		} else {
+
+			Menu.lose();
+
+		}
 
 	}
 

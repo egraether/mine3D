@@ -1,13 +1,19 @@
 var Menu = {
 
+	mode : null,
+	level : null,
+
+	animations : false,
+	recenter : false,
+
 	init : function() {
 
 		$('#newButton').click(function () {
 
 			Game.start();
 
-			$('#menu').toggle(false);
-			$('#menuButton').removeClass('active');
+			$('#menu').toggle( false );
+			$('#menuButton').removeClass( 'active' );
 
 		});
 
@@ -17,38 +23,38 @@ var Menu = {
 
 		});
 
+
+		function setMode( modeName ) {
+
+			$('#classic').removeClass( 'active' );
+			$('#sweep').removeClass( 'active' );
+
+			$('#' + modeName).addClass( 'active' );
+			Menu.mode = modeName;
+
+		};
+
 		$('#classic').click(function() {
 
-			if ( !$(this).hasClass('active') ) {
-
-				$(this).addClass('active');
-				$('#sweep').removeClass('active');
-				Settings.mode = 'classic';
-
-			}
+			setMode( 'classic' );
 
 		});
 
 		$('#sweep').click(function() {
 
-			if ( !$(this).hasClass('active') ) {
-
-				$(this).addClass('active');
-				$('#classic').removeClass('active');
-				Settings.mode = 'sweep';
-
-			}
+			setMode( 'sweep' );
 
 		});
 
+
 		function setLevel( levelName ) {
 
-			$('#easy').removeClass('active');
-			$('#medium').removeClass('active');
-			$('#hard').removeClass('active');
+			$('#easy').removeClass( 'active' );
+			$('#medium').removeClass( 'active' );
+			$('#hard').removeClass( 'active' );
 
-			$('#' + levelName).addClass('active');
-			Settings.currentLevel = Settings.levels[levelName];
+			$('#' + levelName).addClass( 'active');
+			Menu.level = Settings.levels[levelName];
 
 		};
 
@@ -70,25 +76,29 @@ var Menu = {
 
 		});
 
-		$('#animations').click(function() {
 
-			$(this).toggleClass('active');
-			Settings.animated = !Settings.animated;
+		function toggleAnimation() {
 
-		});
+			$('#animations').toggleClass( 'active' );
+			Menu.animations = !Menu.animations;
 
-		$('#recenter').click(function() {
+		};
 
-			$(this).toggleClass('active');
-			Settings.recenter = !Settings.recenter;
+		function toggleRecenter() {
 
-		});
+			$('#recenter').toggleClass( 'active' );
+			Menu.recenter = !Menu.recenter;
 
-		$('#sweep').addClass('active');
-		$('#easy').addClass('active');
+		};
 
-		$('#animations').addClass('active');
-		$('#recenter').addClass('active');
+		$('#animations').click( toggleAnimation );
+		$('#recenter').click( toggleRecenter );
+
+		setMode( 'sweep' );
+		setLevel( 'easy' );
+
+		toggleAnimation();
+		toggleRecenter();
 
 	},
 
@@ -109,12 +119,27 @@ var Menu = {
 		this.setTime( time );
 		this.setMines( mines );
 
+		$('#winner').hide();
+		$('#loser').hide();
+
 	},
 
 	toggle : function() {
 
 		$('#menu').toggle();
 		$('#menuButton').toggleClass('active');
+
+	},
+
+	lose : function() {
+
+		$('#loser').show();
+
+	},
+
+	win : function() {
+
+		$('#winner').show();
 
 	}
 

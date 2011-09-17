@@ -68,14 +68,17 @@ body {
 #menu {
 	display: none;
 
-	width: 300px;
+	width: 295px;
+	height: 124px;
 
 	margin : 4px;
 	padding : 4px;
 
-	position : absolute;
-
 	background-color : #EEE;
 	border : 1px solid #777;
 	color : #777;
+}
+
+#winner, #loser {
+	display: none;
 }
