@@ -120,11 +120,11 @@ var InputHandler = {
 
 		if ( this.button == 0 ) {
 
-			Grid.clicked = true;
+			Grid.leftClicked = true;
 
 		} else if ( this.button == 2 ) {
 
-			Grid.flagged = true;
+			Grid.rightClicked = true;
 
 		}
 

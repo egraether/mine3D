@@ -66,6 +66,8 @@ var Game = {
 
 		this.gameover = true;
 
+		Grid.showMines();
+
 	}
 
 };

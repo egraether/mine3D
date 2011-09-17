@@ -53,10 +53,9 @@ Element.prototype = {
 
 	decreaseValue : function() {
 
-		if ( !(--this.value) ) {
+		if ( --this.value == 0 && this.state != "cube" ) {
 
-			this.state = "cube";
-			this.open();
+			this.openEmpty();
 
 		}
 
@@ -107,14 +106,11 @@ Element.prototype = {
 
 	open : function() {
 
-		var i,
-			neighbors;
-
 		if ( this.state == "cube" ) {
 
 			if ( this.isMine ) {
 
-				Grid.showMines();
+				Game.over();
 
 			} else if ( this.value ) {
 
@@ -122,23 +118,71 @@ Element.prototype = {
 
 			} else {
 
-				this.state = "open";
-
-				BSPTree.remove( this );
-
-				neighbors = this.neighbors;
-
-				for ( i = 0; i < neighbors.length; i++ ) {
-
-					neighbors[i].open();
-
-				}
+				this.openEmpty();
 
 			}
 
 		}
 
 	},
+
+	openEmpty : function() {
+
+		var i = 0,
+			neighbors = this.neighbors;
+
+		this.state = "open";
+
+		BSPTree.remove( this );
+
+		do {
+
+			neighbors[i].open();
+
+		} while ( ++i < neighbors.length );
+
+	},
+
+	openMine : function() {
+
+		var i,
+			neighbors;
+
+		if ( this.state == "cube" ) {
+
+			if ( this.isMine ) {
+
+				this.state = "open";
+
+				neighbors = this.neighbors;
+
+				for ( i = 0; i < neighbors.length; i++ ) {
+
+					neighbors[i].decreaseValue();
+
+				}
+
+
+				if ( this.value ) {
+
+					this.state = "number";
+
+				} else {
+
+					this.openEmpty();
+
+				}
+
+			} else {
+
+				Game.over();
+
+			}
+
+		}
+
+	},
+
 
 	flag : function() {
 

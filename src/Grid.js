@@ -7,8 +7,8 @@ var Grid = {
 	minesLeft : 0,
 	minesSet : false,
 
-	clicked : false,
-	flagged : false,
+	leftClicked : false,
+	rightClicked : false,
 
 	redraw : true,
 
@@ -28,7 +28,7 @@ var Grid = {
 		this.redraw = true;
 		this.minesSet = false;
 
-		this.clicked = this.flagged = false;
+		this.leftClicked = this.rightClicked = false;
 		this.elementInRay = null;
 
 	},
@@ -325,7 +325,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( element.isMine ) {
+			if ( (element.state == 'cube' || element.state == 'flag') && element.isMine ) {
 
 				element.showMine();
 
@@ -344,7 +344,7 @@ var Grid = {
 
 		if ( elementInRay ) {
 
-			if ( this.clicked ) {
+			if ( this.leftClicked ) {
 
 				if ( !this.minesSet ) {
 
@@ -356,9 +356,17 @@ var Grid = {
 
 				stateChanged = true;
 
-			} else if ( this.flagged && this.minesSet ) {
+			} else if ( this.rightClicked && this.minesSet ) {
 
-				elementInRay.flag();
+				if ( Settings.mode == 'classic' ) {
+
+					elementInRay.flag();
+
+				} else {
+
+					elementInRay.openMine();
+
+				}
 
 				stateChanged = true;
 
@@ -366,8 +374,8 @@ var Grid = {
 
 		}
 
-		this.clicked = false;
-		this.flagged = false;
+		this.leftClicked = false;
+		this.rightClicked = false;
 		this.redraw = false;
 
 		return stateChanged;

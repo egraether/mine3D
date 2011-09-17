@@ -19,13 +19,17 @@ var Settings = {
 	currentLevel : null,
 
 	animations : false,
+	transitions : false,
 
 	mode : 'classic', // [ 'classic', 'sweep' ]
 
 	init : function() {
 
 		this.currentLevel = this.levels.easy;
+
 		this.animations = true;
+		this.transitions = true;
+
 		this.mode = 'sweep';
 
 	}
