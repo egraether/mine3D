@@ -10,8 +10,8 @@ var Settings = {
 	levels : {
 
 		easy : new Level( 5, 10 ),
-		medium : new Level( 7, 40 ),
-		hard : new Level( 10, 99 ),
+		medium : new Level( 7, 10 ),
+		hard : new Level( 10, 19 ),
 		custom : new Level( 10, 99 )
 
 	},

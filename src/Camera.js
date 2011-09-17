@@ -330,10 +330,11 @@ var Camera = ( function() {
 	this.recenterView = function() {
 
 		var visionSize = BSPTree.getCenterAndVisionSize( center ),
-			visionFactor = 2.5,
+			d = 2, k = 1,
 			minEyeLength = 8;
 
-		visionSize *= visionFactor / vec3.length( eye );
+		visionSize += k * visionSize + d;
+		visionSize /= vec3.length( eye );
 
 		if ( visionSize < 1 && visionSize > 0 ) {
 

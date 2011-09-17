@@ -66,28 +66,25 @@ var Game = {
 
 		this.gameover = false;
 
-		if ( Settings.recenter ) {
-
-			vec3.scale( Camera.getEye(), 100 );
-
-		}
+		vec3.scale( Camera.getEye(), 100 );
+		Camera.recenterView();
 
 	},
 
 	start : function() {
 
-		this.reset();
-
 		// Grid.start();
 		Grid.init();
+
+		this.reset();
 
 	},
 
 	restart : function() {
 
-		this.reset();
-
 		Grid.restart();
+
+		this.reset();
 
 	},
 

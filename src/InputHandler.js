@@ -19,6 +19,9 @@ var InputHandler = {
 		document.addEventListener("DOMMouseScroll", bind( this, this.onScroll ), false);
 		document.addEventListener("mousewheel", bind( this, this.onScroll ), false);
 
+		document.addEventListener("keydown", bind( this, this.onKeyDown ), false);
+		document.addEventListener("keyup", bind( this, this.onKeyUp ), false);
+
 		canvas.addEventListener( 'contextmenu', function( event ) { event.preventDefault(); }, false );
 		canvas.onselectstart = function() { return false; };
 
@@ -144,7 +147,7 @@ var InputHandler = {
 
 	},
 
-	onScroll : function(event) {
+	onScroll : function( event ) {
 
 		event.stopPropagation();
 		event.preventDefault();
@@ -153,6 +156,41 @@ var InputHandler = {
 		delta = 1 - delta * 0.0002;
 
 		Camera.zoom( delta );
+
+	},
+
+	onKeyDown : function( event ) {
+
+		if (event.keyCode === 32) {
+
+			vec3.set( this.mouse, this.oldMouse );
+
+			Camera.startRotate( this.oldMouse );
+
+			this.button = 0;
+			this.state = "drag";
+
+		}
+
+	},
+
+	onKeyUp : function( event ) {
+
+		if (event.keyCode === 32) {
+
+			this.state = "up";
+
+			Camera.calculateMouseRay();
+
+		} else if (event.keyCode == 82 || event.keyCode == 78) {
+
+			Game.start();
+
+		} else if (event.keyCode === 27) {
+
+			Menu.toggle();
+
+		}
 
 	}
 

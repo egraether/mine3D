@@ -6,6 +6,9 @@ var Menu = {
 
 			Game.start();
 
+			$('#menu').toggle(false);
+			$('#menuButton').removeClass('active');
+
 		});
 
 		$('#menuButton').click(function () {
