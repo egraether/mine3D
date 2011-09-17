@@ -18,6 +18,8 @@ var Grid = {
 
 	init : function() {
 
+		this.elements = [];
+
 		this.createGrid();
 		this.setNeighbors();
 

@@ -17,9 +17,23 @@ body {
 
 #hud {
 	position : absolute;
+	width : 300px;
+	height : 0%;
 }
 
-#hud div {
+#hud a {
+	color : #6A8F5F;
+}
+
+#hud a:visited {
+	color : #6A8F5F;
+}
+
+#hud a:hover {
+	color : #333;
+}
+
+.element {
 	margin : 4px;
 	padding : 4px 8px;
 
@@ -30,23 +44,38 @@ body {
 	color : #777;
 }
 
-#hud a {
-	color : #555;
-}
-
-#hud a:visited {
-	color : #777;
-}
-
-#hud a:hover {
-	color : #333;
-}
-
-#new {
+.button {
 	cursor : pointer;
 	background-color : #FFF !important;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
-#new:hover {
-	background-color : #EEE !important;
+.button:hover {
+	background-color : #BACF9F !important;
+}
+
+.active {
+	background-color : #CADFB6 !important;
+}
+
+.clear {
+	clear : both;
+}
+
+#menu {
+	display: none;
+
+	width: 300px;
+
+	margin : 4px;
+	padding : 4px;
+
+	position : absolute;
+
+	background-color : #EEE;
+	border : 1px solid #777;
+	color : #777;
 }

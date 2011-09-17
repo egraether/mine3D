@@ -45,7 +45,7 @@ var Camera = ( function() {
 		width = canvas.width;
 		height = canvas.height;
 
-		vec3.assign( eye, 8, 8, 8 );
+		vec3.assign( eye, 100 );
 		vec3.assign( up, 0, 0, 1 );
 
 		vec3.zero( center );
@@ -215,14 +215,15 @@ var Camera = ( function() {
 
 	this.panCamera = function() {
 
-		var pan = vector2;
+		var pan = vector2,
+			panFactor = 0.3;
 
 		getMouseOnScreen( mouse, end );
 		vec3.subtract( start, end, vector );
 
 		if ( vec3.lengthSquared( vector ) ) {
 
-			vec3.scale( vector, vec3.length( eye ) * 0.3 );
+			vec3.scale( vector, vec3.length( eye ) * panFactor );
 
 			vec3.scale( right, vector[0], pan );
 			vec3.add( pan, vec3.scale( up, vector[1], vector ) );
@@ -328,13 +329,21 @@ var Camera = ( function() {
 
 	this.recenterView = function() {
 
-		var visionSize = BSPTree.getCenterAndVisionSize( center );
+		var visionSize = BSPTree.getCenterAndVisionSize( center ),
+			visionFactor = 2.5,
+			minEyeLength = 8;
 
-		visionSize /= vec3.length( eye );
+		visionSize *= visionFactor / vec3.length( eye );
 
-		if ( visionSize < 1 ) {
+		if ( visionSize < 1 && visionSize > 0 ) {
 
 			vec3.scale( eye, visionSize );
+
+		}
+
+		if ( vec3.lengthSquared( eye ) < minEyeLength * minEyeLength ) {
+
+			vec3.scale( vec3.normalize( eye ), minEyeLength );
 
 		}
 

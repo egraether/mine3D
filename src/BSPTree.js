@@ -65,7 +65,7 @@ var BSPTree = {
 			vec3.add( this.highVector, this.lowVector, center );
 			vec3.scale( center, 0.5 );
 
-			return this.root.getVisionSize( center, this.highVector );
+			return Math.sqrt( this.root.getVisionSize( center, this.highVector ) );
 
 		}
 

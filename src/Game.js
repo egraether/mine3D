@@ -66,13 +66,20 @@ var Game = {
 
 		this.gameover = false;
 
+		if ( Settings.recenter ) {
+
+			vec3.scale( Camera.getEye(), 100 );
+
+		}
+
 	},
 
 	start : function() {
 
 		this.reset();
 
-		Grid.start();
+		// Grid.start();
+		Grid.init();
 
 	},
 
