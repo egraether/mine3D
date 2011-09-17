@@ -4,6 +4,7 @@ var Game = {
 
 	init : function( gl ) {
 
+		Settings.init();
 		Camera.init();
 
 		Element.init( gl );

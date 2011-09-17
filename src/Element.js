@@ -10,19 +10,11 @@ var Element = function( index, position ) {
 
 };
 
-/** states:
-  * - cube
-  * - number
-  * - flag
-  * - mine
-  * - open
-  */
-
 Element.prototype = {
 
 	reset : function() {
 
-		this.state = "cube";
+		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open' ]
 
 		this.value = 0;
 		this.maxValue = 0;

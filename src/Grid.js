@@ -4,9 +4,6 @@ var Grid = {
 
 	spacing : 0.1,
 
-	dimensions : vec3.create(),
-
-	mineAmount : 1,
 	minesLeft : 0,
 	minesSet : false,
 
@@ -16,9 +13,6 @@ var Grid = {
 	redraw : true,
 
 	init : function() {
-
-		vec3.assign( this.dimensions, 5, 5, 5 );
-		this.mineAmount = 10;
 
 		this.createGrid();
 		this.setNeighbors();
@@ -79,7 +73,7 @@ var Grid = {
 			k, j, i,
 			spacing = this.spacing,
 			position = vec3.create(),
-			dim = this.dimensions;
+			dim = Settings.currentLevel.dimensions;
 	
 		position[2] = ( dim[2] - 1 ) * ( 1 + spacing ) / 2;
 
@@ -150,7 +144,7 @@ var Grid = {
 			frontBorder, backBorder, 
 			rightBorder, leftBorder,
 			k, j, i,
-			dim = this.dimensions,
+			dim = Settings.currentLevel.dimensions,
 			element;
 
 		for ( k = dim[2] - 1; k >= 0; k-- ) {
@@ -269,9 +263,9 @@ var Grid = {
 
 		var i, index,
 			neighbors = element.neighbors,
-			dim = this.dimensions,
+			dim = Settings.currentLevel.dimensions,
 			elementAmount = dim[0] * dim[1] * dim[2],
-			mines = this.mineAmount,
+			mines = Settings.currentLevel.mines,
 			openElementIndices = [],
 			elements = this.elements;
 
@@ -284,21 +278,13 @@ var Grid = {
 		}
 
 
-		var elementsLeft = elementAmount - openElementIndices.length;
+		if ( elementAmount - openElementIndices.length < mines ) {
 
-		if ( elementsLeft < 0 ) {
-
-			mines = 0;
-
-		} else if ( elementsLeft < mines ) {
-
-			mines = elementsLeft;
+			throw 'more mines than left elements';
 
 		}
 
-		this.mineAmount = mines;
 		this.minesLeft = mines;
-
 
 		mineWhile: while ( mines ) {
 
