@@ -175,6 +175,8 @@ Element.prototype = {
 
 				}
 
+				Grid.minesLeft--;
+
 			} else {
 
 				Game.over();
@@ -191,10 +193,12 @@ Element.prototype = {
 		if ( this.state == "cube" ) {
 
 			this.state = "flag";
+			Grid.minesLeft--;
 
 		} else {
 
 			this.state = "cube";
+			Grid.minesLeft++;
 
 		}
 

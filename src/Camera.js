@@ -330,8 +330,6 @@ var Camera = ( function() {
 
 		var visionSize = BSPTree.getCenterAndVisionSize( center );
 
-		console.log( vec3.str( center ));
-
 		visionSize /= vec3.length( eye );
 
 		if ( visionSize < 1 ) {

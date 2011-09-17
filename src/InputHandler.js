@@ -118,13 +118,17 @@ var InputHandler = {
 
 	onClick : function( ) {
 
-		if ( this.button == 0 ) {
+		if ( !Game.gameover ) {
 
-			Grid.leftClicked = true;
+			if ( this.button == 0 ) {
 
-		} else if ( this.button == 2 ) {
+				Grid.leftClicked = true;
 
-			Grid.rightClicked = true;
+			} else if ( this.button == 2 ) {
+
+				Grid.rightClicked = true;
+
+			}
 
 		}
 

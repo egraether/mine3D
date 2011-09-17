@@ -13,6 +13,8 @@ var Grid = {
 	redraw : true,
 	recenter : true,
 
+	time : 0,
+
 
 	init : function() {
 
@@ -31,9 +33,12 @@ var Grid = {
 		this.recenter = true;
 
 		this.minesSet = false;
+		this.minesLeft = Settings.currentLevel.mines;
 
 		this.leftClicked = this.rightClicked = false;
 		this.elementInRay = null;
+
+		Menu.reset( 0, this.minesLeft );
 
 	},
 
@@ -290,8 +295,6 @@ var Grid = {
 
 		}
 
-		this.minesLeft = mines;
-
 		mineWhile: while ( mines ) {
 
 			index = Math.floor( Math.random() * elementAmount );
@@ -318,6 +321,7 @@ var Grid = {
 		}
 
 		this.minesSet = true;
+		this.time = new Date().getTime();
 
 	},
 
@@ -374,6 +378,7 @@ var Grid = {
 
 				}
 
+				Menu.setMines( this.minesLeft );
 				this.redraw = true;
 
 			}
@@ -381,6 +386,13 @@ var Grid = {
 		}
 
 		this.leftClicked = this.rightClicked = false;
+
+
+		if ( this.minesSet && !Game.gameover ) {
+
+			Menu.setTime( new Date().getTime() - this.time );
+
+		}
 
 		return this.redraw;
 

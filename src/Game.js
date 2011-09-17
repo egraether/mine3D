@@ -5,12 +5,16 @@ var Game = {
 	init : function( gl ) {
 
 		Settings.init();
+		Menu.init();
+
 		Camera.init();
 
 		Element.init( gl );
 		Grid.init();
 
 		InputHandler.init();
+
+		this.reset();
 
 	},
 
@@ -58,13 +62,23 @@ var Game = {
 
 	},
 
+	reset : function() {
+
+		this.gameover = false;
+
+	},
+
 	start : function() {
+
+		this.reset();
 
 		Grid.start();
 
 	},
 
 	restart : function() {
+
+		this.reset();
 
 		Grid.restart();
 
