@@ -29,6 +29,7 @@ var Camera = ( function() {
 		isRotating = false,
 		isPanning = false,
 		isZooming = false,
+		isRecentered = false,
 
 		vector = vec3.create(),
 		vector2 = vec3.create(),
@@ -62,7 +63,7 @@ var Camera = ( function() {
 
 	this.update = function() {
 
-		var updateView = isRotating || isPanning || isZooming;
+		var updateView = isRotating || isPanning || isZooming || isRecentered;
 
 		if ( isZooming ) {
 
@@ -84,7 +85,7 @@ var Camera = ( function() {
 
 		}
 
-		isRotating = isPanning = isZooming = false;
+		isRotating = isPanning = isZooming = isRecentered = false;
 
 		return updateView;
 
@@ -289,7 +290,7 @@ var Camera = ( function() {
 
 		return ray;
 
-	}
+	};
 
 	this.updateFaceDirections = function( gl, vertices, buffer ) {
 
@@ -323,7 +324,25 @@ var Camera = ( function() {
 
 		this.updateRotation = false;
 
-	}
+	};
+
+	this.recenterView = function() {
+
+		var visionSize = BSPTree.getCenterAndVisionSize( center );
+
+		console.log( vec3.str( center ));
+
+		visionSize /= vec3.length( eye );
+
+		if ( visionSize < 1 ) {
+
+			vec3.scale( eye, visionSize );
+
+		}
+
+		isRecentered = true;
+
+	};
 
 	return this;
 

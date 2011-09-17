@@ -165,6 +165,22 @@ BSPNode.prototype = {
 
 	},
 
+	getCenter : function( highVector, lowVector ) {
+
+		this.front.getCenter( highVector, lowVector );
+		this.back.getCenter( highVector, lowVector );
+
+	},
+
+	getVisionSize : function( center, vector ) {
+
+		var a = this.front.getVisionSize( center, vector ),
+			b = this.back.getVisionSize( center, vector );
+
+		return a < b ? b : a;
+
+	},
+
 	print : function( str ) {
 
 		str += "    ";

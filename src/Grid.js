@@ -11,6 +11,8 @@ var Grid = {
 	rightClicked : false,
 
 	redraw : true,
+	recenter : true,
+
 
 	init : function() {
 
@@ -26,6 +28,8 @@ var Grid = {
 		BSPTree.createPartition( this.elements.concat() );
 
 		this.redraw = true;
+		this.recenter = true;
+
 		this.minesSet = false;
 
 		this.leftClicked = this.rightClicked = false;
@@ -61,6 +65,7 @@ var Grid = {
 		this.minesSet = true;
 
 	},
+
 
 	createGrid : function( ) {
 
@@ -259,6 +264,7 @@ var Grid = {
 
 	},
 
+
 	setMines : function( element ) {
 
 		var i, index,
@@ -337,10 +343,10 @@ var Grid = {
 
 	},
 
+
 	update : function() {
 
-		var elementInRay = this.elementInRay,
-			stateChanged = this.redraw;
+		var elementInRay = this.elementInRay;
 
 		if ( elementInRay ) {
 
@@ -354,7 +360,7 @@ var Grid = {
 
 				elementInRay.open();
 
-				stateChanged = true;
+				this.redraw = true;
 
 			} else if ( this.rightClicked && this.minesSet ) {
 
@@ -368,17 +374,15 @@ var Grid = {
 
 				}
 
-				stateChanged = true;
+				this.redraw = true;
 
 			}
 
 		}
 
-		this.leftClicked = false;
-		this.rightClicked = false;
-		this.redraw = false;
+		this.leftClicked = this.rightClicked = false;
 
-		return stateChanged;
+		return this.redraw;
 
 	},
 
@@ -386,7 +390,10 @@ var Grid = {
 
 		BSPTree.draw( gl, Camera.getPosition() );
 
+		this.redraw = false;
+
 	},
+
 
 	elementInRay : null,
 

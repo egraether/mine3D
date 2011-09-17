@@ -18,6 +18,14 @@ var Game = {
 
 		var redraw = Grid.update();
 
+		if ( Grid.recenter && Settings.recenter ) {
+
+			Camera.recenterView();
+
+			Grid.recenter = false;
+
+		}
+
 		if ( Camera.update() || Camera.updateRotation ) {
 
 			mat4.set( Camera.getMvMatrix(), gl.matrix );

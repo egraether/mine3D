@@ -1,6 +1,6 @@
 var Level = function( dimensions, mines ) {
 
-	this.dimensions = vec3.assign( vec3.create(), dimensions, dimensions, dimensions );
+	this.dimensions = vec3.assign( vec3.create(), dimensions );
 	this.mines = mines;
 
 };
@@ -18,8 +18,8 @@ var Settings = {
 
 	currentLevel : null,
 
-	animations : false,
-	transitions : false,
+	animated : false,
+	recenter : false,
 
 	mode : 'classic', // [ 'classic', 'sweep' ]
 
@@ -27,8 +27,8 @@ var Settings = {
 
 		this.currentLevel = this.levels.easy;
 
-		this.animations = true;
-		this.transitions = true;
+		this.animated = true;
+		this.recenter = true;
 
 		this.mode = 'sweep';
 

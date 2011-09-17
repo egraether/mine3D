@@ -141,6 +141,8 @@ Element.prototype = {
 
 		} while ( ++i < neighbors.length );
 
+		Grid.recenter = true;
+
 	},
 
 	openMine : function() {
@@ -216,6 +218,26 @@ Element.prototype = {
 	count : function() {
 
 		return 1;
+
+	},
+
+	getCenter : function( highVector, lowVector ) {
+
+		var i,
+			pos = this.position;
+
+		for ( i = 0; i < 3; i++ ) {
+
+			highVector[i] = pos[i] > highVector[i] ? pos[i] : highVector[i];
+			lowVector[i] = pos[i] < lowVector[i] ? pos[i] : lowVector[i];
+
+		}
+
+	},
+
+	getVisionSize : function( center, vector ) {
+
+		return vec3.lengthSquared( vec3.subtract( this.position, center, vector ) );
 
 	},
 

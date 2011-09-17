@@ -2,6 +2,9 @@ var BSPTree = {
 
 	root : null,
 
+	highVector : vec3.create(),
+	lowVector : vec3.create(),
+
 	createPartition : function( elements ) {
 
 		if ( elements.length > 1 ) {
@@ -47,6 +50,26 @@ var BSPTree = {
 			return 0;
 
 		}
+
+	},
+
+	getCenterAndVisionSize : function( center ) {
+
+		if ( this.root ) {
+
+			vec3.assign( this.highVector, -Infinity );
+			vec3.assign( this.lowVector, Infinity );
+
+			this.root.getCenter( this.highVector, this.lowVector );
+
+			vec3.add( this.highVector, this.lowVector, center );
+			vec3.scale( center, 0.5 );
+
+			return this.root.getVisionSize( center, this.highVector );
+
+		}
+
+		return 0;
 
 	},
 

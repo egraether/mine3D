@@ -27,8 +27,8 @@ function extend( destination, source ) {
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x;
-	dest[1] = y;
-	dest[2] = z;
+	dest[1] = typeof y == 'number' ? y : x;
+	dest[2] = typeof z == 'number' ? z : x;
 
 	return dest;
 
