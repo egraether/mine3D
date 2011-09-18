@@ -12,8 +12,6 @@ var Grid = {
 	rightClicked : false,
 
 	redraw : true,
-	recenter : true,
-
 	time : 0,
 
 
@@ -37,7 +35,6 @@ var Grid = {
 		this.cubeCount = this.elements.length;
 
 		this.redraw = true;
-		this.recenter = true;
 
 		this.minesSet = false;
 		this.minesLeft = Settings.currentLevel.mines;

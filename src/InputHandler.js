@@ -75,7 +75,7 @@ var InputHandler = {
 
 		this.state = "up";
 
-		Camera.calculateMouseRay();
+		Camera.updateRay = true;
 
 	},
 
@@ -113,7 +113,7 @@ var InputHandler = {
 
 		} else {
 
-			Camera.calculateMouseRay();
+			Camera.updateRay = true;
 
 		}
 
@@ -180,7 +180,7 @@ var InputHandler = {
 
 			this.state = "up";
 
-			Camera.calculateMouseRay();
+			Camera.updateRay = true;
 
 		} else if (event.keyCode == 82 || event.keyCode == 78) {
 

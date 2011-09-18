@@ -181,6 +181,13 @@ BSPNode.prototype = {
 
 	},
 
+	solve : function() {
+
+		this.front.solve();
+		this.back.solve();
+
+	},
+
 	print : function( str ) {
 
 		str += "    ";

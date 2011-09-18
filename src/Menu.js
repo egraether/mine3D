@@ -110,6 +110,8 @@ var Menu = {
 
 	setMines : function( mines ) {
 
+		mines = mines < 0 ? 0 : mines;
+
 		$('#mines').text( mines );
 
 	},

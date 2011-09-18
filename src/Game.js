@@ -21,16 +21,7 @@ var Game = {
 
 		var redraw = Grid.update();
 
-		if ( Grid.recenter && Settings.recenter ) {
-
-			Camera.recenterView( Settings.animations );
-
-			Grid.recenter = false;
-
-		}
-
-
-		if ( Camera.update() || Camera.updateRotation ) {
+		if ( Camera.update() ) {
 
 			mat4.set( Camera.getMvMatrix(), gl.matrix );
 
@@ -51,7 +42,6 @@ var Game = {
 			redraw = true;
 
 		}
-
 
 		if ( Settings.animations && TWEEN.getAll().length ) {
 
@@ -75,6 +65,8 @@ var Game = {
 	reset : function() {
 
 		this.gameover = false;
+
+		TWEEN.removeAll();
 
 		Camera.reset();
 

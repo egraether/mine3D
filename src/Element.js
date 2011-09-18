@@ -143,7 +143,7 @@ Element.prototype = {
 
 		} while ( ++i < neighbors.length );
 
-		Grid.recenter = true;
+		Camera.recenter = true;
 
 	},
 
@@ -245,6 +245,28 @@ Element.prototype = {
 	getVisionSize : function( center, vector ) {
 
 		return vec3.lengthSquared( vec3.subtract( this.position, center, vector ) );
+
+	},
+
+	solve : function() {
+
+		if ( this.state == "cube" && !this.isMine ) {
+
+			if ( this.value ) {
+
+				this.state = "number";
+
+			} else {
+
+				BSPTree.remove( this );
+
+				this.state = "open";
+
+			}
+
+			Grid.cubeCount--;
+
+		}
 
 	},
 

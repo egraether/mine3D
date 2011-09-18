@@ -73,6 +73,16 @@ var BSPTree = {
 
 	},
 
+	solve : function() {
+
+		if ( this.root ) {
+
+			this.root.solve();
+
+		}
+
+	},
+
 	print : function() {
 
 		console.log( "root " + vec3.str( this.root.position ) );

@@ -1,4 +1,4 @@
-var Camera = ( function() {
+var Camera = new ( function() {
 
 	var eye = vec3.create(),
 		up = vec3.create(),
@@ -31,14 +31,17 @@ var Camera = ( function() {
 		isRotating = false,
 		isPanning = false,
 		isZooming = false,
+
+		isRecentering = false,
 		isRecentered = false,
 
 		vector = vec3.create(),
 		vector2 = vec3.create(),
-		vector3 = vec3.create(),
 
-		matrix = mat4.create();
+		matrix = mat4.create(),
+		mouse = null;
 
+	this.recenter = false;
 	this.updateRay = true;
 	this.updateRotation = true;
 
@@ -65,6 +68,12 @@ var Camera = ( function() {
 	};
 
 	this.update = function() {
+
+		if ( this.recenter && Settings.recenter ) {
+
+			this.recenterView( Settings.animations );
+
+		}
 
 		var updateView = isRotating || isPanning || isZooming || isRecentered;
 
@@ -184,7 +193,11 @@ var Camera = ( function() {
 
 	this.rotate = function() {
 
-		isRotating = true;
+		if ( !isRecentering ) {
+
+			isRotating = true;
+
+		}
 
 	}
 
@@ -221,7 +234,11 @@ var Camera = ( function() {
 
 	this.pan = function() {
 
-		isPanning = true;
+		if ( !isRecentering ) {
+
+			isPanning = true;
+
+		}
 
 	};
 
@@ -250,8 +267,12 @@ var Camera = ( function() {
 
 	this.zoom = function( delta ) {
 
-		isZooming = true;
-		zoomDelta *= delta;
+		if ( !isRecentering ) {
+
+			isZooming = true;
+			zoomDelta *= delta;
+
+		}
 
 	};
 
@@ -273,12 +294,6 @@ var Camera = ( function() {
 		point[0] /= point[3];
 		point[1] /= point[3];
 		point[2] /= point[3];
-
-	};
-
-	this.calculateMouseRay = function() {
-
-		this.updateRay = true;
 
 	};
 
@@ -342,14 +357,13 @@ var Camera = ( function() {
 	this.recenterView = function( animated ) {
 
 		var visionSize = BSPTree.getCenterAndVisionSize( vector ),
-			d = 2, k = 1,
 			minEyeLength = 8,
 			tweenCenter, tweenEye;
 
-		visionSize += k * visionSize + d;
+		visionSize += 1 * visionSize + 2;
 		visionSize /= vec3.length( eye );
 
-		if ( !vec3.equal( vector, center ) || ( visionSize < 1 && visionSize > 0 ) ) {
+		if ( visionSize > 0 && visionSize < 0.99 ) {
 
 			vec3.set( eye, vector2 )
 			vec3.scale( vector2, visionSize );
@@ -369,16 +383,27 @@ var Camera = ( function() {
 					0 : vector[0],
 					1 : vector[1],
 					2 : vector[2]
-				}, 500 );
+				}, 400 );
 
 				tweenEye.to( { 
 					0 : vector2[0],
 					1 : vector2[1],
 					2 : vector2[2]
-				}, 500 );
+				}, 400 );
+
+				isRecentering = true;
 
 				tweenCenter.onUpdate( function() {
+
 					isRecentered = true;
+
+				});
+
+				tweenCenter.onComplete( function() {
+
+					isRecentering = false;
+					Camera.updateRay = true;
+
 				});
 
 				tweenCenter.easing( TWEEN.Easing.Quadratic.EaseInOut );
@@ -398,8 +423,10 @@ var Camera = ( function() {
 
 		}
 
+		this.recenter = false;
+
 	};
 
 	return this;
 
-}).call({});
+});

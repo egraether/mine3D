@@ -82,3 +82,11 @@ body {
 #winner, #loser {
 	display: none;
 }
+
+#winner {
+	background-color : #CADFB6;
+}
+
+#loser {
+	background-color : #ED9F9C;
+}
