@@ -8,6 +8,8 @@ var Grid = {
 	minesLeft : 0,
 	minesSet : false,
 
+	started : false,
+
 	leftClicked : false,
 	rightClicked : false,
 
@@ -37,6 +39,8 @@ var Grid = {
 		this.redraw = true;
 
 		this.minesSet = false;
+		this.started = false;
+
 		this.minesLeft = Settings.currentLevel.mines;
 
 		this.leftClicked = this.rightClicked = false;
@@ -325,7 +329,6 @@ var Grid = {
 		}
 
 		this.minesSet = true;
-		this.time = new Date().getTime();
 
 	},
 
@@ -360,10 +363,17 @@ var Grid = {
 
 			if ( this.leftClicked ) {
 
-				if ( !this.minesSet ) {
+				if ( !this.started ) {
 
-					this.setMines( elementInRay );
-					elementInRay.openNeighbors();
+					if ( !this.minesSet ) {
+
+						this.setMines( elementInRay );
+						elementInRay.openNeighbors();
+
+					}
+
+					this.time = new Date().getTime();
+					this.started = true;
 
 				}
 
@@ -371,7 +381,7 @@ var Grid = {
 
 				this.redraw = true;
 
-			} else if ( this.rightClicked && this.minesSet ) {
+			} else if ( this.rightClicked && this.started ) {
 
 				if ( Settings.mode == 'classic' ) {
 
@@ -393,7 +403,7 @@ var Grid = {
 		this.leftClicked = this.rightClicked = false;
 
 
-		if ( this.minesSet && !Game.gameover ) {
+		if ( this.started && !Game.gameover ) {
 
 			Menu.setTime( new Date().getTime() - this.time );
 

@@ -30,6 +30,8 @@ Element.prototype = {
 		this.state = "cube";
 
 		this.value = this.maxValue;
+		this.scale = 1;
+
 		this.highlight = false;
 
 	},
@@ -158,6 +160,7 @@ Element.prototype = {
 
 			if ( this.isMine ) {
 
+				this.state = 'cube';
 				return Game.over();
 
 			} else {
@@ -261,6 +264,7 @@ Element.prototype = {
 
 			} else {
 
+				this.state = 'cube';
 				Game.over();
 
 			}
@@ -285,14 +289,14 @@ Element.prototype = {
 
 	flag : function() {
 
-		if ( this.state == "cube" ) {
+		if ( this.state == 'cube' ) {
 
-			this.state = "flag";
+			this.state = 'flag';
 			Grid.minesLeft--;
 
-		} else {
+		} else if ( this.state == 'flag' ) {
 
-			this.state = "cube";
+			this.state = 'cube';
 			Grid.minesLeft++;
 
 		}

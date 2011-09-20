@@ -11,15 +11,20 @@ var Menu = {
 		$('#newButton').click(function () {
 
 			Game.start();
-
-			$('#menu').toggle( false );
-			$('#menuButton').removeClass( 'active' );
+			Menu.hide();
 
 		});
 
 		$('#menuButton').click(function () {
 
 			Menu.toggle();
+
+		});
+
+		$('#restartButton').click(function() {
+
+			Game.restart();
+			Menu.hide();
 
 		});
 
@@ -124,6 +129,8 @@ var Menu = {
 		$('#winner').hide();
 		$('#loser').hide();
 
+		$('#restartButton').hide();
+
 	},
 
 	toggle : function() {
@@ -136,6 +143,7 @@ var Menu = {
 	lose : function() {
 
 		$('#loser').show();
+		$('#restartButton').show();
 
 	},
 
@@ -152,6 +160,13 @@ var Menu = {
 
 		$('#newButton').show();
 		$('#menuButton').show();
+
+	},
+
+	hide : function() {
+
+		$('#menu').toggle( false );
+		$('#menuButton').removeClass( 'active' );
 
 	},
 
