@@ -354,8 +354,7 @@ var Grid = {
 
 	update : function() {
 
-		var elementInRay = this.elementInRay,
-			newCubeCount = false;
+		var elementInRay = this.elementInRay;
 
 		if ( elementInRay ) {
 
@@ -364,13 +363,13 @@ var Grid = {
 				if ( !this.minesSet ) {
 
 					this.setMines( elementInRay );
+					elementInRay.openNeighbors();
 
 				}
 
-				elementInRay.open();
+				elementInRay.openCube();
 
 				this.redraw = true;
-				newCubeCount = true;
 
 			} else if ( this.rightClicked && this.minesSet ) {
 
@@ -381,7 +380,6 @@ var Grid = {
 				} else {
 
 					elementInRay.openMine();
-					newCubeCount = true;
 
 				}
 
@@ -399,8 +397,7 @@ var Grid = {
 
 			Menu.setTime( new Date().getTime() - this.time );
 
-			if ( newCubeCount &&
-				( Settings.mode == 'classic' && this.cubeCount == Settings.currentLevel.mines ) ||
+			if ( ( Settings.mode == 'classic' && this.cubeCount == Settings.currentLevel.mines ) ||
 				( Settings.mode == 'sweep' && this.cubeCount == this.minesLeft ) ) {
 
 				Game.over( true );

@@ -79,7 +79,7 @@ body {
 	color : #777;
 }
 
-#winner, #loser {
+#winner, #loser, #newButton, #menuButton, #error {
 	display: none;
 }
 

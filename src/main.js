@@ -3,18 +3,6 @@ var canvas,
 
 function init() {
 
-	canvas = document.createElement( "canvas" );
-	document.querySelector( "#container" ).appendChild( canvas );
-
-	canvas.style.backgroundColor = "black";
-
-	canvas.width = window.innerWidth,
-	canvas.height = window.innerHeight;
-
-
-	gl = canvas.getContext( "experimental-webgl" );
-	extend( gl, WebGLUtilities );
-
 	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 	gl.viewport( 0, 0, canvas.width, canvas.height );
 
@@ -22,7 +10,6 @@ function init() {
 	// gl.enable( gl.DEPTH_TEST );
 
 	gl.enableAlpha();
-
 
 	Game.init( gl );
 
@@ -38,13 +25,34 @@ function draw() {
 
 window.onload = function () {
 
-	if ( !window.WebGLRenderingContext ) {
+	canvas = document.createElement( "canvas" );
+	document.querySelector( "#container" ).appendChild( canvas );
 
+	canvas.style.backgroundColor = "black";
+
+	canvas.width = window.innerWidth,
+	canvas.height = window.innerHeight;
+
+	if ( canvas.getContext ) {
+
+		gl = canvas.getContext( "experimental-webgl" );
+
+	}
+
+	if ( gl ) {
+
+		Menu.show();
+
+	} else {
+
+		Menu.error();
 		return;
 
 	}
 
-	init();
+	extend( gl, WebGLUtilities );
+
+	init( gl );
 
 	draw();
 

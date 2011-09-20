@@ -14,10 +14,12 @@ Element.prototype = {
 
 	reset : function() {
 
-		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open' ]
+		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open', 'opening' ]
 
 		this.value = 0;
 		this.maxValue = 0;
+		this.scale = 1;
+
 		this.isMine = false;
 		this.highlight = false;
 
@@ -53,9 +55,9 @@ Element.prototype = {
 
 	decreaseValue : function() {
 
-		if ( --this.value == 0 && this.state != "cube" ) {
+		if ( --this.value == 0 && this.state != 'cube' ) {
 
-			this.openEmpty();
+			this.open();
 
 		}
 
@@ -90,13 +92,20 @@ Element.prototype = {
 		gl.pushMatrix();
 		mat4.translate(gl.matrix, this.position);
 
+		if ( this.scale != 1 ) {
+
+			vec3.assign( Element.vector, this.scale );
+			mat4.scale( gl.matrix, Element.vector );
+
+		}
+
 		if ( state == "number" || state == "mine" ) {
 
 			Face.draw( gl, Element.shader, this.value );
 
 		} else {
 
-			Cube.draw( gl, Element.shader, this.state == "flag", this.highlight );
+			Cube.draw( gl, Element.shader, state == "flag", this.highlight );
 
 		}
 
@@ -104,59 +113,141 @@ Element.prototype = {
 
 	},
 
-	open : function() {
+	openCube : function() {
+
+		var tween;
 
 		if ( this.state == "cube" ) {
 
-			if ( this.isMine ) {
+			this.state = 'opening';
 
-				return Game.over();
+			if ( Settings.animations ) {
 
-			} else if ( this.value ) {
+				tween = new TWEEN.Tween( this );
 
-				this.state = "number";
+				tween.to( { scale : 0 }, 50 );
+
+				tween.onUpdate( function () {
+
+					Grid.redraw = true;
+
+				});
+
+				tween.onComplete( function() {
+
+					this.scale = 1;
+					this.openCubeNow();
+
+				});
+
+				tween.start();
 
 			} else {
 
-				this.openEmpty();
+				this.openCubeNow();
 
 			}
-
-			Grid.cubeCount--;
 
 		}
 
 	},
 
-	openEmpty : function() {
+	openCubeNow : function() {
 
-		var i = 0,
-			neighbors = this.neighbors;
+		if ( this.state == 'opening' ) {
 
-		this.state = "open";
+			if ( this.isMine ) {
 
-		BSPTree.remove( this );
+				return Game.over();
 
-		do {
+			} else {
 
-			neighbors[i].open();
+				this.open();
 
-		} while ( ++i < neighbors.length );
+			}
 
-		Camera.recenter = true;
+		}
+
+	},
+
+	open : function() {
+
+		if ( this.state == 'opening' ) {
+
+			Grid.cubeCount--;
+
+		}
+
+
+		if ( this.value ) {
+
+			this.state = "number";
+
+		} else {
+
+			this.state = "open";
+
+			BSPTree.remove( this );
+
+			this.openNeighbors();
+
+			Camera.recenter = true;
+
+		}
 
 	},
 
 	openMine : function() {
 
-		var i,
-			neighbors;
+		var tween;
 
 		if ( this.state == "cube" ) {
 
+			if ( Settings.animations ) {
+
+				this.state = 'flag';
+
+				tween = new TWEEN.Tween( this );
+
+				tween.to( { scale : 0 }, 200 );
+
+				tween.onUpdate( function () {
+
+					Grid.redraw = true;
+
+				});
+
+				tween.onComplete( function() {
+
+					this.scale = 1;
+					this.state = 'opening';
+					this.openMineNow();
+
+				});
+
+				tween.start();
+
+			} else {
+
+				this.state = 'opening';
+				this.openMineNow();
+
+			}
+
+		}
+
+	},
+
+	openMineNow : function() {
+
+		var i,
+			neighbors;
+
+		if ( this.state == 'opening' ) {
+
 			if ( this.isMine ) {
 
-				this.state = "open";
+				this.open();
 
 				neighbors = this.neighbors;
 
@@ -166,19 +257,7 @@ Element.prototype = {
 
 				}
 
-
-				if ( this.value ) {
-
-					this.state = "number";
-
-				} else {
-
-					this.openEmpty();
-
-				}
-
 				Grid.minesLeft--;
-				Grid.cubeCount--;
 
 			} else {
 
@@ -187,6 +266,19 @@ Element.prototype = {
 			}
 
 		}
+
+	},
+
+	openNeighbors : function() {
+
+		var i = 0,
+			neighbors = this.neighbors;
+
+		do {
+
+			neighbors[i].openCube();
+
+		} while ( ++i < neighbors.length );
 
 	},
 
@@ -281,6 +373,8 @@ Element.prototype = {
 };
 
 extend( Element, {
+
+	vector : vec3.create(),
 
 	init : function( gl ) {
 

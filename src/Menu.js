@@ -143,6 +143,22 @@ var Menu = {
 
 		$('#winner').show();
 
+	},
+
+	show : function() {
+
+		$('#time').show();
+		$('#mines').show();
+
+		$('#newButton').show();
+		$('#menuButton').show();
+
+	},
+
+	error: function() {
+
+		$('#error').show();
+
 	}
 
 };
