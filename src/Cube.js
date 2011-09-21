@@ -95,9 +95,18 @@ Cube.prototype = {
 
 extend( Cube, {
 
-	draw : function( gl, shader, flag, highlight ) {
+	vector : vec3.create(),
+
+	draw : function( gl, shader, flag, highlight, scale ) {
 
 		var colorOffset = ( 72 + 48 + ( flag ? highlight ? 3 : 2 : highlight ? 1 : 0 ) * 96 ) * 4;
+
+		if ( scale != 1 ) {
+
+			vec3.assign( this.vector, scale );
+			mat4.scale( gl.matrix, this.vector );
+
+		}
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 

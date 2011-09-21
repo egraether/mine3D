@@ -14,23 +14,21 @@ Element.prototype = {
 
 	reset : function() {
 
-		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open', 'opening' ]
-
-		this.value = 0;
 		this.maxValue = 0;
-		this.scale = 1;
-
 		this.isMine = false;
-		this.highlight = false;
+
+		this.restart();
 
 	},
 
 	restart : function() {
 
-		this.state = "cube";
+		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open', 'opening' ]
 
 		this.value = this.maxValue;
+
 		this.scale = 1;
+		this.rotation = 0;
 
 		this.highlight = false;
 
@@ -57,7 +55,33 @@ Element.prototype = {
 
 	decreaseValue : function() {
 
-		if ( --this.value == 0 && this.state != 'cube' ) {
+		var tween;
+
+		this.value--;
+
+		if ( Settings.animations ) {
+
+			this.rotation = -Math.PI;
+
+			tween = new TWEEN.Tween( this );
+
+			tween.to( { rotation : 0 }, 300 );
+
+			tween.onComplete( this.valueDecreased );
+
+			tween.start();
+
+		} else {
+
+			this.valueDecreased();
+
+		}
+
+	},
+
+	valueDecreased : function() {
+
+		if ( this.value == 0 && this.state != 'cube' ) {
 
 			this.open();
 
@@ -89,25 +113,39 @@ Element.prototype = {
 
 	draw : function( gl ) {
 
-		var state = this.state;
+		var state = this.state,
+			rotation = this.rotation,
+			value = this.value,
+			right;
 
 		gl.pushMatrix();
-		mat4.translate(gl.matrix, this.position);
-
-		if ( this.scale != 1 ) {
-
-			vec3.assign( Element.vector, this.scale );
-			mat4.scale( gl.matrix, Element.vector );
-
-		}
+		mat4.translate( gl.matrix, this.position );
 
 		if ( state == "number" || state == "mine" ) {
 
-			Face.draw( gl, Element.shader, this.value );
+			if ( rotation ) {
+
+				right = Camera.getRight();
+
+				gl.pushMatrix();
+				mat4.rotate( gl.matrix, rotation + Math.PI, right );
+
+				Face.draw( gl, Element.shader, value + 1 );
+
+				gl.popMatrix();
+				mat4.rotate( gl.matrix, rotation, right );
+
+			}
+
+			if ( value ) {
+
+				Face.draw( gl, Element.shader, value );
+
+			}
 
 		} else {
 
-			Cube.draw( gl, Element.shader, state == "flag", this.highlight );
+			Cube.draw( gl, Element.shader, state == "flag", this.highlight, this.scale );
 
 		}
 
@@ -127,7 +165,7 @@ Element.prototype = {
 
 				tween = new TWEEN.Tween( this );
 
-				tween.to( { scale : 0 }, 50 );
+				tween.to( { scale : 0 }, 200 );
 
 				tween.onUpdate( function () {
 
@@ -174,6 +212,13 @@ Element.prototype = {
 	},
 
 	open : function() {
+
+		if ( this.state == 'open' ) {
+
+			return;
+
+		}
+
 
 		if ( this.state == 'opening' ) {
 
@@ -377,8 +422,6 @@ Element.prototype = {
 };
 
 extend( Element, {
-
-	vector : vec3.create(),
 
 	init : function( gl ) {
 
