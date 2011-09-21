@@ -22,6 +22,9 @@ var Settings = {
 	animations : false,
 	recenter : false,
 
+	changed : false,
+	changedSize : false,
+
 	setFromMenu : function() {
 
 		this.currentLevel = Menu.level;
@@ -29,6 +32,8 @@ var Settings = {
 
 		this.animations = Menu.animations;
 		this.recenter = Menu.recenter;
+
+		this.changed = this.changedSize = false;
 
 	}
 

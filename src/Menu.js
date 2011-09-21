@@ -37,6 +37,8 @@ var Menu = {
 			$('#' + modeName).addClass( 'active' );
 			Menu.mode = modeName;
 
+			Settings.changed = true;
+
 		};
 
 		$('#classic').click(function() {
@@ -60,6 +62,8 @@ var Menu = {
 
 			$('#' + levelName).addClass( 'active');
 			Menu.level = Settings.levels[levelName];
+
+			Settings.changedSize = true;
 
 		};
 
@@ -87,12 +91,16 @@ var Menu = {
 			$('#animations').toggleClass( 'active' );
 			Menu.animations = !Menu.animations;
 
+			Settings.changed = true;
+
 		};
 
 		function toggleRecenter() {
 
 			$('#recenter').toggleClass( 'active' );
 			Menu.recenter = !Menu.recenter;
+
+			Settings.changed = true;
 
 		};
 

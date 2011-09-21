@@ -74,8 +74,15 @@ var Game = {
 
 	start : function() {
 
-		// Grid.start();
-		Grid.init();
+		if ( Settings.changedSize ) {
+
+			Grid.init();
+
+		} else {
+
+			Grid.start();
+
+		}
 
 		this.reset();
 

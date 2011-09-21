@@ -65,7 +65,7 @@ Element.prototype = {
 
 			tween = new TWEEN.Tween( this );
 
-			tween.to( { rotation : 0 }, 300 );
+			tween.to( { rotation : 0 }, 250 );
 
 			tween.onComplete( this.valueDecreased );
 
@@ -165,7 +165,7 @@ Element.prototype = {
 
 				tween = new TWEEN.Tween( this );
 
-				tween.to( { scale : 0 }, 200 );
+				tween.to( { scale : 0 }, 150 );
 
 				tween.onUpdate( function () {
 

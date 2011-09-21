@@ -14,7 +14,9 @@ var Grid = {
 	rightClicked : false,
 
 	redraw : true,
+
 	time : 0,
+	playTime : 0,
 
 
 	init : function() {
@@ -46,6 +48,7 @@ var Grid = {
 		this.leftClicked = this.rightClicked = false;
 		this.elementInRay = null;
 
+		this.playTime = 0;
 		Menu.reset( 0, this.minesLeft );
 
 	},
@@ -59,6 +62,8 @@ var Grid = {
 			this.elements[i].reset();
 
 		}
+
+		Settings.setFromMenu();
 
 		this.reset();
 
@@ -405,7 +410,15 @@ var Grid = {
 
 		if ( this.started && !Game.gameover ) {
 
-			Menu.setTime( new Date().getTime() - this.time );
+			var t = new Date().getTime(),
+				dt = t - this.time;
+
+			dt = dt > 500 ? 100 : dt;
+
+			this.playTime += dt;
+			this.time = t;
+
+			Menu.setTime( this.playTime );
 
 			if ( ( Settings.mode == 'classic' && this.cubeCount == Settings.currentLevel.mines ) ||
 				( Settings.mode == 'sweep' && this.cubeCount == this.minesLeft ) ) {
