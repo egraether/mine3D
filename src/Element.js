@@ -23,7 +23,7 @@ Element.prototype = {
 
 	restart : function() {
 
-		this.state = "cube"; // [ 'cube', 'number', 'flag', 'mine', 'open', 'opening' ]
+		this.state = "cube"; // [ 'cube', 'number', 'flag', 'open', 'opening' ]
 
 		this.value = this.maxValue;
 
@@ -105,7 +105,11 @@ Element.prototype = {
 
 	showMine : function() {
 
-		this.state = "mine";
+		if ( this.state != 'flag' ) {
+
+			this.state = 'open';
+
+		}
 
 		this.value = 28;
 
@@ -121,7 +125,7 @@ Element.prototype = {
 		gl.pushMatrix();
 		mat4.translate( gl.matrix, this.position );
 
-		if ( state == "number" || state == "mine" ) {
+		if ( state == "number" || ( state == 'open' && this.isMine ) ) {
 
 			if ( rotation ) {
 
@@ -148,7 +152,7 @@ Element.prototype = {
 
 		} else {
 
-			Cube.draw( gl, Element.shader, state == "flag", this.highlight, this.scale );
+			Cube.draw( gl, Element.shader, this.isMine, state == "flag", this.highlight, this.scale );
 
 		}
 

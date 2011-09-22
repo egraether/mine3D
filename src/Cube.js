@@ -97,9 +97,18 @@ extend( Cube, {
 
 	vector : vec3.create(),
 
-	draw : function( gl, shader, flag, highlight, scale ) {
+	draw : function( gl, shader, mine, flag, highlight, scale ) {
 
-		var colorOffset = ( 72 + 48 + ( flag ? highlight ? 3 : 2 : highlight ? 1 : 0 ) * 96 ) * 4;
+		var colorIndex = flag ? highlight ? 6 : 3 : highlight ? 1 : 0,
+			colorOffset;
+
+		if ( Game.gameover && flag ) {
+
+			colorIndex = mine ? highlight ? 7 : 4 : highlight ? 5 : 2;
+
+		}
+
+		colorOffset = ( 72 + 48 + colorIndex * 96 ) * 4;
 
 		if ( scale != 1 ) {
 
@@ -276,19 +285,47 @@ extend( Cube, {
 				[ 0.6, 0.6, 0.6, 0.8 ],
 				[ 0.8, 0.8, 0.8, 0.8 ]
 
-			// flagColors
+			// flagColors red
 			], [
 
 				[ 0.7, 0.175, 0.175, 1.0 ],
 				[ 0.6, 0.15, 0.15, 1.0 ],
 				[ 0.8, 0.2, 0.2, 1.0 ]
 
-			// flagHighlightColors
+			// flagColors yellow
+			], [
+
+				[ 0.7, 0.7, 0.175, 1.0 ],
+				[ 0.6, 0.6, 0.15, 1.0 ],
+				[ 0.8, 0.8, 0.2, 1.0 ]
+
+			// flagColors green
+			], [
+
+				[ 0.175, 0.7, 0.175, 1.0 ],
+				[ 0.15, 0.6, 0.15, 1.0 ],
+				[ 0.2, 0.8, 0.2, 1.0 ]
+
+			// flagHighlightColors red
 			], [
 
 				[ 0.7, 0.175, 0.175, 0.9 ],
 				[ 0.6, 0.15, 0.15, 0.9 ],
 				[ 0.8, 0.2, 0.2, 0.9 ]
+
+			// flagHighlightColors yellow
+			], [
+
+				[ 0.7, 0.7, 0.175, 0.9 ],
+				[ 0.6, 0.6, 0.15, 0.9 ],
+				[ 0.8, 0.8, 0.2, 0.9 ]
+
+			// flagHighlightColors green
+			], [
+
+				[ 0.175, 0.7, 0.175, 0.9 ],
+				[ 0.15, 0.6, 0.15, 0.9 ],
+				[ 0.2, 0.8, 0.2, 0.9 ]
 
 			]
 
