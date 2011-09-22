@@ -362,7 +362,8 @@ var Grid = {
 
 	update : function() {
 
-		var elementInRay = this.elementInRay;
+		var elementInRay = this.elementInRay,
+			t, dt;
 
 		if ( elementInRay ) {
 
@@ -410,8 +411,8 @@ var Grid = {
 
 		if ( this.started && !Game.gameover ) {
 
-			var t = new Date().getTime(),
-				dt = t - this.time;
+			t = new Date().getTime();
+			dt = t - this.time;
 
 			dt = dt > 500 ? 100 : dt;
 

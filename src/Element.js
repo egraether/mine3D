@@ -127,13 +127,16 @@ Element.prototype = {
 
 				right = Camera.getRight();
 
-				gl.pushMatrix();
-				mat4.rotate( gl.matrix, rotation + Math.PI, right );
+				if ( rotation < -Math.PI / 2 ) {
 
-				Face.draw( gl, Element.shader, value + 1 );
+					mat4.rotate( gl.matrix, rotation + Math.PI, right );
+					value++;
 
-				gl.popMatrix();
-				mat4.rotate( gl.matrix, rotation, right );
+				} else {
+
+					mat4.rotate( gl.matrix, rotation, right );
+
+				}
 
 			}
 
