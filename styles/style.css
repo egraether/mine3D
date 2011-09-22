@@ -17,7 +17,6 @@ body {
 
 #hud {
 	position : absolute;
-	width : 336px;
 	height : 0%;
 }
 
@@ -39,7 +38,7 @@ body {
 
 	float : left;
 
-	background-color : #DDD;
+	background-color : #EEE;
 	border : 1px solid #777;
 	color : #777;
 }
@@ -51,6 +50,16 @@ body {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+}
+
+.label {
+	margin : 4px;
+	padding : 4px;
+
+	float : left;
+	color : #777;
+
+	clear : both;
 }
 
 .button:hover {
@@ -65,18 +74,21 @@ body {
 	clear : both;
 }
 
-#menu {
+#menu, #settings, #instructions, #about, #stats {
 	display: none;
-
-	width: 295px;
-	height: 124px;
-
-	margin : 4px;
 	padding : 4px;
+}
 
-	background-color : #EEE;
-	border : 1px solid #777;
-	color : #777;
+#menu {
+	height: 42px;
+}
+
+#about, #stats, #instructions {
+	height: 42px;
+}
+
+#settings {
+	height: 210px;
 }
 
 #winner, #loser, #newButton, #menuButton, #restartButton, #error {
@@ -89,4 +101,12 @@ body {
 
 #loser {
 	background-color : #ED9F9C;
+}
+
+#apply {
+	float : none;
+	clear : both;
+
+	width : 46px;
+	margin : 4px auto;
 }

@@ -26,29 +26,25 @@ function draw() {
 window.onload = function () {
 
 	canvas = document.createElement( "canvas" );
-	document.querySelector( "#container" ).appendChild( canvas );
-
-	canvas.style.backgroundColor = "black";
-
-	canvas.width = window.innerWidth,
-	canvas.height = window.innerHeight;
 
 	if ( canvas.getContext ) {
 
 		gl = canvas.getContext( "experimental-webgl" );
 
-	}
+		if ( !gl ) {
 
-	if ( gl ) {
+			Menu.error();
+			return;
 
-		Menu.show();
-
-	} else {
-
-		Menu.error();
-		return;
+		}
 
 	}
+
+	document.querySelector( "#container" ).appendChild( canvas );
+	canvas.style.backgroundColor = "black";
+
+	canvas.width = window.innerWidth,
+	canvas.height = window.innerHeight;
 
 	extend( gl, WebGLUtilities );
 

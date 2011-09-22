@@ -8,6 +8,9 @@ var Menu = {
 
 	init : function() {
 
+		$('#newButton').show();
+		$('#menuButton').show();
+
 		$('#newButton').click(function () {
 
 			Game.start();
@@ -28,6 +31,53 @@ var Menu = {
 
 		});
 
+		this.initMenu();
+
+		this.initSettings();
+
+	},
+
+	initMenu : function() {
+
+		$('#aboutButton').click( function() {
+
+			Menu.hidePages();
+
+			$(this).addClass( 'active' );
+			$('#about').show();
+
+		});
+
+		$('#settingsButton').click( function() {
+
+			Menu.hidePages();
+
+			$(this).addClass( 'active' );
+			$('#settings').show();
+
+		});
+
+		$('#statsButton').click( function() {
+
+			Menu.hidePages();
+
+			$(this).addClass( 'active' );
+			$('#stats').show();
+
+		});
+
+		$('#instructionsButton').click( function() {
+
+			Menu.hidePages();
+
+			$(this).addClass( 'active' );
+			$('#instructions').show();
+
+		});
+
+	},
+
+	initSettings : function() {
 
 		function setMode( modeName ) {
 
@@ -37,7 +87,7 @@ var Menu = {
 			$('#' + modeName).addClass( 'active' );
 			Menu.mode = modeName;
 
-			Settings.changed = true;
+			Menu.changedSettings( false );
 
 		};
 
@@ -63,7 +113,7 @@ var Menu = {
 			$('#' + levelName).addClass( 'active');
 			Menu.level = Settings.levels[levelName];
 
-			Settings.changedSize = true;
+			Menu.changedSettings( true );
 
 		};
 
@@ -91,7 +141,9 @@ var Menu = {
 			$('#animations').toggleClass( 'active' );
 			Menu.animations = !Menu.animations;
 
-			Settings.changed = true;
+			$('#animations').text( Menu.animations ? 'On' : 'Off' );
+
+			Menu.changedSettings( false );
 
 		};
 
@@ -100,7 +152,9 @@ var Menu = {
 			$('#recenter').toggleClass( 'active' );
 			Menu.recenter = !Menu.recenter;
 
-			Settings.changed = true;
+			$('#recenter').text( Menu.recenter ? 'On' : 'Off' );
+
+			Menu.changedSettings( false );
 
 		};
 
@@ -112,6 +166,14 @@ var Menu = {
 
 		toggleAnimation();
 		toggleRecenter();
+
+
+		$('#apply').click(function() {
+
+			Game.start();
+			Menu.hide();
+
+		});
 
 	},
 
@@ -141,10 +203,28 @@ var Menu = {
 
 	},
 
+	show : function() {
+
+		$('#menu').toggle( true );
+		$('#menuButton').addClass( 'active' );
+
+	},
+
+	hide : function() {
+
+		$('#menu').toggle( false );
+		$('#menuButton').removeClass( 'active' );
+
+		this.hidePages();
+
+	},
+
 	toggle : function() {
 
 		$('#menu').toggle();
 		$('#menuButton').toggleClass('active');
+
+		this.hidePages();
 
 	},
 
@@ -161,26 +241,41 @@ var Menu = {
 
 	},
 
-	show : function() {
-
-		$('#time').show();
-		$('#mines').show();
-
-		$('#newButton').show();
-		$('#menuButton').show();
-
-	},
-
-	hide : function() {
-
-		$('#menu').toggle( false );
-		$('#menuButton').removeClass( 'active' );
-
-	},
-
 	error: function() {
 
 		$('#error').show();
+
+	},
+
+	hidePages : function() {
+
+		$('#about').hide();
+		$('#settings').hide();
+		$('#stats').hide();
+		$('#instructions').hide();
+
+		$('#aboutButton').removeClass('active');
+		$('#settingsButton').removeClass('active');
+		$('#statsButton').removeClass('active');
+		$('#instructionsButton').removeClass('active');
+
+		$('#apply').removeClass( 'active' );
+
+	},
+
+	changedSettings : function( resize ) {
+
+		if ( resize ) {
+
+			Settings.changedSize = true;
+
+		} else {
+
+			Settings.changed = true;
+
+		}
+
+		$('#apply').addClass( 'active' );
 
 	}
 
