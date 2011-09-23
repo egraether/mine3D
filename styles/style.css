@@ -13,22 +13,22 @@
 
 body {
 	font-size : 16pt;
+	color : #777;
 }
 
-#hud {
+.hud {
 	position : absolute;
-	height : 0%;
 }
 
-#hud a {
+a {
 	color : #6A8F5F;
 }
 
-#hud a:visited {
+a:visited {
 	color : #6A8F5F;
 }
 
-#hud a:hover {
+a:hover {
 	color : #333;
 }
 
@@ -40,7 +40,6 @@ body {
 
 	background-color : #EEE;
 	border : 1px solid #777;
-	color : #777;
 }
 
 .button {
@@ -53,12 +52,10 @@ body {
 }
 
 .label {
-	margin : 4px;
+	margin : 4px 2px;
 	padding : 4px;
 
 	float : left;
-	color : #777;
-
 	clear : both;
 }
 
@@ -83,7 +80,11 @@ body {
 	height: 42px;
 }
 
-#about, #stats, #instructions {
+#stats {
+	height : 260px;
+}
+
+#about, #instructions {
 	height: 42px;
 }
 
@@ -109,4 +110,27 @@ body {
 
 	width : 46px;
 	margin : 4px auto;
+}
+
+table {
+	border-spacing : 0;
+	margin : 4px;
+}
+
+td {
+	padding : 4px 8px;
+
+	text-align : center;
+	font-weight : normal;
+
+/*	border-left : 1px solid #777;
+	border-top : 1px solid #777;*/
+}
+
+tr:first-child td {
+	border-bottom : 1px solid #777;
+}
+
+td:first-child {
+	border-right : 1px solid #777;
 }

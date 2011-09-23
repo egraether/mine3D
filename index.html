@@ -10,9 +10,9 @@
 
 	<div id="container"></div>
 
-	<div id="hud">
+	<div class="hud">
 
-		<div class="element"> 
+		<div class="element">
 			<a href="http://egraether.com/mine3d.html">Mine3D</a>
 			alpha release by <a href="http://egraether.com/">egraether</a>
 		</div>
@@ -57,7 +57,32 @@
 
 		<div class="element clear" id="stats">
 
-			<div class="label"> stats </div>
+			<table>
+				<tr>
+					<td> times </td>
+					<td> classic </td>
+					<td> sweep </td>
+				</tr>
+				<tr>
+					<td> easy </td>
+					<td id="classicEasy"> 56 </td>
+					<td id="sweepEasy"> 14 </td>
+				</tr>
+				<tr>
+					<td> medium </td>
+					<td id="classicMedium" class="active"> 380 </td>
+					<td id="sweepMedium"> 60 </td>
+				</tr>
+				<tr>
+					<td> hard </td>
+					<td id="classicHard"> 3667 </td>
+					<td id="sweepHard"> 234 </td>
+				</tr>
+			</table>
+
+			<div class="label"> games won: <span id="gamesPlayed"> 0 </span> </div>
+			<div class="label"> games played: <span id="gamesPlayed"> 0 </span> </div>
+			<div class="label"> time played: <span id="timePlayed"> 0 </span> </div>
 
 		</div>
 

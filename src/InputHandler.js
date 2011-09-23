@@ -150,7 +150,7 @@ var InputHandler = {
 	onScroll : function( event ) {
 
 		event.stopPropagation();
-		event.preventDefault();
+		// event.preventDefault();
 
 		var delta = event.wheelDelta || (event.detail * -5);
 		delta = 1 - delta * 0.0002;
