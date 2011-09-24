@@ -89,15 +89,15 @@ a:hover {
 }
 
 #stats {
-	height : 260px;
+	height : 302px;
 }
 
 #instructions {
-	height: 42px;
+	height: 412px;
 }
 
 #settings {
-	height: 210px;
+	height: 252px;
 }
 
 #winner, #loser, #newButton, #menuButton, #restartButton, #error {
