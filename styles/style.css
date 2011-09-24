@@ -59,6 +59,10 @@ a:hover {
 	clear : both;
 }
 
+.highlight {
+	color : #6A8F5F;
+}
+
 .button:hover {
 	background-color : #BACF9F !important;
 }
@@ -80,11 +84,15 @@ a:hover {
 	height: 42px;
 }
 
+#about {
+	height : 358px;
+}
+
 #stats {
 	height : 260px;
 }
 
-#about, #instructions {
+#instructions {
 	height: 42px;
 }
 
@@ -133,4 +141,12 @@ tr:first-child td {
 
 td:first-child {
 	border-right : 1px solid #777;
+}
+
+.heading {
+	font-size: 18pt;
+}
+
+.heading span {
+	font-weight: bold;
 }
