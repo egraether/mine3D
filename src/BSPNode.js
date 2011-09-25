@@ -14,7 +14,8 @@ BSPNode.prototype = {
 
 		var frontElements,
 			backElements,
-			element;
+			element,
+			pos;
 
 		this.direction = direction;
 		this.position = this.getAveragePosition( elements, direction );

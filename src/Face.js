@@ -41,7 +41,7 @@ var Face = {
 
 		var texCoords = new Float32Array( 29 * 8 ),
 			step = 1 / 32,
-			top, botton, i;
+			top, bottom, i;
 
 		for ( i = 0; i < 29; i++ ) {
 

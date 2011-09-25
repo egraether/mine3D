@@ -16,11 +16,13 @@ var InputHandler = {
 		canvas.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 		canvas.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
 
-		document.addEventListener("DOMMouseScroll", bind( this, this.onScroll ), false);
-		document.addEventListener("mousewheel", bind( this, this.onScroll ), false);
+		document.addEventListener( "DOMMouseScroll", bind( this, this.onScroll ), false );
+		document.addEventListener( "mousewheel", bind( this, this.onScroll ), false );
 
-		document.addEventListener("keydown", bind( this, this.onKeyDown ), false);
-		document.addEventListener("keyup", bind( this, this.onKeyUp ), false);
+		document.addEventListener( "keydown", bind( this, this.onKeyDown ), false );
+		document.addEventListener( "keyup", bind( this, this.onKeyUp ), false );
+
+		window.addEventListener( "resize", bind( this, this.onResize ), false );
 
 		canvas.addEventListener( 'contextmenu', function( event ) { event.preventDefault(); }, false );
 		canvas.onselectstart = function() { return false; };
@@ -191,6 +193,20 @@ var InputHandler = {
 			Menu.toggle();
 
 		}
+
+	},
+
+	onResize : function( event ) {
+
+		canvas.width = window.innerWidth,
+		canvas.height = window.innerHeight;
+
+		gl.viewport( 0, 0, canvas.width, canvas.height );
+
+		Camera.resize();
+		Element.resize( gl );
+
+		Grid.redraw = true;
 
 	}
 

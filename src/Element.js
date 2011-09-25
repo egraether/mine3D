@@ -439,6 +439,12 @@ extend( Element, {
 		Cube.initBuffers( gl );
 		Face.initBuffers( gl );
 
+		this.resize( gl );
+
+	},
+
+	resize : function( gl ) {
+
 		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 	},

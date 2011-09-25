@@ -23,7 +23,7 @@ var Camera = new ( function() {
 		ray = {
 			origin : null,
 			direction : null
-		}
+		},
 
 		near = new glMatrixArrayType(4),
 		far = new glMatrixArrayType(4),
@@ -47,9 +47,6 @@ var Camera = new ( function() {
 
 	this.init = function() {
 
-		width = canvas.width;
-		height = canvas.height;
-
 		vec3.assign( eye, 100 );
 		vec3.assign( up, 0, 0, 1 );
 
@@ -59,11 +56,20 @@ var Camera = new ( function() {
 		vec3.normalize( vec3.cross( up, eye, right ) );
 		vec3.normalize( vec3.cross( eye, right, up ) );
 
+		mouse = InputHandler.mouse;
+
+		this.resize();
+
+	};
+
+	this.resize = function() {
+
+		width = canvas.width;
+		height = canvas.height;
+
 		mat4.perspective( 45, width / height, 0.1, 1000, pMatrix );
 
 		radius = ( width + height ) / 4;
-
-		mouse = InputHandler.mouse;
 
 	};
 
