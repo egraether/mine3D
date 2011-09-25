@@ -8,6 +8,17 @@ var Menu = {
 
 	resize : false,
 
+	names : [
+		'classic' + 'easy',
+		'sweep' + 'easy',
+
+		'classic' + 'medium',
+		'sweep' + 'medium',
+
+		'classic' + 'hard',
+		'sweep' + 'hard'
+	],
+
 	init : function() {
 
 		$('#newButton').show();
@@ -36,6 +47,8 @@ var Menu = {
 		this.initMenu();
 
 		this.initSettings();
+
+		this.initStats();
 
 	},
 
@@ -192,6 +205,19 @@ var Menu = {
 
 	},
 
+	initStats : function() {
+
+		var names = this.names,
+			i;
+
+		for ( i = 0; i < names.length; i++ ) {
+
+			this.setBestTime( names[i] );
+
+		}
+
+	},
+
 	setTime : function( time ) {
 
 		$('#time').text( Math.floor( time * 0.001 ) );
@@ -264,6 +290,15 @@ var Menu = {
 
 	hidePages : function() {
 
+		var names = this.names,
+			i;
+
+		for ( i = 0; i < names.length; i++ ) {
+
+			$('#' + names[i]).removeClass('active');
+
+		}
+
 		$('#about').hide();
 		$('#settings').hide();
 		$('#stats').hide();
@@ -286,6 +321,27 @@ var Menu = {
 
 		$('#apply').addClass( 'active' );
 		$('#apply').show();
+
+	},
+
+	setBestTime : function( name ) {
+
+		var time = Stats.read( name );
+
+		$('#' + name).text( time ? Math.floor( time * 0.001 ) : '-' );
+
+	},
+
+	updateTime : function( name, time ) {
+
+		this.setBestTime( name );
+
+		$('#' + name).addClass( 'active' );
+
+		Menu.show();
+
+		$('#statsButton').addClass( 'active' );
+		$('#stats').show();
 
 	}
 

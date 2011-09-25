@@ -4,7 +4,9 @@ var Game = {
 
 	init : function( gl ) {
 
+		Stats.init();
 		Menu.init();
+
 		Settings.setFromMenu();
 
 		Camera.init();
@@ -99,11 +101,19 @@ var Game = {
 
 	over : function( won ) {
 
+		var name = Settings.getKey();
+
 		this.gameover = true;
 
 		Grid.showMines();
 
 		if ( won ) {
+
+			if ( Stats.updateBestTime( name, Grid.playTime ) ) {
+
+				Menu.updateTime( name, Grid.playTime );
+
+			}
 
 			Menu.win();
 
