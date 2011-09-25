@@ -5,6 +5,7 @@ var Game = {
 	init : function( gl ) {
 
 		Menu.init();
+		Settings.setFromMenu();
 
 		Camera.init();
 
@@ -72,9 +73,9 @@ var Game = {
 
 	},
 
-	start : function() {
+	start : function( resize ) {
 
-		if ( Settings.changedSize ) {
+		if ( resize ) {
 
 			Grid.init();
 

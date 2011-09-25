@@ -6,6 +6,8 @@ var Menu = {
 	animations : false,
 	recenter : false,
 
+	resize : false,
+
 	init : function() {
 
 		$('#newButton').show();
@@ -170,10 +172,23 @@ var Menu = {
 
 		$('#apply').click(function() {
 
-			Game.start();
-			Menu.hide();
+			if ( $(this).hasClass( 'active' ) ) {
+
+				Settings.setFromMenu();
+
+				Game.start( Menu.resize );
+				Menu.hide();
+
+				$(this).removeClass( 'active' );
+				$(this).hide();
+				
+				Menu.resize = false;
+
+			}
 
 		});
+
+		$('#apply').hide();
 
 	},
 
@@ -231,7 +246,7 @@ var Menu = {
 	lose : function() {
 
 		$('#loser').show();
-		$('#restartButton').show();
+		// $('#restartButton').show();
 
 	},
 
@@ -259,23 +274,18 @@ var Menu = {
 		$('#statsButton').removeClass('active');
 		$('#instructionsButton').removeClass('active');
 
-		$('#apply').removeClass( 'active' );
-
 	},
 
 	changedSettings : function( resize ) {
 
 		if ( resize ) {
 
-			Settings.changedSize = true;
-
-		} else {
-
-			Settings.changed = true;
+			this.resize = true;
 
 		}
 
 		$('#apply').addClass( 'active' );
+		$('#apply').show();
 
 	}
 

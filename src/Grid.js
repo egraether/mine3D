@@ -23,8 +23,6 @@ var Grid = {
 
 		this.elements = [];
 
-		Settings.setFromMenu();
-
 		this.createGrid();
 		this.setNeighbors();
 
@@ -62,8 +60,6 @@ var Grid = {
 			this.elements[i].reset();
 
 		}
-
-		Settings.setFromMenu();
 
 		this.reset();
 
