@@ -1,4 +1,4 @@
-var InputHandler = {
+var EventHandler = {
 
 	mouse : vec3.create(),
 	oldMouse : vec3.create(),
@@ -209,6 +209,7 @@ var InputHandler = {
 		} else if ( event.keyCode === 32  /* SPACE */ ) {
 
 			Game.start();
+			Menu.hide();
 
 		} else if (event.keyCode === 27 /* ECS */ ) {
 

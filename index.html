@@ -12,14 +12,10 @@
 
 	<div class="hud">
 
-		<div class="element">
+		<!-- <div class="element">
 			<span class="highlight">Mine3D</span>
 			alpha release by <a href="http://egraether.com/">egraether</a>
-		</div>
-
-		<div class="element clear"> mines: <span id="mines"> 10 </span> </div>
-
-		<div class="element"> time: <span id="time"> 0 </span> </div>
+		</div> -->
 
 		<div class="element button clear" id="menuButton"> menu </div>
 
@@ -195,6 +191,10 @@
 
 	</div>
 
+	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
+
+	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
+
 <script id="vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 
 	uniform mat4 uMVMatrix;
@@ -259,7 +259,7 @@
 <script type="text/javascript" charset="utf-8" src="src/Menu.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="src/Grid.js"></script>
-<script type="text/javascript" charset="utf-8" src="src/InputHandler.js"></script>
+<script type="text/javascript" charset="utf-8" src="src/EventHandler.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Camera.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Game.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/main.js"></script>

@@ -56,7 +56,7 @@ var Camera = new ( function() {
 		vec3.normalize( vec3.cross( up, eye, right ) );
 		vec3.normalize( vec3.cross( eye, right, up ) );
 
-		mouse = InputHandler.mouse;
+		mouse = EventHandler.mouse;
 
 		this.resize();
 

@@ -14,7 +14,7 @@ var Game = {
 		Element.init( gl );
 		Grid.init();
 
-		InputHandler.init();
+		EventHandler.init();
 
 		this.reset();
 

@@ -4,6 +4,12 @@ var Face = {
 
 	draw : function( gl, shader, value ) {
 
+		if ( value === 28 ) {
+
+			mat4.scale( gl.matrix, vec3.assign( Cube.vector, 1.5 ) );
+
+		}
+
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
