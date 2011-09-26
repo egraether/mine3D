@@ -207,6 +207,30 @@ var Menu = {
 
 	initStats : function() {
 
+		function togglePrompt() {
+
+			$('#clearButton').toggleClass( 'active' );
+			$('#clearPrompt').toggle();
+
+		}
+
+		$('#clearButton').click( togglePrompt );
+
+		$('#clearNowButton').click( function() {
+
+			togglePrompt();
+			Stats.clear();
+
+			Menu.loadStats();
+
+		});
+
+		Menu.loadStats();
+
+	},
+
+	loadStats : function() {
+
 		var names = this.names,
 			i;
 
@@ -215,6 +239,8 @@ var Menu = {
 			this.setBestTime( names[i] );
 
 		}
+
+		this.updateStats();
 
 	},
 
@@ -273,12 +299,14 @@ var Menu = {
 
 		$('#loser').show();
 		// $('#restartButton').show();
+		$('#newButton').addClass( 'active' );
 
 	},
 
 	win : function() {
 
 		$('#winner').show();
+		$('#newButton').addClass( 'active' );
 
 	},
 
@@ -309,6 +337,8 @@ var Menu = {
 		$('#statsButton').removeClass('active');
 		$('#instructionsButton').removeClass('active');
 
+		$('#newButton').removeClass( 'active' );
+
 	},
 
 	changedSettings : function( resize ) {
@@ -328,7 +358,7 @@ var Menu = {
 
 		var time = Stats.read( name );
 
-		$('#' + name).text( time ? Math.floor( time * 0.001 ) : '-' );
+		$('#' + name).text( Math.floor( time * 0.001 ) || '-' );
 
 	},
 
@@ -336,12 +366,21 @@ var Menu = {
 
 		this.setBestTime( name );
 
-		$('#' + name).addClass( 'active' );
-
+		Menu.hide();
 		Menu.show();
+
+		$('#' + name).addClass( 'active' );
 
 		$('#statsButton').addClass( 'active' );
 		$('#stats').show();
+
+	},
+
+	updateStats : function() {
+
+		$('#gamesWon').text( Stats.read( 'gamesWon' ) || 0 );
+		$('#gamesPlayed').text( Stats.read( 'gamesPlayed' ) || 0 );
+		$('#timePlayed').text( Math.floor( Stats.read( 'timePlayed' ) * 0.001 ) || 0 );
 
 	}
 

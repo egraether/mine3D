@@ -77,6 +77,8 @@ var Game = {
 
 	start : function( resize ) {
 
+		this.saveStats( Grid.playTime, false );
+
 		if ( resize ) {
 
 			Grid.init();
@@ -93,6 +95,8 @@ var Game = {
 
 	restart : function() {
 
+		this.saveStats( Grid.playTime, false );
+
 		Grid.restart();
 
 		this.reset();
@@ -102,6 +106,8 @@ var Game = {
 	over : function( won ) {
 
 		var name = Settings.getKey();
+
+		this.saveStats( Grid.playTime, won );
 
 		this.gameover = true;
 
@@ -120,6 +126,17 @@ var Game = {
 		} else {
 
 			Menu.lose();
+
+		}
+
+	},
+
+	saveStats : function( time, won ) {
+
+		if ( !this.gameover && Grid.started ) {
+
+			Stats.updateStats( time, won );
+			Menu.updateStats();
 
 		}
 

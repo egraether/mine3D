@@ -1,38 +1,36 @@
 var Stats = {
 
-	storage : null,
-
 	init : function() {
-
-		this.storage = window.localStorage;
-
-		if ( this.storage ) {
-
-			console.log( this.storage );
-
-		}
 
 	},
 
 	read : function( key ) {
 
-		if ( this.storage ) {
+		var storage = window.localStorage;
 
-			return parseInt( this.storage.getItem( key ) );
-
-		} else {
-
-			return null;
-
-		}
+		return storage ? parseInt( storage.getItem( key ) ) : null;
 
 	},
 
 	write : function( key, value ) {
 
-		if ( this.storage ) {
+		var storage = window.localStorage;
 
-			this.storage.setItem( key, value );
+		if ( storage ) {
+
+			storage.setItem( key, value );
+
+		}
+
+	},
+
+	clear : function() {
+
+		var storage = window.localStorage;
+
+		if ( storage ) {
+
+			storage.clear();
 
 		}
 
@@ -63,5 +61,24 @@ var Stats = {
 		return false;
 
 	},
+
+	updateStats : function( time, won ) {
+
+		var storage = window.localStorage;
+
+		if ( storage ) {
+
+			if ( won ) {
+
+				storage.setItem( 'gamesWon', parseInt( storage.getItem( 'gamesWon' ) || 0 ) + 1 );
+
+			}
+
+			storage.setItem( 'gamesPlayed', parseInt( storage.getItem( 'gamesPlayed' ) || 0 ) + 1 );
+			storage.setItem( 'timePlayed', parseInt( storage.getItem( 'timePlayed' ) || 0 ) + time );
+
+		}
+
+	}
 
 };

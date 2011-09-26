@@ -85,11 +85,11 @@ a:hover {
 }
 
 #about {
-	height : 358px;
+	height : 380px;
 }
 
 #stats {
-	height : 302px;
+	height : 358px;
 }
 
 #instructions {
@@ -149,4 +149,8 @@ td:first-child {
 
 .heading span {
 	font-weight: bold;
+}
+
+#clearPrompt {
+	display: none;
 }
