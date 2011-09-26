@@ -1,38 +1,50 @@
 var Stats = {
 
+	storage : null,
+
 	init : function() {
+
+		this.storage = window.localStorage || {
+
+			storage : {},
+
+			setItem : function( key, value ) {
+
+				this.storage[key] = value.toString();
+
+			},
+
+			getItem : function( key ) {
+
+				return this.storage[key];
+
+			},
+
+			clear : function() {
+
+				this.storage = {};
+
+			}
+
+		};
 
 	},
 
 	read : function( key ) {
 
-		var storage = window.localStorage;
-
-		return storage ? parseInt( storage.getItem( key ) ) : null;
+		return parseInt( this.storage.getItem( key ) ) || 0;
 
 	},
 
 	write : function( key, value ) {
 
-		var storage = window.localStorage;
-
-		if ( storage ) {
-
-			storage.setItem( key, value );
-
-		}
+		this.storage.setItem( key, value );
 
 	},
 
 	clear : function() {
 
-		var storage = window.localStorage;
-
-		if ( storage ) {
-
-			storage.clear();
-
-		}
+		this.storage.clear();
 
 	},
 
@@ -40,17 +52,7 @@ var Stats = {
 
 		var oldTime = this.read( name );
 
-		if ( oldTime ) {
-
-			if ( time < oldTime ) {
-
-				this.write( name, time );
-
-				return true;
-
-			}
-
-		} else if ( this.storage ) {
+		if ( !oldTime || time < oldTime ) {
 
 			this.write( name, time );
 
@@ -64,20 +66,14 @@ var Stats = {
 
 	updateStats : function( time, won ) {
 
-		var storage = window.localStorage;
+		if ( won ) {
 
-		if ( storage ) {
-
-			if ( won ) {
-
-				storage.setItem( 'gamesWon', parseInt( storage.getItem( 'gamesWon' ) || 0 ) + 1 );
-
-			}
-
-			storage.setItem( 'gamesPlayed', parseInt( storage.getItem( 'gamesPlayed' ) || 0 ) + 1 );
-			storage.setItem( 'timePlayed', parseInt( storage.getItem( 'timePlayed' ) || 0 ) + time );
+			this.write( 'gamesWon', this.read( 'gamesWon' ) + 1 );
 
 		}
+
+		this.write( 'gamesPlayed', this.read( 'gamesPlayed' ) + 1 );
+		this.write( 'timePlayed', this.read( 'timePlayed' ) + time );
 
 	}
 
