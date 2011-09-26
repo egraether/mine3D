@@ -13,7 +13,7 @@
 
 body {
 	font-size : 16pt;
-	color : #777;
+	color : #555;
 }
 
 .hud {
@@ -39,7 +39,7 @@ a:hover {
 	float : left;
 
 	background-color : #EEE;
-	border : 1px solid #777;
+	border : 1px solid #555;
 }
 
 .button {
@@ -93,7 +93,7 @@ a:hover {
 }
 
 #instructions {
-	height: 414px;
+	height: 500px;
 }
 
 #settings {
@@ -136,11 +136,11 @@ td {
 }
 
 tr:first-child td {
-	border-bottom : 1px solid #777;
+	border-bottom : 1px solid #555;
 }
 
 td:first-child {
-	border-right : 1px solid #777;
+	border-right : 1px solid #555;
 }
 
 .heading {

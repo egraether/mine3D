@@ -41,7 +41,7 @@ var InputHandler = {
 
 	},
 
-	onMouseDown : function(event) {
+	onMouseDown : function( event ) {
 
 		event.stopPropagation();
 
@@ -161,16 +161,40 @@ var InputHandler = {
 
 	},
 
+	isMouseKey : function( keyCode ) {
+
+		return this.isLeftMouseKey( keyCode ) || this.isRightMouseKey( keyCode );
+
+	},
+
+	isLeftMouseKey : function( keyCode ) {
+
+		return keyCode === 70 /* F */ || keyCode === 74 /* J */;
+
+	},
+
+	isRightMouseKey : function( keyCode ) {
+
+		return keyCode === 68 /* D */ || keyCode === 75 /* K */;
+
+	},
+
+	augmentEvent : function( event ) {
+
+		event.clientX = this.mouse[0];
+		event.clientY = this.mouse[1];
+
+		event.button = this.isLeftMouseKey( event.keyCode ) ? 0 : 2;
+
+		return event;
+
+	},
+
 	onKeyDown : function( event ) {
 
-		if (event.keyCode === 32) {
+		if ( this.isMouseKey( event.keyCode ) ) {
 
-			vec3.set( this.mouse, this.oldMouse );
-
-			Camera.startRotate( this.oldMouse );
-
-			this.button = 0;
-			this.state = "drag";
+			this.onMouseDown( this.augmentEvent( event ) );
 
 		}
 
@@ -178,17 +202,15 @@ var InputHandler = {
 
 	onKeyUp : function( event ) {
 
-		if (event.keyCode === 32) {
+		if ( this.isMouseKey( event.keyCode ) ) {
 
-			this.state = "up";
+			this.onMouseUp( this.augmentEvent( event ) );
 
-			Camera.updateRay = true;
-
-		} else if (event.keyCode == 82 || event.keyCode == 78) {
+		} else if ( event.keyCode === 32  /* SPACE */ ) {
 
 			Game.start();
 
-		} else if (event.keyCode === 27) {
+		} else if (event.keyCode === 27 /* ECS */ ) {
 
 			Menu.toggle();
 
