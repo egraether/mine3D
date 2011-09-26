@@ -34,19 +34,19 @@
 
 			<div class="label heading"> Settings </div>
 
-			<div class="label"> mode: </div>
+			<div class="label left"> mode: </div>
 			<div class="element button" id="classic"> classic </div>
 			<div class="element button" id="sweep"> sweep </div>
 
-			<div class="label"> level: </div>
+			<div class="label left"> level: </div>
 			<div class="element button" id="easy"> easy </div>
 			<div class="element button" id="medium"> medium </div>
 			<div class="element button" id="hard"> hard </div>
 
-			<div class="label"> animations: </div>
+			<div class="label left"> animations: </div>
 			<div class="element button" id="animations"> </div>
 
-			<div class="label"> center field in sweep mode: </div>
+			<div class="label left"> center field in sweep mode: </div>
 			<div class="element button" id="recenter"> </div>
 
 			<div class="element button" id="apply"> apply </div>
@@ -86,7 +86,7 @@
 
 			<div class="element button clear" id="clearButton"> delete </div>
 			<div id="clearPrompt">
-				<div class="label" style="clear:none"> sure? </div>
+				<div class="label left" style="clear:none"> sure? </div>
 				<div class="element button" id="clearNowButton"> yes </div>
 			</div>
 
@@ -97,20 +97,6 @@
 			<div class="label heading">
 				<span class="highlight">Mine3D</span>
 				- Minesweeper in 3D WebGL
-			</div>
-
-			<div class="label">
-				release contains all main features, without graphic design
-			</div>
-
-			<div class="label">
-				renders only on interaction, therefore consumes no CPU
-			</div>
-
-			<div class="label">
-				if rendering lags: <br />
-				- decrease size of window <br />
-				- turn off animations in the Settings section
 			</div>
 
 			<div class="label">
@@ -194,6 +180,35 @@
 	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
 
 	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
+
+	<div id="welcomeWrapper">
+
+		<div id="welcomeOverlay"></div>
+
+		<div class="element" id="welcome">
+
+			<div class="label heading">
+				<span class="highlight">Mine3D</span>
+				- Minesweeper in 3D WebGL
+			</div>
+
+			<div class="label">
+				release contains all main features, without graphic design
+			</div>
+
+			<div class="label">
+				renders only on interaction, therefore consumes no CPU
+			</div>
+
+			<div class="label">
+				if rendering lags: <br />
+				- decrease size of window <br />
+				- turn off animations in the Settings section
+			</div>
+
+		</div>
+
+	</div>
 
 <script id="vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 

@@ -12,12 +12,15 @@
 /* ------------- */
 
 body {
+	margin : 0;
 	font-size : 16pt;
 	color : #555;
 }
 
 .hud {
 	position : absolute;
+	top : 4px;
+	left : 4px;
 }
 
 a {
@@ -55,7 +58,6 @@ a:hover {
 	margin : 4px 2px;
 	padding : 4px;
 
-	float : left;
 	clear : both;
 }
 
@@ -75,6 +77,10 @@ a:hover {
 	clear : both;
 }
 
+.left {
+	float : left;
+}
+
 #menu, #settings, #instructions, #about, #stats {
 	display: none;
 	padding : 4px;
@@ -85,15 +91,15 @@ a:hover {
 }
 
 #about {
-	height : 382px;
+	height : 200px;
 }
 
 #stats {
-	height : 340px;
+	height : 330px;
 }
 
 #instructions {
-	height: 500px;
+	height: 485px;
 }
 
 #settings {
@@ -165,4 +171,30 @@ td:first-child {
 	position : absolute;
 	bottom : 4px;
 	right : 4px;
+}
+
+#welcomeWrapper {
+	display : none;
+	position : absolute;
+
+	width : 100%;
+	height : 100%;
+}
+
+#welcomeOverlay {
+	position : absolute;
+
+	width : 100%;
+	height : 100%;
+
+	background-color : #FFF;
+	opacity : 0.5;
+}
+
+#welcome {
+	position : relative;
+	float : none;
+
+	width : 500px;
+	margin : 15% auto 0;
 }
