@@ -31,12 +31,12 @@ window.onload = function () {
 
 		gl = canvas.getContext( "experimental-webgl" );
 
-		if ( !gl ) {
+	}
 
-			Menu.error();
-			return;
+	if ( !gl ) {
 
-		}
+		Menu.error();
+		return;
 
 	}
 

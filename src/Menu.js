@@ -24,6 +24,8 @@ var Menu = {
 		$('#newButton').show();
 		$('#menuButton').show();
 
+		$('#welcomeWrapper').show();
+
 		$('#newButton').click(function () {
 
 			Game.start();
