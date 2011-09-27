@@ -98,13 +98,17 @@ var Menu = {
 
 		function setMode( modeName ) {
 
-			$('#classic').removeClass( 'active' );
-			$('#sweep').removeClass( 'active' );
+			if ( !($('#' + modeName).hasClass( 'active' )) ) {
 
-			$('#' + modeName).addClass( 'active' );
-			Menu.mode = modeName;
+				$('#classic').removeClass( 'active' );
+				$('#sweep').removeClass( 'active' );
 
-			Menu.changedSettings( false );
+				$('#' + modeName).addClass( 'active' );
+				Menu.mode = modeName;
+
+				Menu.changedSettings( false );
+
+			}
 
 		};
 
@@ -144,14 +148,18 @@ var Menu = {
 
 		function setLevel( levelName ) {
 
-			$('#easy').removeClass( 'active' );
-			$('#medium').removeClass( 'active' );
-			$('#hard').removeClass( 'active' );
+			if ( !( $('#' + levelName).hasClass( 'active') ) ) {
 
-			$('#' + levelName).addClass( 'active');
-			Menu.level = Settings.levels[levelName];
+				$('#easy').removeClass( 'active' );
+				$('#medium').removeClass( 'active' );
+				$('#hard').removeClass( 'active' );
 
-			Menu.changedSettings( true );
+				$('#' + levelName).addClass( 'active');
+				Menu.level = Settings.levels[levelName];
+
+				Menu.changedSettings( true );
+
+			}
 
 		};
 
