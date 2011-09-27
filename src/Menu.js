@@ -119,6 +119,27 @@ var Menu = {
 		});
 
 
+		$('#playClassicButton').click(function() {
+
+			setMode( 'classic' );
+
+			Settings.setFromMenu();
+
+			Game.start( Menu.resize );
+			Menu.hide();
+
+			$('#apply').removeClass( 'active' );
+			$('#apply').hide();
+
+		});
+
+		$('#playSweepButton').click(function() {
+
+			Menu.hide();
+
+		});
+
+
 		function setLevel( levelName ) {
 
 			$('#easy').removeClass( 'active' );
@@ -194,7 +215,7 @@ var Menu = {
 
 				$(this).removeClass( 'active' );
 				$(this).hide();
-				
+
 				Menu.resize = false;
 
 			}
@@ -338,6 +359,7 @@ var Menu = {
 		$('#instructionsButton').removeClass('active');
 
 		$('#newButton').removeClass( 'active' );
+		$('#welcomeWrapper').hide();
 
 	},
 

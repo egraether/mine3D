@@ -2,8 +2,10 @@
 <html lang=en>
 <head>
 	<meta name="author" content="Eberhard Gräther">
+
 	<title>Mine3D</title>
-	
+	<description>3D Minesweeper in WebGL</description>
+
 	<link rel="stylesheet" media="all" href="styles/style.css"/>
 </head>
 <body>
@@ -187,24 +189,53 @@
 
 		<div class="element" id="welcome">
 
-			<div class="label heading">
-				<span class="highlight">Mine3D</span>
-				- Minesweeper in 3D WebGL
+			<div class="left" id="intro">
+
+				<div class="label">
+					<span class="title"> Mine3D </span>
+					<span class="subtitle"> open beta </span>
+				</div>
+
+				<div class="label">
+					Can you play Minesweeper in 3D? Click here to give it a try:
+				</div>
+
+				<div class="element button" id="playClassicButton"> classic mode </div>
+
+				<div class="label">
+					Or go for a new game mode and delete mines instead of marking them:
+				</div>
+
+				<div class="element button" id="playSweepButton"> sweep mode </div>
+
 			</div>
 
-			<div class="label">
-				release contains all main features, without graphic design
+			<div class="left" id="info">
+
+				<div class="label heading"> Infos </div>
+
+				<div class="label">
+					release contains all main features, but no true graphic design
+				</div>
+
+				<div class="label">
+					renders only on interaction, therefore consumes little CPU
+				</div>
+
+				<div class="label">
+					look up ways for interaction in
+					'menu -> instructions'
+				</div>
+
+				<div class="label">
+					if rendering lags: <br />
+					- decrease size of window <br />
+					- turn off animations
+				</div>
+
 			</div>
 
-			<div class="label">
-				renders only on interaction, therefore consumes no CPU
-			</div>
-
-			<div class="label">
-				if rendering lags: <br />
-				- decrease size of window <br />
-				- turn off animations in the Settings section
-			</div>
+			<div class="clear"></div>
 
 		</div>
 
