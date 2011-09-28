@@ -192,7 +192,7 @@ var EventHandler = {
 
 	onKeyDown : function( event ) {
 
-		if ( this.isMouseKey( event.keyCode ) ) {
+		if ( this.state === "up" && this.isMouseKey( event.keyCode ) ) {
 
 			this.onMouseDown( this.augmentEvent( event ) );
 
