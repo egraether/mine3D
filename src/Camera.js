@@ -33,7 +33,6 @@ var Camera = new ( function() {
 		isZooming = false,
 
 		isRecentering = false,
-		isRecentered = false,
 
 		vector = vec3.create(),
 		vector2 = vec3.create(),
@@ -75,13 +74,18 @@ var Camera = new ( function() {
 
 	this.update = function() {
 
-		if ( this.recenter && Settings.recenter ) {
+		var updateView = isRotating || isPanning || isZooming;
 
-			this.recenterView( Settings.animations );
+		if ( isRecentering ) {
+
+			isRecentering = false;
+			return true;
+
+		} else if ( !updateView && this.recenter && Settings.recenter ) {
+
+			return this.recenterView( Settings.animations );
 
 		}
-
-		var updateView = isRotating || isPanning || isZooming || isRecentered;
 
 		if ( isZooming ) {
 
@@ -103,7 +107,7 @@ var Camera = new ( function() {
 
 		}
 
-		isRotating = isPanning = isZooming = isRecentered = false;
+		isRotating = isPanning = isZooming = false;
 
 		return updateView;
 
@@ -199,11 +203,7 @@ var Camera = new ( function() {
 
 	this.rotate = function() {
 
-		if ( !isRecentering ) {
-
-			isRotating = true;
-
-		}
+		isRotating = true;
 
 	}
 
@@ -240,11 +240,7 @@ var Camera = new ( function() {
 
 	this.pan = function() {
 
-		if ( !isRecentering ) {
-
-			isPanning = true;
-
-		}
+		isPanning = true;
 
 	};
 
@@ -273,12 +269,8 @@ var Camera = new ( function() {
 
 	this.zoom = function( delta ) {
 
-		if ( !isRecentering ) {
-
-			isZooming = true;
-			zoomDelta *= delta;
-
-		}
+		isZooming = true;
+		zoomDelta *= delta;
 
 	};
 
@@ -369,6 +361,8 @@ var Camera = new ( function() {
 		visionSize += 1 * visionSize + 2;
 		visionSize /= vec3.length( eye );
 
+		this.recenter = false;
+
 		if ( visionSize > 0 && visionSize < 0.99 ) {
 
 			vec3.set( eye, vector2 )
@@ -397,17 +391,14 @@ var Camera = new ( function() {
 					2 : vector2[2]
 				}, 400 );
 
-				isRecentering = true;
-
 				tweenCenter.onUpdate( function() {
 
-					isRecentered = true;
+					isRecentering = true;
 
 				});
 
 				tweenCenter.onComplete( function() {
 
-					isRecentering = false;
 					Camera.updateRay = true;
 
 				});
@@ -423,13 +414,15 @@ var Camera = new ( function() {
 				vec3.set( vector, center );
 				vec3.set( vector2, eye );
 
-				isRecentered = true;
-
 			}
+
+			isRecentering = true;
+
+			return true;
 
 		}
 
-		this.recenter = false;
+		return false;
 
 	};
 
