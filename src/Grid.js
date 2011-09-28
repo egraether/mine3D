@@ -98,7 +98,7 @@ var Grid = {
 
 		for ( k = dim[2] - 1; k >= 0; k-- ) {
 
-			if ( k == 0 ) {
+			if ( k === 0 ) {
 
 				bottomBorder = true;
 
@@ -110,8 +110,8 @@ var Grid = {
 			position[1] = ( dim[1] - 1 ) * ( 1 + spacing ) / 2;
 
 			for ( j = dim[1] - 1; j >= 0; j-- ) {
-			
-				if (j == 0) {
+
+				if ( j === 0 ) {
 
 					leftBorder = true;
 
@@ -124,7 +124,7 @@ var Grid = {
 
 				for ( i = dim[0] - 1; i >= 0; i-- ) {
 
-					if (i == 0) {
+					if ( i === 0 ) {
 
 						backBorder = true;
 
@@ -168,7 +168,7 @@ var Grid = {
 
 		for ( k = dim[2] - 1; k >= 0; k-- ) {
 
-			if ( k == 0 ) {
+			if ( k === 0 ) {
 
 				bottomBorder = true;
 
@@ -178,11 +178,11 @@ var Grid = {
 
 			for ( j = dim[1] - 1; j >= 0; j-- ) {
 
-				backBorder = ( j == 0 ? true : false );
+				backBorder = ( j === 0 ? true : false );
 
 				for ( i = dim[0] - 1; i >= 0; i-- ) {
 
-					leftBorder = ( i == 0 ? true : false );
+					leftBorder = ( i === 0 ? true : false );
 
 					element = elements[index];
 
@@ -310,7 +310,7 @@ var Grid = {
 
 			for ( i = 0; i < openElementIndices.length; i++ ) {
 
-				if ( openElementIndices[i] == index ) {
+				if ( openElementIndices[i] === index ) {
 
 					continue mineWhile;
 
@@ -343,7 +343,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( (element.state == 'cube' || element.state == 'flag') && element.isMine ) {
+			if ( (element.state === 'cube' || element.state === 'flag') && element.isMine ) {
 
 				element.showMine();
 
@@ -385,7 +385,7 @@ var Grid = {
 
 			} else if ( this.rightClicked && this.started ) {
 
-				if ( Settings.mode == 'classic' ) {
+				if ( Settings.mode === 'classic' ) {
 
 					elementInRay.flag();
 
@@ -417,8 +417,8 @@ var Grid = {
 
 			Menu.setTime( this.playTime );
 
-			if ( ( Settings.mode == 'classic' && this.cubeCount == Settings.currentLevel.mines ) ||
-				( Settings.mode == 'sweep' && this.cubeCount == this.minesLeft ) ) {
+			if ( ( Settings.mode === 'classic' && this.cubeCount === Settings.currentLevel.mines ) ||
+				( Settings.mode === 'sweep' && this.cubeCount === this.minesLeft ) ) {
 
 				Game.over( true );
 
@@ -460,7 +460,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( element.state == "cube" || element.state == "flag" ) {
+			if ( element.state === "cube" || element.state === "flag" ) {
 
 				vec3.subtract( element.position, origin, vector );
 				distanceFromOrigin = vec3.lengthSquared( vector );

@@ -50,11 +50,11 @@ var EventHandler = {
 
 		var oldMouse = this.getMouse( event, this.oldMouse );
 
-		if ( this.button == 0 ) {
+		if ( this.button === 0 ) {
 
 			Camera.startRotate( oldMouse );
 
-		} else if ( this.button == 2 ) {
+		} else if ( this.button === 2 ) {
 
 			Camera.startPan( oldMouse );
 
@@ -68,7 +68,7 @@ var EventHandler = {
 
 		event.stopPropagation();
 
-		if ( this.state == "down" ) {
+		if ( this.state === "down" ) {
 
 			this.onClick( event );
 			clearTimeout( this.timeoutID );
@@ -88,7 +88,7 @@ var EventHandler = {
 		var mouse = this.getMouse( event, this.mouse ),
 			len, ray;
 
-		if ( this.state == "down" ) {
+		if ( this.state === "down" ) {
 
 			len = vec3.lengthSquared( vec3.subtract( mouse, this.oldMouse, this.vector ) );
 
@@ -101,13 +101,13 @@ var EventHandler = {
 
 		}
 
-		if ( this.state == "drag" ) {
+		if ( this.state === "drag" ) {
 
-			if ( this.button == 0 ) {
+			if ( this.button === 0 ) {
 
 				Camera.rotate();
 
-			} else if ( this.button == 2 ) {
+			} else if ( this.button === 2 ) {
 
 				Camera.pan();
 
@@ -125,11 +125,11 @@ var EventHandler = {
 
 		if ( !Game.gameover ) {
 
-			if ( this.button == 0 ) {
+			if ( this.button === 0 ) {
 
 				Grid.leftClicked = true;
 
-			} else if ( this.button == 2 ) {
+			} else if ( this.button === 2 ) {
 
 				Grid.rightClicked = true;
 
@@ -141,7 +141,7 @@ var EventHandler = {
 
 	onClickTimeout : function() {
 
-		if ( this.state == "down" ) {
+		if ( this.state === "down" ) {
 
 			this.state = "drag";
 

@@ -27,8 +27,8 @@ function extend( destination, source ) {
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x;
-	dest[1] = typeof y == 'number' ? y : x;
-	dest[2] = typeof z == 'number' ? z : x;
+	dest[1] = typeof y === 'number' ? y : x;
+	dest[2] = typeof z === 'number' ? z : x;
 
 	return dest;
 
@@ -58,6 +58,6 @@ vec3.angle = function( vec, vec2 ) {
 
 vec3.equal = function( vec, vec2 ) {
 
-	return vec[0] == vec2[0] && vec[1] == vec2[1] && vec[2] == vec2[2];
+	return vec[0] === vec2[0] && vec[1] === vec2[1] && vec[2] === vec2[2];
 
 };

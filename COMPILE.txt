@@ -1,0 +1,35 @@
+// insert this script at: http://closure-compiler.appspot.com/home
+
+// ==ClosureCompiler==
+
+// @compilation_level SIMPLE_OPTIMIZATIONS
+
+// @output_file_name mine3d.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/requestAnimationFrame.js
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/glMatrix.js
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/Tween.js
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/jquery-1.6.4.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/utilities.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/WebGLUtilities.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Cube.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Face.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Element.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/BSPNode.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/BSPTree.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Settings.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Stats.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Menu.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Grid.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Camera.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/EventHandler.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Game.js
+
+// @code_url https://raw.github.com/egraether/mine3D/master/src/main.js
+
+// ==/ClosureCompiler==

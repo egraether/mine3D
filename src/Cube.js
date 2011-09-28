@@ -110,7 +110,7 @@ extend( Cube, {
 
 		colorOffset = ( 72 + 48 + colorIndex * 96 ) * 4;
 
-		if ( scale != 1 ) {
+		if ( scale !== 1 ) {
 
 			vec3.assign( this.vector, scale );
 			mat4.scale( gl.matrix, this.vector );

@@ -11,7 +11,7 @@ var BSPTree = {
 
 			this.root = new BSPNode().init( elements, 0 );
 
-		} else if ( elements.length == 1 ) {
+		} else if ( elements.length === 1 ) {
 
 			this.root = elements[0];
 

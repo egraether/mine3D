@@ -52,7 +52,7 @@ BSPNode.prototype = {
 
 		} else {
 
-			if ( frontElements.length == 1 ) {
+			if ( frontElements.length === 1 ) {
 
 				this.front = frontElements[0];
 
@@ -62,7 +62,7 @@ BSPNode.prototype = {
 
 			}
 
-			if ( backElements.length == 1 ) {
+			if ( backElements.length === 1 ) {
 
 				this.back = backElements[0];
 

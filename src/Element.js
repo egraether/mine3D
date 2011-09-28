@@ -81,7 +81,7 @@ Element.prototype = {
 
 	valueDecreased : function() {
 
-		if ( this.value == 0 && this.state != 'cube' ) {
+		if ( this.value === 0 && this.state !== 'cube' ) {
 
 			this.open();
 
@@ -105,7 +105,7 @@ Element.prototype = {
 
 	showMine : function() {
 
-		if ( this.state != 'flag' ) {
+		if ( this.state !== 'flag' ) {
 
 			this.state = 'open';
 
@@ -125,7 +125,7 @@ Element.prototype = {
 		gl.pushMatrix();
 		mat4.translate( gl.matrix, this.position );
 
-		if ( state == "number" || ( state == 'open' && this.isMine ) ) {
+		if ( state === "number" || ( state === 'open' && this.isMine ) ) {
 
 			if ( rotation ) {
 
@@ -152,7 +152,7 @@ Element.prototype = {
 
 		} else {
 
-			Cube.draw( gl, Element.shader, this.isMine, state == "flag", this.highlight, this.scale );
+			Cube.draw( gl, Element.shader, this.isMine, state === "flag", this.highlight, this.scale );
 
 		}
 
@@ -164,7 +164,7 @@ Element.prototype = {
 
 		var tween;
 
-		if ( this.state == "cube" ) {
+		if ( this.state === "cube" ) {
 
 			this.state = 'opening';
 
@@ -201,7 +201,7 @@ Element.prototype = {
 
 	openCubeNow : function() {
 
-		if ( this.state == 'opening' ) {
+		if ( this.state === 'opening' ) {
 
 			if ( this.isMine ) {
 
@@ -220,14 +220,14 @@ Element.prototype = {
 
 	open : function() {
 
-		if ( this.state == 'open' ) {
+		if ( this.state === 'open' ) {
 
 			return;
 
 		}
 
 
-		if ( this.state == 'opening' ) {
+		if ( this.state === 'opening' ) {
 
 			Grid.cubeCount--;
 
@@ -256,7 +256,7 @@ Element.prototype = {
 
 		var tween;
 
-		if ( this.state == "cube" ) {
+		if ( this.state === "cube" ) {
 
 			if ( Settings.animations ) {
 
@@ -298,7 +298,7 @@ Element.prototype = {
 		var i,
 			neighbors;
 
-		if ( this.state == 'opening' ) {
+		if ( this.state === 'opening' ) {
 
 			if ( this.isMine ) {
 
@@ -341,12 +341,12 @@ Element.prototype = {
 
 	flag : function() {
 
-		if ( this.state == 'cube' ) {
+		if ( this.state === 'cube' ) {
 
 			this.state = 'flag';
 			Grid.minesLeft--;
 
-		} else if ( this.state == 'flag' ) {
+		} else if ( this.state === 'flag' ) {
 
 			this.state = 'cube';
 			Grid.minesLeft++;
@@ -357,7 +357,7 @@ Element.prototype = {
 
 	remove : function( element ) {
 
-		if ( this.index == element.index ) {
+		if ( this.index === element.index ) {
 
 			return 0;
 
@@ -398,7 +398,7 @@ Element.prototype = {
 
 	solve : function() {
 
-		if ( this.state == "cube" && !this.isMine ) {
+		if ( this.state === "cube" && !this.isMine ) {
 
 			if ( this.value ) {
 
