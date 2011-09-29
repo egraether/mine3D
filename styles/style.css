@@ -13,7 +13,11 @@
 
 body {
 	margin : 0;
+/*	font-family: 'Open Sans', sans-serif;*/
+	font-family: 'Questrial', sans-serif;
+/*	font-family: 'Lato', sans-serif;*/
 	font-size : 16pt;
+	line-height : 1.3em;
 	color : #555;
 }
 
@@ -63,6 +67,7 @@ a:hover {
 
 .highlight {
 	color : #6A8F5F;
+	font-size : 24pt;
 }
 
 .button:hover {
@@ -175,7 +180,7 @@ td:first-child {
 	float : none;
 
 	width : 720px;
-	margin : 13% auto 0;
+	margin : 10% auto 0;
 }
 
 #intro {
@@ -186,34 +191,39 @@ td:first-child {
 }
 
 #info {
-	width : 280px;
+	width : 276px;
 	font-size : 14pt;
-	padding-left : 8px;
-	margin-top : 32px;
+	padding-left : 16px;
+	margin : 24px 0;
 }
 
 #info .heading {
-	font-size : 16pt;
+	font-size : 20pt;
+}
+
+#info .label {
+	margin : 8px 2px;
 }
 
 #playClassicButton {
 	float : none;
-	padding : 18px 24px;
-	font-size : 18pt;
-	width : 127px;
-	margin : 10px auto;
+	padding : 16px 32px;
+	font-size : 24pt;
+	width : 190px;
+	margin : 16px auto;
 }
 
 #playSweepButton {
 	float : none;
-	padding : 10px 16px;
-	width : 107px;
-	margin : 10px auto;
+	padding : 12px 24px;
+	font-size : 20pt;
+	width : 160px;
+	margin : 16px auto;
 }
 
 .title {
 	color : #6A8F5F;
-	font-size : 24pt;
+	font-size : 32pt;
 	padding : 0;
 	text-align : center;
 }
