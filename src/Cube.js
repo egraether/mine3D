@@ -99,12 +99,18 @@ extend( Cube, {
 
 	draw : function( gl, shader, mine, flag, highlight, scale ) {
 
-		var colorIndex = flag ? highlight ? 6 : 3 : highlight ? 1 : 0,
+		var colorIndex = flag ? 2 : 0,
 			colorOffset;
 
 		if ( Game.gameover && flag ) {
 
-			colorIndex = mine ? highlight ? 7 : 4 : highlight ? 5 : 2;
+			colorIndex = mine ? 3 : 1;
+
+		}
+
+		if ( highlight ) {
+
+			colorIndex += 4;
 
 		}
 
@@ -132,7 +138,7 @@ extend( Cube, {
 
 	initBuffers : function( gl ) {
 
-		var i, j,
+		var i, j, l,
 			vV = this.vertexVectors = [],
 			vertices = new Float32Array([
 
@@ -271,65 +277,56 @@ extend( Cube, {
 
 		var colors = [
 
-			// baseColors
-			[
+			// base
+			[ 0.7, 0.7, 0.7, 1.0 ],
 
-				[ 0.7, 0.7, 0.7, 1.0 ],
-				[ 0.6, 0.6, 0.6, 1.0 ],
-				[ 0.8, 0.8, 0.8, 1.0 ]
+			// red
+			[ 0.7, 0.175, 0.175, 1.0 ],
 
-			// highlightColors
-			], [
+			// yellow
+			[ 0.7, 0.7, 0.175, 1.0 ],
 
-				[ 0.7, 0.7, 0.7, 0.8 ],
-				[ 0.6, 0.6, 0.6, 0.8 ],
-				[ 0.8, 0.8, 0.8, 0.8 ]
-
-			// flagColors red
-			], [
-
-				[ 0.7, 0.175, 0.175, 1.0 ],
-				[ 0.6, 0.15, 0.15, 1.0 ],
-				[ 0.8, 0.2, 0.2, 1.0 ]
-
-			// flagColors yellow
-			], [
-
-				[ 0.7, 0.7, 0.175, 1.0 ],
-				[ 0.6, 0.6, 0.15, 1.0 ],
-				[ 0.8, 0.8, 0.2, 1.0 ]
-
-			// flagColors green
-			], [
-
-				[ 0.175, 0.7, 0.175, 1.0 ],
-				[ 0.15, 0.6, 0.15, 1.0 ],
-				[ 0.2, 0.8, 0.2, 1.0 ]
-
-			// flagHighlightColors red
-			], [
-
-				[ 0.7, 0.175, 0.175, 0.9 ],
-				[ 0.6, 0.15, 0.15, 0.9 ],
-				[ 0.8, 0.2, 0.2, 0.9 ]
-
-			// flagHighlightColors yellow
-			], [
-
-				[ 0.7, 0.7, 0.175, 0.9 ],
-				[ 0.6, 0.6, 0.15, 0.9 ],
-				[ 0.8, 0.8, 0.2, 0.9 ]
-
-			// flagHighlightColors green
-			], [
-
-				[ 0.175, 0.7, 0.175, 0.9 ],
-				[ 0.15, 0.6, 0.15, 0.9 ],
-				[ 0.2, 0.8, 0.2, 0.9 ]
-
-			]
+			// green
+			[ 0.175, 0.7, 0.175, 1.0 ]
 
 		];
+
+		var highlightColor;
+
+		for ( i = 0, l = colors.length; i < l; i++ ) {
+
+			highlightColor = colors[i].concat();
+			highlightColor[3] = 0.85;
+
+			colors.push( highlightColor );
+
+		}
+
+
+		function addShades( colors ) {
+
+			var shadeUp = colors.concat(),
+				shadeDown = colors.concat(),
+				i, value;
+
+			for ( i = 0; i < 3; i++ ) {
+
+				value = colors[i] / 7;
+
+				shadeUp[i] += value;
+				shadeDown[i] -= value;
+
+			}
+
+			return [ colors, shadeDown, shadeUp ];
+
+		}
+
+		for ( i = 0; i < colors.length; i++ ) {
+
+			colors[i] = addShades( colors[i] );
+
+		}
 
 
 		var texCoords = new Float32Array( 48 );
