@@ -20,22 +20,16 @@ body {
 	color : #555;
 }
 
-.hud {
-	position : absolute;
-	top : 4px;
-	left : 4px;
-}
-
 a {
-	color : #6A8F5F;
+	color : #618F46;
 }
 
 a:visited {
-	color : #6A8F5F;
+	color : #75AD55;
 }
 
 a:hover {
-	color : #333;
+	color : #476933;
 }
 
 .element {
@@ -43,14 +37,12 @@ a:hover {
 	padding : 4px 8px;
 
 	float : left;
-
-	background-color : #EEE;
 	border : 1px solid #555;
 }
 
 .button {
 	cursor : pointer;
-	background-color : #FFF !important;
+	color : #555;
 
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -64,16 +56,20 @@ a:hover {
 	clear : both;
 }
 
+.heading {
+	font-size: 22pt;
+}
+
 .highlight {
-	color : #6A8F5F;
+	color : #618F46;
 }
 
 .button:hover {
-	background-color : #BACF9F !important;
+	background-color : #B9E09D !important;
 }
 
 .active {
-	background-color : #CADFB6 !important;
+	background-color : #C3E0B1;
 }
 
 .clear {
@@ -84,9 +80,54 @@ a:hover {
 	float : left;
 }
 
-#menu, #settings, #instructions, #about, #stats {
+#welcomeWrapper {
+	position : absolute;
+
+	top : 0px;
+	left : 0px;
+
+	width : 100%;
+	height : 100%;
+
+	z-index : 2;
+}
+
+#overlay {
+	position : fixed;
+
+	top : 0px;
+	left : 0px;
+
+	width : 100%;
+	height : 100%;
+
+	background-color : #FFF;
+	opacity : 0.7;
+
+	z-index : 1;
+}
+
+#hud {
+	position : absolute;
+	top : 4px;
+	left : 4px;
+}
+
+#menu, .page {
 	display: none;
-	padding : 4px;
+}
+
+#menu {
+	padding: 8px;
+}
+
+.page {
+	padding : 0 8px;
+}
+
+.page * {
+	margin-top : 12px;
+	margin-bottom : 12px
 }
 
 #winner, #loser, #newButton, #menuButton, #restartButton, #error {
@@ -94,19 +135,19 @@ a:hover {
 }
 
 #winner {
-	background-color : #CADFB6;
+	background-color : #C3E0B1;
 }
 
 #loser {
-	background-color : #ED9F9C;
+	background-color : #FFC2C2;
 }
 
 #apply {
-	float : none;
-	clear : both;
+	float : right;
+}
 
-	width : 46px;
-	margin : 4px auto;
+#stats span {
+	margin-left : 10px;
 }
 
 table {
@@ -129,45 +170,20 @@ td:first-child {
 	border-right : 1px solid #555;
 }
 
-.heading {
-	font-size: 18pt;
-}
-
 #clearPrompt {
 	display: none;
 }
 
 #timeDisplay {
-	position : absolute;
+	position : fixed;
 	bottom : 4px;
 	left : 4px;
 }
 
 #mineDisplay {
-	position : absolute;
+	position : fixed;
 	bottom : 4px;
 	right : 4px;
-}
-
-#welcomeWrapper {
-	display : none;
-	position : absolute;
-
-	top : 0px;
-	left : 0px;
-
-	width : 100%;
-	height : 100%;
-}
-
-#welcomeOverlay {
-	position : absolute;
-
-	width : 100%;
-	height : 100%;
-
-	background-color : #FFF;
-	opacity : 0.5;
 }
 
 #welcome {
@@ -175,7 +191,8 @@ td:first-child {
 	float : none;
 
 	width : 720px;
-	margin : 10% auto 0;
+	top : 10%;
+	margin : 0 auto;
 }
 
 #intro {
@@ -201,24 +218,35 @@ td:first-child {
 	margin : 8px 2px;
 }
 
-#playClassicButton {
+#playClassicButton, #playSweepButton {
 	float : none;
+	margin : 16px auto;
+/*	background-color : #555;
+	color : #75AD55;*/
+
+	-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#playClassicButton {
 	padding : 16px 32px;
 	font-size : 24pt;
-	width : 190px;
-	margin : 16px auto;
+	width : 165px;
+	margin-bottom : 32px;
 }
 
 #playSweepButton {
-	float : none;
 	padding : 12px 24px;
 	font-size : 20pt;
-	width : 155px;
-	margin : 16px auto;
+	width : 138px;
 }
 
 .title {
-	color : #6A8F5F;
 	font-size : 32pt;
 	padding : 0;
 	text-align : center;

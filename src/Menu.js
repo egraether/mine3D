@@ -24,7 +24,7 @@ var Menu = {
 		$('#newButton').show();
 		$('#menuButton').show();
 
-		$('#welcomeWrapper').show();
+		$('#welcome').show();
 
 		$('#newButton').click(function () {
 
@@ -306,6 +306,9 @@ var Menu = {
 		$('#menu').toggle( true );
 		$('#menuButton').addClass( 'active' );
 
+		$('#overlay').css('z-index', 0);
+		$("#overlay").fadeTo(500, 0.7);
+
 	},
 
 	hide : function() {
@@ -313,16 +316,27 @@ var Menu = {
 		$('#menu').toggle( false );
 		$('#menuButton').removeClass( 'active' );
 
+		$("#overlay").fadeTo(100, 0.0, function() {
+
+			$('#overlay').css('z-index', -1);
+
+		});
+
 		this.hidePages();
 
 	},
 
 	toggle : function() {
 
-		$('#menu').toggle();
-		$('#menuButton').toggleClass('active');
+		if ( $('#menu').is(":visible") ) {
 
-		this.hidePages();
+			this.hide();
+
+		} else {
+
+			this.show();
+
+		}
 
 	},
 

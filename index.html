@@ -13,7 +13,9 @@
 
 	<div id="container"></div>
 
-	<div class="hud">
+	<div id="overlay"></div>
+
+	<div id="hud">
 
 		<div class="element button clear" id="menuButton"> menu </div>
 
@@ -28,7 +30,7 @@
 
 		</div>
 
-		<div class="element clear" id="settings">
+		<div class="page element clear" id="settings">
 
 			<div class="label heading"> Settings </div>
 
@@ -44,18 +46,18 @@
 			<div class="label left"> animations: </div>
 			<div class="element button" id="animations"> </div>
 
-			<div class="label left"> center field in <br /> sweep mode: </div>
+			<div class="label left"> auto center: </div>
 			<div class="element button" id="recenter"> </div>
 
 			<div class="element button" id="apply"> apply </div>
 
 		</div>
 
-		<div class="element clear" id="stats">
+		<div class="page element clear" id="stats">
 
 			<div class="label heading"> Stats </div>
 
-			<table class="clear">
+			<table>
 				<tr>
 					<td> times </td>
 					<td> classic </td>
@@ -90,16 +92,17 @@
 
 		</div>
 
-		<div class="element clear" id="about">
+		<div class="page element clear" id="about">
 
-			<div class="label heading">
-				<span class="highlight">Mine3D</span>
-				- Minesweeper in 3D WebGL
+			<div class="label">
+				<span class="heading highlight">Mine3D</span>
+				<span class="subtitle"> open beta </span> <br />
+				3D Minesweeper in WebGL
 			</div>
 
 			<div class="label">
 				taking up
-				<a href="http://weegen.home.xs4all.nl/Minesweeper3D/">Minesweeper 3D</a>
+				<a href="http://weegen.home.xs4all.nl/Minesweeper3D/">Minesweeper 3D</a> <br />
 				by Eelis van der Weegen
 			</div>
 
@@ -107,17 +110,21 @@
 				developed by <a href="http://egraether.com/">egraether</a><br />
 				with help from 
 				<a href="http://hempt.at/">mph</a>, 
-				<a href="http://www.findologic.com/">felix hummel</a>, 
-				<a href="http://stravid.com/">stravid</a>, 
-				<a href="http://cwinkler.multimediatechnology.at/">cwinkler</a> <br />
+				<a href="http://www.findologic.com/">felix hummel</a>, <br />
+				<a href="http://stravid.com/">stravid</a>,
+				<a href="http://cwinkler.multimediatechnology.at/">cwinkler</a> 
 				and <a href="http://www.walmink.com/">wouter walmink</a>
 			</div>
 
 			<div class="label">
-				used libraries: 
+				powered by 
 				<a href="http://code.google.com/p/glmatrix/">glMatrix.js</a>, 
-				<a href="https://github.com/sole/tween.js/">tween.js</a>, 
-				<a href="http://jquery.com/">jQuery</a>
+				<a href="https://github.com/sole/tween.js/">tween.js</a> <br />
+				and <a href="http://jquery.com/">jQuery</a>
+			</div>
+
+			<div class="label">
+				released under <a href="https://github.com/egraether/mine3D/blob/master/LICENSE.txt">MIT Licence</a>
 			</div>
 
 			<div class="label">
@@ -126,7 +133,7 @@
 
 		</div>
 
-		<div class="element clear" id="instructions">
+		<div class="page element clear" id="instructions">
 
 			<div class="label heading"> Instructions </div>
 
@@ -181,38 +188,32 @@
 
 	</div>
 
-	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
-
-	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
-
 	<div id="welcomeWrapper">
-
-		<div id="welcomeOverlay"></div>
 
 		<div class="element" id="welcome">
 
 			<div class="left" id="intro">
 
 				<div class="label">
-					<span class="title"> Mine3D </span>
+					<span class="title highlight"> Mine3D </span>
 					<span class="subtitle"> open beta </span>
 				</div>
 
-				<div class="label">
+				<div class="label text">
 					Can you play Minesweeper in 3D? 
 					Same rules, one more dimension.
 					Click here to give it a try:
 				</div>
 
-				<div class="element button" id="playClassicButton"> classic mode </div>
+				<div class="element button" id="playClassicButton"> play classic </div>
 
-				<div class="label">
+				<div class="label text">
 					Or choose an entirely new experience. 
 					Delete mines instead of marking them
 					and reduce the field mine by mine:
 				</div>
 
-				<div class="element button" id="playSweepButton"> sweep mode </div>
+				<div class="element button" id="playSweepButton"> play sweep </div>
 
 			</div>
 
@@ -221,7 +222,7 @@
 				<div class="label heading highlight"> Info </div>
 
 				<div class="label">
-					release contains all main features, but no final graphic design
+					release contains most main features, but no final graphic design
 				</div>
 
 				<div class="label">
@@ -250,6 +251,10 @@
 		</div>
 
 	</div>
+
+	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
+
+	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
 
 <script id="vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 
