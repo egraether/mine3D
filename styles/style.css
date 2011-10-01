@@ -13,9 +13,8 @@
 
 body {
 	margin : 0;
-/*	font-family: 'Open Sans', sans-serif;*/
 	font-family: 'Questrial', sans-serif;
-/*	font-family: 'Lato', sans-serif;*/
+/*	font-family: sans-serif;*/
 	font-size : 16pt;
 	line-height : 1.3em;
 	color : #555;
@@ -67,7 +66,6 @@ a:hover {
 
 .highlight {
 	color : #6A8F5F;
-	font-size : 24pt;
 }
 
 .button:hover {
@@ -121,9 +119,6 @@ td {
 
 	text-align : center;
 	font-weight : normal;
-
-/*	border-left : 1px solid #777;
-	border-top : 1px solid #777;*/
 }
 
 tr:first-child td {
@@ -185,13 +180,13 @@ td:first-child {
 
 #intro {
 	width : 408px;
-	border-right : 1px solid #555;
 	margin : 24px 0;
 	padding : 0 8px;
 }
 
 #info {
 	width : 276px;
+	border-left : 1px solid #555;
 	font-size : 14pt;
 	padding-left : 16px;
 	margin : 24px 0;
@@ -199,9 +194,10 @@ td:first-child {
 
 #info .heading {
 	font-size : 20pt;
+	padding-top : 12px;
 }
 
-#info .label {
+#info .label, #intro .label {
 	margin : 8px 2px;
 }
 
@@ -217,7 +213,7 @@ td:first-child {
 	float : none;
 	padding : 12px 24px;
 	font-size : 20pt;
-	width : 160px;
+	width : 155px;
 	margin : 16px auto;
 }
 
