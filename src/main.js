@@ -1,7 +1,7 @@
 var canvas,
 	gl;
 
-function init() {
+function init( gl ) {
 
 	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 	gl.viewport( 0, 0, canvas.width, canvas.height );
@@ -24,6 +24,10 @@ function draw() {
 };
 
 window.onload = function () {
+
+	// Menu.showWelcome();
+	// Menu.init();
+	// return;
 
 	canvas = document.createElement( "canvas" );
 
@@ -51,7 +55,7 @@ window.onload = function () {
 	extend( gl, WebGLUtilities );
 
 	init( gl );
-
+	
 	draw();
 
 };

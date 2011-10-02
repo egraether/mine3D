@@ -8,6 +8,20 @@
 
 	<link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" media="all" href="styles/style.css"/>
+
+	<!-- <script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-18871992-2']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script> -->
 </head>
 <body>
 
@@ -27,68 +41,7 @@
 			<div class="element button" id="settingsButton"> settings </div>
 			<div class="element button" id="statsButton"> stats </div>
 			<div class="element button" id="instructionsButton"> instructions </div>
-
-		</div>
-
-		<div class="page element clear" id="settings">
-
-			<div class="label heading"> Settings </div>
-
-			<div class="label left"> mode: </div>
-			<div class="element button" id="classic"> classic </div>
-			<div class="element button" id="sweep"> sweep </div>
-
-			<div class="label left"> level: </div>
-			<div class="element button" id="easy"> easy </div>
-			<div class="element button" id="medium"> medium </div>
-			<div class="element button" id="hard"> hard </div>
-
-			<div class="label left"> animations: </div>
-			<div class="element button" id="animations"> </div>
-
-			<div class="label left"> auto center: </div>
-			<div class="element button" id="recenter"> </div>
-
-			<div class="element button" id="apply"> apply </div>
-
-		</div>
-
-		<div class="page element clear" id="stats">
-
-			<div class="label heading"> Stats </div>
-
-			<table>
-				<tr>
-					<td> times </td>
-					<td> classic </td>
-					<td> sweep </td>
-				</tr>
-				<tr>
-					<td> easy </td>
-					<td id="classiceasy"> - </td>
-					<td id="sweepeasy"> - </td>
-				</tr>
-				<tr>
-					<td> medium </td>
-					<td id="classicmedium"> - </td>
-					<td id="sweepmedium"> - </td>
-				</tr>
-				<tr>
-					<td> hard </td>
-					<td id="classichard"> - </td>
-					<td id="sweephard"> - </td>
-				</tr>
-			</table>
-
-			<div class="label"> games won: <span id="gamesWon"> 0 </span> </div>
-			<div class="label"> games played: <span id="gamesPlayed"> 0 </span> </div>
-			<div class="label"> time played: <span id="timePlayed"> 0 </span> </div>
-
-			<div class="element button clear" id="clearButton"> delete </div>
-			<div id="clearPrompt">
-				<div class="label left" style="clear:none"> sure? </div>
-				<div class="element button" id="clearNowButton"> yes </div>
-			</div>
+			<div class="element button" id="controlsButton"> controls </div>
 
 		</div>
 
@@ -133,17 +86,110 @@
 
 		</div>
 
+		<div class="page element clear" id="settings">
+
+			<div class="label heading"> Settings </div>
+
+			<div class="label left"> mode: </div>
+			<div class="element button" id="classic"> classic </div>
+			<div class="element button" id="sweep"> sweep </div>
+
+			<div class="label left"> level: </div>
+			<div class="element button" id="easy"> easy </div>
+			<div class="element button" id="medium"> medium </div>
+			<div class="element button" id="hard"> hard </div>
+
+			<div class="label left"> animations: </div>
+			<div class="element button" id="animations"> </div>
+
+			<div class="label left"> auto center: </div>
+			<div class="element button" id="recenter"> </div>
+
+			<div class="element button" id="apply"> apply </div>
+
+		</div>
+
+		<div class="page element clear" id="stats">
+
+			<div class="label heading"> Stats </div>
+
+			<table>
+				<tr>
+					<td style="color:#555"> times </td>
+					<td> classic </td>
+					<td> sweep </td>
+				</tr>
+				<tr>
+					<td> easy </td>
+					<td id="classiceasy"> - </td>
+					<td id="sweepeasy"> - </td>
+				</tr>
+				<tr>
+					<td> medium </td>
+					<td id="classicmedium"> - </td>
+					<td id="sweepmedium"> - </td>
+				</tr>
+				<tr>
+					<td> hard </td>
+					<td id="classichard"> - </td>
+					<td id="sweephard"> - </td>
+				</tr>
+			</table>
+
+			<div class="label"> games won: <span id="gamesWon"> 0 </span> </div>
+			<div class="label"> games played: <span id="gamesPlayed"> 0 </span> </div>
+			<div class="label"> time played: <span id="timePlayed"> 0 </span> </div>
+
+			<div class="element button clear" id="clearButton"> delete </div>
+			<div class="left" id="clearPrompt">
+				<div class="label left" style="clear:none"> sure? </div>
+				<div class="element button" id="clearNowButton"> yes </div>
+			</div>
+
+		</div>
+
 		<div class="page element clear" id="instructions">
 
 			<div class="label heading"> Instructions </div>
 
-			<div class="label"> 
-				- some cubes are mines <br />
-				- opening a mine means game over <br />
-				- numbers show how many mines are around <br />
-				- open all empty cubes to win the game <br />
-				- in sweep mode you can delete mines
-			</div>
+			<ul>
+				<li> 
+					some <span class="highlight">cubes</span> are 
+					<span class="highlight">mines</span>
+				</li>
+				<li> 
+					opening a mine
+					means <span class="highlight">game over</span>
+				</li>
+				<li> 
+					open all <span class="highlight">empty</span> cubes
+					to <span class="highlight">win</span> the game 
+				</li>
+				<li> 
+					<span class="highlight">numbers</span> show 
+					how many mines are around 
+				</li>
+				<li> 
+					<span class="highlight">mark</span> cubes 
+					to tag them as mine
+				</li>
+			</ul>
+
+			<div class="label">sweep mode:</div>
+
+			<ul>
+				<li> 
+					<span class="highlight">delete</span> 
+					mines instead of marking </li>
+				<li> 
+					deleting an <span class="highlight">empty</span> cube 
+					means <span class="highlight">game over</span> 
+				</li>
+			</ul>
+
+		</div>
+
+		<div class="page element clear" id="controls">
 
 			<div class="label heading"> Controls </div>
 
@@ -160,18 +206,31 @@
 				</tr>
 				<tr>
 					<td> right </td>
-					<td> flag cube / <br /> delete mine </td>
+					<td> mark cube / <br /> delete mine </td>
 					<td> move grid </td>
 				</tr>
 			</table>
 
-			<div class="label"> 
-				keyboard: <br />
-				- F/D or J/K alternatively to mouse buttons <br />
-				- SPACE to start new game
-			</div>
+			<div class="label"> <span class="highlight">scroll</span> to zoom </div>
 
-			<div class="label"> SCROLL to zoom </div>
+			<table class="clear">
+				<tr>
+					<td> keyboard <br /> button </td>
+					<td> action </td>
+				</tr>
+				<tr>
+					<td> F/D & J/K </td>
+					<td> alternatives to <br /> mouse muttons </td>
+				</tr>
+				<tr>
+					<td> SPACE </td>
+					<td> start new game </td>
+				</tr>
+				<tr>
+					<td> ESC </td>
+					<td> open/close menu </td>
+				</tr>
+			</table>
 
 		</div>
 
@@ -185,6 +244,8 @@
 			WebGL does not work in your browser. Find out why: 
 			<a href="http://get.webgl.org">http://get.webgl.org</a>
 		</div>
+
+		<div class="left clear" id="antiOverlap"></div>
 
 	</div>
 
@@ -222,7 +283,7 @@
 				<div class="label heading highlight"> Info </div>
 
 				<div class="label">
-					release contains most main features, but no final graphic design
+					release contains most features, but no final graphic design
 				</div>
 
 				<div class="label">
@@ -230,8 +291,7 @@
 				</div>
 
 				<div class="label">
-					find rules and controls in <br />
-					'menu -> instructions'
+					find rules and controls in the menu
 				</div>
 
 				<div class="label">
@@ -247,6 +307,25 @@
 			</div>
 
 			<div class="clear"></div>
+
+		</div>
+
+	</div>
+
+	<div id="externals">
+
+		<div class="element button right" id="feedbackButton"> feedback </div>
+
+		<div class="element button right" id="shareButton"> share </div>
+
+		<div class="element clear" id="share">
+
+			<div class="label">
+				copy and paste to your favorite <br />
+				social media:
+			</div>
+
+			<textarea>Mine3D - play 3D Minesweeper in WebGL: http://egraether.com/mine3d/</textarea>
 
 		</div>
 

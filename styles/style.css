@@ -82,6 +82,10 @@ a:hover {
 	float : left;
 }
 
+.right {
+	float : right;
+}
+
 #welcomeWrapper {
 	position : absolute;
 
@@ -173,8 +177,40 @@ td:first-child {
 	border-right : 1px solid #555;
 }
 
+tr:first-child td:first-child {
+	color : #618F46;
+}
+
 #clearPrompt {
 	display: none;
+}
+
+#clearPrompt > * {
+	margin-top : 0;
+	margin-bottom : 0;
+}
+
+#externals {
+	position : fixed;
+	top : 4px;
+	right : 4px;
+}
+
+#externals .button {
+	font-size : 12pt;
+	padding : 1px 4px;
+}
+
+#share {
+	display : none;
+}
+
+#share textarea {
+	width : 300px;
+	height : 50px;
+	margin : 4px;
+	font-size : 12pt;
+	font-family : "Questrial", sans-serif;
 }
 
 #timeDisplay {
@@ -260,4 +296,8 @@ td:first-child {
 .subtitle {
 	font-size : 14pt;
 	text-align : center;
+}
+
+#antiOverlap {
+	height : 50px;
 }

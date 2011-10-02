@@ -8,7 +8,15 @@ var Menu = {
 
 	resize : false,
 
-	names : [
+	pageNames : [
+		'about',
+		'settings',
+		'stats',
+		'instructions',
+		'controls'
+	],
+
+	levelNames : [
 		'classic' + 'easy',
 		'sweep' + 'easy',
 
@@ -46,6 +54,13 @@ var Menu = {
 
 		});
 
+		$('#shareButton').click(function() {
+
+			$(this).toggleClass('active');
+			$('#share').toggle();
+
+		});
+
 		this.initMenu();
 
 		this.initSettings();
@@ -56,41 +71,27 @@ var Menu = {
 
 	initMenu : function() {
 
-		$('#aboutButton').click( function() {
+		var names = this.pageNames,
+			i;
 
-			Menu.hidePages();
+		function clickHandler( name ) {
 
-			$(this).addClass( 'active' );
-			$('#about').show();
+			return function() {
 
-		});
+				Menu.hidePages();
 
-		$('#settingsButton').click( function() {
+				$('#' + name + 'Button').addClass( 'active' );
+				$('#' + name).show();
 
-			Menu.hidePages();
+			}
 
-			$(this).addClass( 'active' );
-			$('#settings').show();
+		}
 
-		});
+		for ( i = 0; i < names.length; i++ ) {
 
-		$('#statsButton').click( function() {
+			$('#' + names[i] + 'Button').click( clickHandler( names[i] ) );
 
-			Menu.hidePages();
-
-			$(this).addClass( 'active' );
-			$('#stats').show();
-
-		});
-
-		$('#instructionsButton').click( function() {
-
-			Menu.hidePages();
-
-			$(this).addClass( 'active' );
-			$('#instructions').show();
-
-		});
+		}
 
 	},
 
@@ -262,7 +263,7 @@ var Menu = {
 
 	loadStats : function() {
 
-		var names = this.names,
+		var names = this.levelNames,
 			i;
 
 		for ( i = 0; i < names.length; i++ ) {
@@ -340,6 +341,31 @@ var Menu = {
 
 	},
 
+	hidePages : function() {
+
+		var names = this.levelNames,
+			i;
+
+		for ( i = 0; i < names.length; i++ ) {
+
+			$('#' + names[i]).removeClass('active');
+
+		}
+
+		names = this.pageNames;
+
+		for ( i = 0; i < names.length; i++ ) {
+
+			$('#' + names[i]).hide();
+			$('#' + names[i] + 'Button').removeClass('active');
+
+		}
+
+		$('#newButton').removeClass( 'active' );
+		$('#welcomeWrapper').hide();
+
+	},
+
 	showWelcome : function() {
 
 		$('#overlay').show();
@@ -365,32 +391,6 @@ var Menu = {
 	error: function() {
 
 		$('#error').show();
-
-	},
-
-	hidePages : function() {
-
-		var names = this.names,
-			i;
-
-		for ( i = 0; i < names.length; i++ ) {
-
-			$('#' + names[i]).removeClass('active');
-
-		}
-
-		$('#about').hide();
-		$('#settings').hide();
-		$('#stats').hide();
-		$('#instructions').hide();
-
-		$('#aboutButton').removeClass('active');
-		$('#settingsButton').removeClass('active');
-		$('#statsButton').removeClass('active');
-		$('#instructionsButton').removeClass('active');
-
-		$('#newButton').removeClass( 'active' );
-		$('#welcomeWrapper').hide();
 
 	},
 
