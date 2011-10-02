@@ -44,6 +44,8 @@ a:hover {
 	cursor : pointer;
 	color : #555;
 
+	text-align : center;
+
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -93,6 +95,7 @@ a:hover {
 }
 
 #overlay {
+	display : none;
 	position : fixed;
 
 	top : 0px;
@@ -125,7 +128,7 @@ a:hover {
 	padding : 0 8px;
 }
 
-.page * {
+.page > * {
 	margin-top : 12px;
 	margin-bottom : 12px
 }
@@ -186,6 +189,10 @@ td:first-child {
 	right : 4px;
 }
 
+#welcomeWrapper {
+	display : none;
+}
+
 #welcome {
 	position : relative;
 	float : none;
@@ -221,8 +228,6 @@ td:first-child {
 #playClassicButton, #playSweepButton {
 	float : none;
 	margin : 16px auto;
-/*	background-color : #555;
-	color : #75AD55;*/
 
 	-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
@@ -236,14 +241,14 @@ td:first-child {
 #playClassicButton {
 	padding : 16px 32px;
 	font-size : 24pt;
-	width : 165px;
+	width : 170px;
 	margin-bottom : 32px;
 }
 
 #playSweepButton {
 	padding : 12px 24px;
 	font-size : 20pt;
-	width : 138px;
+	width : 145px;
 }
 
 .title {

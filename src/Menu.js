@@ -340,6 +340,13 @@ var Menu = {
 
 	},
 
+	showWelcome : function() {
+
+		$('#overlay').show();
+		$('#welcomeWrapper').show();
+
+	},
+
 	lose : function() {
 
 		$('#loser').show();

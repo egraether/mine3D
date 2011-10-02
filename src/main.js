@@ -27,7 +27,7 @@ window.onload = function () {
 
 	canvas = document.createElement( "canvas" );
 
-	if ( canvas.getContext ) {
+	if ( canvas.getContext && !!window.WebGLRenderingContext ) {
 
 		gl = canvas.getContext( "experimental-webgl" );
 
@@ -39,6 +39,8 @@ window.onload = function () {
 		return;
 
 	}
+
+	Menu.showWelcome();
 
 	document.querySelector( "#container" ).appendChild( canvas );
 	canvas.style.backgroundColor = "black";
