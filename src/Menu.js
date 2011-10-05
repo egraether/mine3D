@@ -3,8 +3,8 @@ var Menu = {
 	mode : null,
 	level : null,
 
-	animations : false,
-	recenter : false,
+	animations : true,
+	recenter : true,
 
 	resize : false,
 
@@ -183,36 +183,49 @@ var Menu = {
 		});
 
 
-		function toggleAnimation() {
+		function toggleFunction( name, on ) {
 
-			$('#animations').toggleClass( 'active' );
-			Menu.animations = !Menu.animations;
+			if ( on !== Menu[name] ) {
 
-			$('#animations').text( Menu.animations ? 'On' : 'Off' );
+				$('#' + name + 'On').toggleClass( 'active' );
+				$('#' + name + 'Off').toggleClass( 'active' );
 
-			Menu.changedSettings( false );
+				Menu[name] = on;
+				Menu.changedSettings( false );
 
-		};
-
-		function toggleRecenter() {
-
-			$('#recenter').toggleClass( 'active' );
-			Menu.recenter = !Menu.recenter;
-
-			$('#recenter').text( Menu.recenter ? 'On' : 'Off' );
-
-			Menu.changedSettings( false );
+			}
 
 		};
 
-		$('#animations').click( toggleAnimation );
-		$('#recenter').click( toggleRecenter );
+		$('#animationsOn').click( function() {
+
+			toggleFunction( 'animations', true );
+
+		});
+
+		$('#animationsOff').click( function() {
+
+			toggleFunction( 'animations', false );
+
+		});
+
+		$('#recenterOn').click( function() {
+
+			toggleFunction( 'recenter', true );
+
+		});
+
+		$('#recenterOff').click( function() {
+
+			toggleFunction( 'recenter', false );
+
+		});
 
 		setMode( 'sweep' );
 		setLevel( 'easy' );
 
-		toggleAnimation();
-		toggleRecenter();
+		$('#animationsOn').addClass('active');
+		$('#recenterOn').addClass('active');
 
 
 		$('#apply').click(function() {
