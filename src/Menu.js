@@ -29,11 +29,6 @@ var Menu = {
 
 	init : function() {
 
-		$('#newButton').show();
-		$('#menuButton').show();
-
-		$('#welcome').show();
-
 		$('#newButton').click(function () {
 
 			Game.start();
@@ -133,6 +128,8 @@ var Menu = {
 			Settings.setFromMenu();
 
 			Game.start( Menu.resize );
+
+			Menu.showHUD();
 			Menu.hide();
 
 			$('#apply').removeClass( 'active' );
@@ -142,6 +139,7 @@ var Menu = {
 
 		$('#playSweepButton').click(function() {
 
+			Menu.showHUD();
 			Menu.hide();
 
 		});
@@ -386,6 +384,20 @@ var Menu = {
 
 	},
 
+	showHUD : function() {
+
+		$('#newButton').show();
+		$('#menuButton').show();
+
+		$('#shareButton').show();
+		$('#feedbackButton').show();
+		$('#updateButton').show();
+
+		$('#timeDisplay').show();
+		$('#mineDisplay').show();
+
+	},
+
 	lose : function() {
 
 		$('#loser').show();
@@ -404,6 +416,7 @@ var Menu = {
 	error: function() {
 
 		$('#error').show();
+		$('#feedbackButton').show();
 
 	},
 

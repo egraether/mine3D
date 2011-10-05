@@ -25,10 +25,6 @@ function draw() {
 
 window.onload = function () {
 
-	// Menu.showWelcome();
-	// Menu.init();
-	// return;
-
 	canvas = document.createElement( "canvas" );
 
 	if ( canvas.getContext && !!window.WebGLRenderingContext ) {

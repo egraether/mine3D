@@ -137,7 +137,11 @@ a:hover {
 	margin-bottom : 12px
 }
 
-#winner, #loser, #newButton, #menuButton, #restartButton, #error {
+#winner, #loser, #newButton, 
+#menuButton, #restartButton, 
+#error, #mineDisplay, #timeDisplay,
+#shareButton, #updateButton, 
+#feedbackButton {
 	display: none;
 }
 
