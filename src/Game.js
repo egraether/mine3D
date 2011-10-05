@@ -14,7 +14,8 @@ var Game = {
 		Element.init( gl );
 		Grid.init();
 
-		EventHandler.init();
+		// moved to Menu.showHUD()
+		// EventHandler.init();
 
 		this.reset();
 

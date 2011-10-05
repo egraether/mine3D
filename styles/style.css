@@ -141,7 +141,7 @@ a:hover {
 #menuButton, #restartButton, 
 #error, #mineDisplay, #timeDisplay,
 #shareButton, #updateButton, 
-#feedbackButton {
+#feedbackButton, #share, #update {
 	display: none;
 }
 
@@ -199,10 +199,6 @@ tr:first-child td:first-child {
 #externals .button {
 	font-size : 12pt;
 	padding : 1px 4px;
-}
-
-#share {
-	display : none;
 }
 
 #share textarea {

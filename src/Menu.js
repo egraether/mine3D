@@ -27,6 +27,8 @@ var Menu = {
 		'sweep' + 'hard'
 	],
 
+	overlayCounter : 1,
+
 	init : function() {
 
 		$('#newButton').click(function () {
@@ -49,10 +51,24 @@ var Menu = {
 
 		});
 
+		function toggleButton( name ) {
+
+			$('#' + name + 'Button').toggleClass('active');
+			$('#' + name).toggle();
+
+			Menu.updateOverlay( $('#' + name + 'Button').hasClass('active') );
+
+		};
+
 		$('#shareButton').click(function() {
 
-			$(this).toggleClass('active');
-			$('#share').toggle();
+			toggleButton( 'share' );
+
+		});
+
+		$('#updateButton').click(function() {
+
+			toggleButton( 'update' );
 
 		});
 
@@ -130,7 +146,6 @@ var Menu = {
 			Game.start( Menu.resize );
 
 			Menu.showHUD();
-			Menu.hide();
 
 			$('#apply').removeClass( 'active' );
 			$('#apply').hide();
@@ -140,7 +155,6 @@ var Menu = {
 		$('#playSweepButton').click(function() {
 
 			Menu.showHUD();
-			Menu.hide();
 
 		});
 
@@ -318,8 +332,7 @@ var Menu = {
 		$('#menu').toggle( true );
 		$('#menuButton').addClass( 'active' );
 
-		$('#overlay').css('z-index', 0);
-		$("#overlay").fadeTo(500, 0.7);
+		this.updateOverlay( true );
 
 	},
 
@@ -328,21 +341,30 @@ var Menu = {
 		$('#menu').toggle( false );
 		$('#menuButton').removeClass( 'active' );
 
-		$("#overlay").fadeTo(100, 0.0, function() {
-
-			$('#overlay').css('z-index', -1);
-
-		});
+		this.updateOverlay( false );
 
 		this.hidePages();
 
 	},
 
-	toggle : function() {
+	toggle : function( hideAll ) {
 
 		if ( $('#menu').is(":visible") ) {
 
 			this.hide();
+
+			if ( hideAll ) {
+
+				$('#shareButton').removeClass('active');
+				$('#updateButton').removeClass('active');
+
+				$('#share').hide();
+				$('#update').hide();
+
+				this.overlayCounter = 1;
+				this.updateOverlay( false );
+
+			}
 
 		} else {
 
@@ -373,7 +395,6 @@ var Menu = {
 		}
 
 		$('#newButton').removeClass( 'active' );
-		$('#welcomeWrapper').hide();
 
 	},
 
@@ -395,6 +416,18 @@ var Menu = {
 
 		$('#timeDisplay').show();
 		$('#mineDisplay').show();
+
+		$('#overlay').click(function() {
+
+			Menu.hide();
+
+		});
+
+		$('#welcomeWrapper').hide();
+
+		this.updateOverlay( false );
+
+		EventHandler.init();
 
 	},
 
@@ -460,6 +493,37 @@ var Menu = {
 		$('#gamesWon').text( Stats.read( 'gamesWon' ) || 0 );
 		$('#gamesPlayed').text( Stats.read( 'gamesPlayed' ) || 0 );
 		$('#timePlayed').text( Math.floor( Stats.read( 'timePlayed' ) * 0.001 ) || 0 );
+
+	},
+
+	updateOverlay : function( increase ) {
+
+		if ( increase ) {
+
+			this.overlayCounter++;
+
+			if ( this.overlayCounter === 1 ) {
+
+				$('#overlay').css('z-index', 0);
+				$("#overlay").fadeTo(500, 0.7);
+
+			}
+
+		} else {
+
+			this.overlayCounter--;
+
+			if ( !this.overlayCounter ) {
+
+				$("#overlay").fadeTo(100, 0.0, function() {
+
+					$('#overlay').css('z-index', -1);
+
+				});
+
+			}
+
+		}
 
 	}
 

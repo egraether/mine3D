@@ -213,7 +213,7 @@ var EventHandler = {
 
 		} else if (event.keyCode === 27 /* ECS */ ) {
 
-			Menu.toggle();
+			Menu.toggle( true );
 
 		}
 
