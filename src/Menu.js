@@ -68,31 +68,33 @@ var Menu = {
 
 		$('#feedbackButton').click(function() {
 
-			if ( !window.UserVoice ) {
+			toggleButton( 'feedback' );
 
-				var uservoiceOptions = {
-					key: 'mine3d',
-					host: 'mine3d.uservoice.com', 
-					forum: '1',
-					lang: 'en',
-					showTab: false
-				};
-
-				var s = document.createElement('script');
-				s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
-				document.getElementsByTagName('head')[0].appendChild(s);
-
-				s.onload = function() {
-
-					UserVoice.Popin.show( uservoiceOptions );
-
-				};
-
-			} else {
-
-				UserVoice.Popin.show( uservoiceOptions );
-
-			}
+			// if ( !window.UserVoice ) {
+			// 
+			// 	var uservoiceOptions = {
+			// 		key: 'mine3d',
+			// 		host: 'mine3d.uservoice.com', 
+			// 		forum: '1',
+			// 		lang: 'en',
+			// 		showTab: false
+			// 	};
+			// 
+			// 	var s = document.createElement('script');
+			// 	s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
+			// 	document.getElementsByTagName('head')[0].appendChild(s);
+			// 
+			// 	s.onload = function() {
+			// 
+			// 		UserVoice.Popin.show( uservoiceOptions );
+			// 
+			// 	};
+			// 
+			// } else {
+			// 
+			// 	UserVoice.Popin.show( uservoiceOptions );
+			// 
+			// }
 
 		});
 
@@ -388,9 +390,11 @@ var Menu = {
 			if ( hideAll ) {
 
 				$('#shareButton').removeClass('active');
+				$('#feedbackButton').removeClass('active');
 				$('#updateButton').removeClass('active');
 
 				$('#share').hide();
+				$('#feedback').hide();
 				$('#update').hide();
 
 				this.overlayCounter = 1;

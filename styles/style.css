@@ -140,8 +140,8 @@ a:hover {
 #winner, #loser, #newButton, 
 #menuButton, #restartButton, 
 #error, #mineDisplay, #timeDisplay,
-#shareButton, #updateButton, 
-#feedbackButton, #share, #update {
+#shareButton, #updateButton, #feedbackButton, 
+#share, #update, #feedback {
 	display: none;
 }
 
