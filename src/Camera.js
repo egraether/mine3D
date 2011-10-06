@@ -281,6 +281,18 @@ var Camera = new ( function() {
 		vec3.normalize( eye );
 		vec3.scale( eye, len * zoomDelta );
 
+		len = vec3.lengthSquared( eye );
+
+		if ( len > 3 * 150 * 150 ) {
+
+			vec3.assign( eye, 150 );
+
+		} else if ( len < 0.03 ) {
+
+			vec3.assign( eye, 0.1 );
+
+		}
+
 		zoomDelta = 1;
 
 	};

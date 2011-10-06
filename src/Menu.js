@@ -66,11 +66,43 @@ var Menu = {
 
 		});
 
+		$('#feedbackButton').click(function() {
+
+			if ( !window.UserVoice ) {
+
+				var uservoiceOptions = {
+					key: 'mine3d',
+					host: 'mine3d.uservoice.com', 
+					forum: '1',
+					lang: 'en',
+					showTab: false
+				};
+
+				var s = document.createElement('script');
+				s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
+				document.getElementsByTagName('head')[0].appendChild(s);
+
+				s.onload = function() {
+
+					UserVoice.Popin.show( uservoiceOptions );
+
+				};
+
+			} else {
+
+				UserVoice.Popin.show( uservoiceOptions );
+
+			}
+
+		});
+
 		$('#updateButton').click(function() {
 
 			toggleButton( 'update' );
 
 		});
+
+
 
 		this.initMenu();
 
