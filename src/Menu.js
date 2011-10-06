@@ -514,7 +514,6 @@ var Menu = {
 
 		this.setBestTime( name );
 
-		Menu.hide();
 		Menu.show();
 
 		$('#' + name).addClass( 'active' );
@@ -545,7 +544,7 @@ var Menu = {
 
 			}
 
-		} else {
+		} else if ( this.overlayCounter ) {
 
 			this.overlayCounter--;
 

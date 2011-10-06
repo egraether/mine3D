@@ -238,11 +238,11 @@ tr:first-child td:first-child {
 	width : 408px;
 	margin : 24px 0;
 	padding : 0 8px;
+	border-right : 1px solid #555;
 }
 
 #info {
 	width : 276px;
-	border-left : 1px solid #555;
 	font-size : 14pt;
 	padding-left : 16px;
 	margin : 24px 0;
