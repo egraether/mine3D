@@ -436,6 +436,9 @@ var Menu = {
 
 	showWelcome : function() {
 
+		$('#error').hide();
+		$('#feedbackButton').hide();
+
 		$('#overlay').show();
 		$('#welcomeWrapper').show();
 
@@ -479,13 +482,6 @@ var Menu = {
 
 		$('#winner').show();
 		$('#newButton').addClass( 'active' );
-
-	},
-
-	error: function() {
-
-		$('#error').show();
-		$('#feedbackButton').show();
 
 	},
 

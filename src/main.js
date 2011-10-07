@@ -35,7 +35,6 @@ window.onload = function () {
 
 	if ( !gl ) {
 
-		Menu.error();
 		return;
 
 	}

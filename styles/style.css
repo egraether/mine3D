@@ -138,9 +138,9 @@ a:hover {
 }
 
 #winner, #loser, #newButton, 
-#menuButton, #restartButton, 
-#error, #mineDisplay, #timeDisplay,
-#shareButton, #updateButton, #feedbackButton, 
+#menuButton, #restartButton,
+#mineDisplay, #timeDisplay,
+#shareButton, #updateButton, 
 #share, #update, #feedback {
 	display: none;
 }
