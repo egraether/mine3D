@@ -436,8 +436,7 @@ var Menu = {
 
 	showWelcome : function() {
 
-		$('#error').hide();
-		$('#feedbackButton').hide();
+		$('#feedback').hide();
 
 		$('#overlay').show();
 		$('#welcomeWrapper').show();
@@ -467,6 +466,12 @@ var Menu = {
 		this.updateOverlay( false );
 
 		EventHandler.init();
+
+	},
+
+	error : function() {
+
+		$('#error').show();
 
 	},
 

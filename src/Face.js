@@ -46,19 +46,30 @@ var Face = {
 		]);
 
 		var texCoords = new Float32Array( 29 * 8 ),
-			step = 1 / 32,
-			top, bottom, i;
+			stepX = 1 / 4,
+			stepY = 1 / 8,
+			top, bottom, left, right, 
+			i, j, index = 0;
 
-		for ( i = 0; i < 29; i++ ) {
+		for ( i = 3; i >= 0; i-- ) {
 
-			top = 1 - i * step;
-			bottom = 1 - ( i + 1 ) * step;
+			for ( j = 0; j < 8; j++ ) {
 
-			texCoords[i * 8] = texCoords[i * 8 + 6] = 1;
-			texCoords[i * 8 + 2] = texCoords[i * 8 + 4] = 0;
+				top = 1 - j * stepY;
+				bottom = 1 - ( j + 1 ) * stepY;
 
-			texCoords[i * 8 + 1] = texCoords[i * 8 + 3] = top;
-			texCoords[i * 8 + 5] = texCoords[i * 8 + 7] = bottom;
+				left = 1 - i * stepX;
+				right = 1 - ( i + 1 ) * stepX;
+
+				texCoords[index * 8] = texCoords[index * 8 + 6] = left;
+				texCoords[index * 8 + 2] = texCoords[index * 8 + 4] = right;
+
+				texCoords[index * 8 + 1] = texCoords[index * 8 + 3] = top;
+				texCoords[index * 8 + 5] = texCoords[index * 8 + 7] = bottom;
+
+				index++;
+
+			}
 
 		}
 

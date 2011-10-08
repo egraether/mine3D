@@ -474,7 +474,7 @@ extend( Element, {
 
 	initTextures : function( gl ) {
 
-		this.texture = gl.loadTexture( "textures/numbers.png", function( gl, texture ) {
+		this.texture = gl.loadTexture( "textures/mine3dtex.png", function( gl, texture ) {
 
 			gl.passTexture( texture, Element.shader.textureUniform );
 			Grid.redraw = true;

@@ -26,8 +26,9 @@ function draw() {
 window.onload = function () {
 
 	canvas = document.createElement( "canvas" );
+	gl = null;
 
-	if ( canvas.getContext && !!window.WebGLRenderingContext ) {
+	if ( !!window.WebGLRenderingContext ) {
 
 		gl = canvas.getContext( "experimental-webgl" );
 
@@ -35,6 +36,7 @@ window.onload = function () {
 
 	if ( !gl ) {
 
+		Menu.error();
 		return;
 
 	}

@@ -141,7 +141,8 @@ a:hover {
 #menuButton, #restartButton,
 #mineDisplay, #timeDisplay,
 #shareButton, #updateButton, 
-#share, #update, #feedback {
+#feedbackButton, #error,
+#share, #update {
 	display: none;
 }
 
