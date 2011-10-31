@@ -105,7 +105,6 @@ var Menu = {
 		});
 
 
-
 		this.initMenu();
 
 		this.initSettings();
@@ -444,6 +443,8 @@ var Menu = {
 	},
 
 	showHUD : function() {
+
+		$('#feedback').hide();
 
 		$('#newButton').show();
 		$('#menuButton').show();

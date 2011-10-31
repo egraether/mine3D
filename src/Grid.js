@@ -3,7 +3,7 @@ var Grid = {
 	elements : [],
 	cubeCount : 0,
 
-	spacing : 0.1,
+	spacing : cubeSpacing,
 
 	minesLeft : 0,
 	minesSet : false,

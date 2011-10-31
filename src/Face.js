@@ -6,9 +6,15 @@ var Face = {
 
 		if ( value === 28 ) {
 
-			mat4.scale( gl.matrix, vec3.assign( Cube.vector, 1.5 ) );
+			vec3.assign( Cube.vector, mineSize );
+
+		} else {
+
+			vec3.assign( Cube.vector, numberSize );
 
 		}
+
+		mat4.scale( gl.matrix, Cube.vector );
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 

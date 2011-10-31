@@ -282,27 +282,20 @@ extend( Cube, {
 				( hex >> 16 & 255 ) / 255,
 				( hex >> 8 & 255 ) / 255,
 				( hex & 255 ) / 255,
-				1.0
+				standardAlpha
 			];
 
 		}
 
 		var colors = [
 
-			// base
-			[ 0.75, 0.75, 0.75, 1.0 ],
+			convert( baseColor ),
 
-			// red
-			// [ 0.7, 0.175, 0.175, 1.0 ],
-			convert( 0xE05353 ),
+			convert( failColor ),
 
-			// yellow
-			// [ 0.7, 0.7, 0.175, 1.0 ],
-			convert( 0xBFBB43 ),
+			convert( flagColor ),
 
-			// green
-			// [ 0.175, 0.7, 0.175, 1.0 ]
-			convert( 0x5BC761 )
+			convert( rightColor )
 
 		];
 
@@ -311,7 +304,7 @@ extend( Cube, {
 		for ( i = 0, l = colors.length; i < l; i++ ) {
 
 			highlightColor = colors[i].concat();
-			highlightColor[3] = 0.85;
+			highlightColor[3] = mouseOverAlpha;
 
 			colors.push( highlightColor );
 
@@ -326,7 +319,7 @@ extend( Cube, {
 
 			for ( i = 0; i < 3; i++ ) {
 
-				value = colors[i] / 7;
+				value = colors[i] * shadeFactor;
 
 				shadeUp[i] += value;
 				shadeDown[i] -= value;

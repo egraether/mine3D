@@ -9,6 +9,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" media="all" href="styles/style.css"/>
 
+<!-- Google Analytics -->
 	<!-- <script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -22,10 +23,59 @@
 	  })();
 
 	</script> -->
+
+<!-- SETTINGS -->
+	<script type="text/javascript" charset="utf-8">
+
+
+	var showWelcomeScreen = false, // true or false
+
+
+	// cube colors
+
+	baseColor = 0xBBBBBB,  // grey
+	flagColor = 0xBFBB43,  // yellow
+
+	failColor = 0xE05353,  // red
+	rightColor = 0x5BC761, // green
+
+
+	// cube color shading
+
+	shadeFactor = 0.15,
+
+
+	// cube transparency
+
+	standardAlpha = 1.0,   // from 0.0 to 1.0
+	mouseOverAlpha = 0.85, // from 0.0 to 1.0
+
+
+	// cube spacing
+
+	cubeSpacing = 0.1, // from 0.0 to ...
+
+
+	// image sizes
+
+	numberSize = 1.0, // from 0.0 to ...
+	mineSize = 1.5;   // from 0.0 to ...
+
+
+	window.onload = function() {
+
+		start();
+
+		// Your Code here...
+
+
+
+	};
+
+	</script>
+
 </head>
 <body>
-
-	<div id="container"></div>
 
 	<div id="overlay"></div>
 
@@ -358,6 +408,11 @@
 	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
 
 	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
+
+
+<!-- DO NOT CHANGE BELOW HERE -->
+
+	<div id="container"></div>
 
 <script id="vertex-shader" type="x-shader/x-vertex" charset="utf-8">
 

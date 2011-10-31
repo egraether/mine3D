@@ -23,7 +23,7 @@ function draw() {
 
 };
 
-window.onload = function () {
+function start() {
 
 	canvas = document.createElement( "canvas" );
 	gl = null;
@@ -41,7 +41,15 @@ window.onload = function () {
 
 	}
 
-	Menu.showWelcome();
+	if ( showWelcomeScreen) {
+
+		Menu.showWelcome();
+
+	} else {
+
+		Menu.showHUD();
+
+	}
 
 	document.querySelector( "#container" ).appendChild( canvas );
 	canvas.style.backgroundColor = "black";
@@ -52,7 +60,7 @@ window.onload = function () {
 	extend( gl, WebGLUtilities );
 
 	init( gl );
-	
+
 	draw();
 
 };
