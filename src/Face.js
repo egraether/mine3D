@@ -51,33 +51,51 @@ var Face = {
 
 		]);
 
-		var texCoords = new Float32Array( 29 * 8 ),
-			stepX = 1 / 4,
+
+		function texCoordsFromRect( x, y, w, h ) {
+
+			return [
+				x + w, 1 - y,
+				x, 1 - y,
+				x, 1 - (y + h),
+				x + w, 1 - (y + h)
+			];
+
+		}
+
+
+		var stepX = 1 / 4,
 			stepY = 1 / 8,
-			top, bottom, left, right, 
-			i, j, index = 0;
+			i, j,
+			texCoords = texCoordsFromRect( 3 * stepX, 0, stepX, stepY );
 
-		for ( i = 3; i >= 0; i-- ) {
+		for ( i = 0; i < 3; i++ ) {
 
-			for ( j = 0; j < 8; j++ ) {
+			for ( j = 0; j < 3; j++ ) {
 
-				top = 1 - j * stepY;
-				bottom = 1 - ( j + 1 ) * stepY;
-
-				left = 1 - i * stepX;
-				right = 1 - ( i + 1 ) * stepX;
-
-				texCoords[index * 8] = texCoords[index * 8 + 6] = left;
-				texCoords[index * 8 + 2] = texCoords[index * 8 + 4] = right;
-
-				texCoords[index * 8 + 1] = texCoords[index * 8 + 3] = top;
-				texCoords[index * 8 + 5] = texCoords[index * 8 + 7] = bottom;
-
-				index++;
+				texCoords = texCoords.concat( texCoordsFromRect( j * stepX, i * stepY, stepX, stepY ) );
 
 			}
 
 		}
+
+		stepX = 1 / 8;
+		stepY = 1 / 16;
+
+		for ( i = 6; i < 9; i++ ) {
+
+			for ( j = 0; j < 6; j++ ) {
+
+				texCoords = texCoords.concat( texCoordsFromRect( j * stepX, i * stepY, stepX, stepY ) );
+
+			}
+
+		}
+
+		texCoords = texCoords.concat( texCoordsFromRect(  3 / 4, 0, 1 / 4, 1 / 8 ) );
+
+		texCoords = new Float32Array( texCoords );
+
 
 		this.attributeBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();

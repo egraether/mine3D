@@ -341,7 +341,7 @@ extend( Cube, {
 
 		for ( i = 0; i < 48; i++ ) {
 
-			texCoords[i] = 0;
+			texCoords[i] = 1;
 
 		}
 
