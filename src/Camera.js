@@ -116,7 +116,13 @@ var Camera = new ( function() {
 	this.reset = function() {
 
 		vec3.scale( eye, 1000 );
+
+		vec3.normalize( vec3.cross( up, eye, right ) );
+		vec3.normalize( vec3.cross( eye, right, up ) );
+
 		vec3.zero( panVector );
+
+		this.updateFaceDirections( gl, Face.vertices, Face.attributeBuffer );
 
 		this.recenterView( false );
 
@@ -332,9 +338,6 @@ var Camera = new ( function() {
 
 	this.updateFaceDirections = function( gl, vertices, buffer ) {
 
-		mat4.identity( matrix );
-		mat4.rotate( matrix, Math.PI / 2, eye );
-
 		vec3.add( up, right, vector );
 		vec3.normalize( vector );
 		vec3.scale( vector, Math.sqrt( Face.size ) );
@@ -346,6 +349,9 @@ var Camera = new ( function() {
 		vertices[6] = -vector[0];
 		vertices[7] = -vector[1];
 		vertices[8] = -vector[2];
+
+		mat4.identity( matrix );
+		mat4.rotate( matrix, Math.PI / 2, eye );
 
 		mat4.multiplyVec3( matrix, vector );
 

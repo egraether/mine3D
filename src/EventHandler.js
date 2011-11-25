@@ -107,6 +107,10 @@ var EventHandler = {
 
 				Camera.rotate();
 
+			} else if ( this.button === 1 ) {
+
+				Camera.reset();
+
 			} else if ( this.button === 2 ) {
 
 				Camera.pan();
@@ -202,6 +206,8 @@ var EventHandler = {
 
 	onKeyUp : function( event ) {
 
+		// console.log( event.keyCode );
+
 		if ( this.isMouseKey( event.keyCode ) ) {
 
 			this.onMouseUp( this.augmentEvent( event ) );
@@ -214,6 +220,10 @@ var EventHandler = {
 		} else if (event.keyCode === 27 /* ECS */ ) {
 
 			Menu.toggle( true );
+
+		} else if (event.keyCode === 82 /* R */ ) {
+
+			Camera.reset();
 
 		}
 
