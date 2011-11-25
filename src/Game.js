@@ -23,7 +23,29 @@ var Game = {
 
 	draw : function( gl ) {
 
-		var redraw = Grid.update();
+		var redraw = false;
+
+		if ( Settings.animations && TWEEN.getAll().length ) {
+
+			if ( Grid.leftClicked || Grid.rightClicked ) {
+
+				TWEEN.completeAll();
+
+				Grid.leftClicked = Grid.rightClicked = false;
+
+			} else {
+
+				TWEEN.update();
+
+			}
+
+			redraw = true;
+
+		}
+
+
+		Grid.update();
+
 
 		if ( Camera.update() ) {
 
@@ -41,22 +63,14 @@ var Game = {
 
 		}
 
-		if ( Camera.updateRay && Grid.getCubeInRay( Camera.getMouseRay() ) ) {
+		if ( Camera.updateRay ) {
 
-			redraw = true;
-
-		}
-
-		if ( Settings.animations && TWEEN.getAll().length ) {
-
-			TWEEN.update();
-
-			redraw = true;
+			Grid.getCubeInRay( Camera.getMouseRay() );
 
 		}
 
 
-		if ( redraw ) {
+		if ( Grid.redraw || redraw ) {
 
 			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 

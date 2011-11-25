@@ -485,19 +485,17 @@ var Grid = {
 
 		}
 
-		return this.setElementInRay( nearest );
+		this.setElementInRay( nearest );
 
 	},
 
 	setElementInRay : function( element ) {
 
-		var screenChanged = false;
-
 		if ( this.elementInRay ) {
 
 			this.elementInRay.highlight = false;
 
-			screenChanged = true;
+			this.redraw = true;
 
 		}
 
@@ -507,11 +505,9 @@ var Grid = {
 
 			element.highlight = true;
 
-			screenChanged = true;
+			this.redraw = true;
 
 		}
-
-		return screenChanged;
 
 	}
 
