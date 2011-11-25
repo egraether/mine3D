@@ -147,6 +147,26 @@ extend( Cube, {
 
 	},
 
+	drawLine : function( gl, shader ) {
+
+		var colorIndex = 0,
+			colorOffset,
+			texOffset = ( 72 + 48 * colorIndex ) * 4;
+
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+
+		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+		// gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
+
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+		gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
+
+	},
+
 	initBuffers : function( gl ) {
 
 		var i, j, l,
@@ -398,16 +418,16 @@ extend( Cube, {
 			// front
 			0, 1, 2, 0, 2, 3,
 
-			// back
+			// right
 			4, 5, 6, 4, 6, 7,
 
-			// right
+			// top
 			8, 9, 10, 8, 10, 11,
 
-			// left
+			// back
 			12, 13, 14, 12, 14, 15,
 
-			// top
+			// left
 			16, 17, 18, 16, 18, 19,
 
 			// bottom
@@ -415,9 +435,18 @@ extend( Cube, {
 
 		]);
 
+		var lineIndices = new Uint16Array([
+
+			0, 1, 3, 0, 0, 12, 1, 2, 2, 3,
+			12, 13, 13, 14, 14, 15, 15, 12,
+			1, 15, 2, 14, 3, 13
+
+		]);
+
 
 		this.attributeBuffer = gl.createBuffer();
 		this.indexBuffer = gl.createBuffer();
+		this.lineIndexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 		gl.bufferData( gl.ARRAY_BUFFER, (72 + 48 * 4 + colors.length * 96) * 4, gl.STATIC_DRAW );
@@ -433,6 +462,9 @@ extend( Cube, {
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, lineIndices, gl.STATIC_DRAW);
 
 	}
 

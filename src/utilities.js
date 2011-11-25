@@ -24,6 +24,18 @@ function extend( destination, source ) {
 
 };
 
+function clamp( x, a, b ) {
+
+	return x < a ? a : x > b ? b : x;
+
+};
+
+function map( x, a1, a2, b1, b2 ) {
+
+	return ( x  - a1 ) * ( b2 - b1 ) / ( a2 - a1 ) + b1;
+
+};
+
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x;
@@ -46,7 +58,7 @@ vec3.lengthSquared = function( vec ) {
 
 	var x = vec[0], y = vec[1], z = vec[2];
 
-	return x*x + y*y + z*z;
+	return x * x + y * y + z * z;
 
 };
 

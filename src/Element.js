@@ -121,9 +121,14 @@ Element.prototype = {
 			rotation = this.rotation,
 			value = this.value,
 			right;
+			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
+			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
 
 		gl.pushMatrix();
 		mat4.translate( gl.matrix, this.position );
+
+		// vec3.assign( Cube.vector, scale );
+		// mat4.scale( gl.matrix, Cube.vector );
 
 		if ( state === "number" || ( state === 'open' && this.isMine ) ) {
 
@@ -149,6 +154,10 @@ Element.prototype = {
 				Face.draw( gl, Element.shader, value );
 
 			}
+
+		// } else if ( state === 'open' ) {
+		// 
+		// 	Cube.drawLine( gl, Element.shader );
 
 		} else {
 

@@ -9,6 +9,8 @@ function init( gl ) {
 	gl.enable( gl.CULL_FACE );
 	// gl.enable( gl.DEPTH_TEST );
 
+	gl.lineWidth( 2 );
+
 	gl.enableAlpha();
 
 	Game.init( gl );
