@@ -322,6 +322,7 @@ Element.prototype = {
 				}
 
 				Grid.minesLeft--;
+				Menu.setMines( Grid.minesLeft );
 
 			} else {
 

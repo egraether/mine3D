@@ -395,7 +395,6 @@ var Grid = {
 
 				}
 
-				Menu.setMines( this.minesLeft );
 				this.redraw = true;
 
 			}
