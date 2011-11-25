@@ -48,7 +48,7 @@ var Stats = {
 
 	},
 
-	updateBestTime : function( name, time ) {
+	updateScores : function( name, time ) {
 
 		var oldTime = this.read( name );
 
@@ -74,6 +74,32 @@ var Stats = {
 
 		this.write( 'gamesPlayed', this.read( 'gamesPlayed' ) + 1 );
 		this.write( 'timePlayed', this.read( 'timePlayed' ) + time );
+
+	},
+
+	saveSettings : function() {
+
+		this.storage.setItem( 'settings', true );
+
+		this.storage.setItem( 'level', Settings.currentLevel.name );
+		this.storage.setItem( 'mode', Settings.mode );
+
+		this.storage.setItem( 'animations', Settings.animations );
+		this.storage.setItem( 'recenter', Settings.recenter );
+
+	},
+
+	loadSettings : function() {
+
+		if ( this.storage.getItem( 'settings' )) {
+
+			Settings.currentLevel = Settings.levels[this.storage.getItem( 'level' )];
+			Settings.mode = this.storage.getItem( 'mode' );
+
+			Settings.animations = this.storage.getItem( 'animations' ) === 'true';
+			Settings.recenter = this.storage.getItem( 'recenter' ) === 'true';
+
+		}
 
 	}
 

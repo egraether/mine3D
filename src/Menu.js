@@ -3,8 +3,8 @@ var Menu = {
 	mode : null,
 	level : null,
 
-	animations : true,
-	recenter : true,
+	animations : false,
+	recenter : false,
 
 	resize : false,
 
@@ -69,32 +69,6 @@ var Menu = {
 		$('#feedbackButton').click(function() {
 
 			toggleButton( 'feedback' );
-
-			// if ( !window.UserVoice ) {
-			// 
-			// 	var uservoiceOptions = {
-			// 		key: 'mine3d',
-			// 		host: 'mine3d.uservoice.com', 
-			// 		forum: '1',
-			// 		lang: 'en',
-			// 		showTab: false
-			// 	};
-			// 
-			// 	var s = document.createElement('script');
-			// 	s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
-			// 	document.getElementsByTagName('head')[0].appendChild(s);
-			// 
-			// 	s.onload = function() {
-			// 
-			// 		UserVoice.Popin.show( uservoiceOptions );
-			// 
-			// 	};
-			// 
-			// } else {
-			// 
-			// 	UserVoice.Popin.show( uservoiceOptions );
-			// 
-			// }
 
 		});
 
@@ -174,20 +148,17 @@ var Menu = {
 
 			setMode( 'classic' );
 
-			Settings.setFromMenu();
-
-			Game.start( Menu.resize );
-
 			Menu.showHUD();
-
-			$('#apply').removeClass( 'active' );
-			$('#apply').hide();
+			Menu.applyChanges();
 
 		});
 
 		$('#playSweepButton').click(function() {
 
+			setMode( 'sweep' );
+
 			Menu.showHUD();
+			Menu.applyChanges();
 
 		});
 
@@ -266,32 +237,28 @@ var Menu = {
 
 		});
 
-		setMode( 'sweep' );
-		setLevel( 'easy' );
-
-		$('#animationsOn').addClass('active');
-		$('#recenterOn').addClass('active');
-
 
 		$('#apply').click(function() {
 
 			if ( $(this).hasClass( 'active' ) ) {
 
-				Settings.setFromMenu();
-
-				Game.start( Menu.resize );
-				Menu.hide();
-
-				$(this).removeClass( 'active' );
-				$(this).hide();
-
-				Menu.resize = false;
+				Menu.applyChanges();
 
 			}
 
 		});
 
 		$('#apply').hide();
+
+
+		setMode( Settings.mode );
+		setLevel( Settings.currentLevel.name );
+
+		this.animations = Settings.animations;
+		this.recenter = Settings.recenter;
+
+		$('#animations' + (Settings.animations ? 'On' : 'Off') ).addClass('active');
+		$('#recenter' + (Settings.recenter ? 'On' : 'Off') ).addClass('active');
 
 	},
 
@@ -326,7 +293,7 @@ var Menu = {
 
 		for ( i = 0; i < names.length; i++ ) {
 
-			this.setBestTime( names[i] );
+			this.setScore( names[i] );
 
 		}
 
@@ -504,7 +471,22 @@ var Menu = {
 
 	},
 
-	setBestTime : function( name ) {
+	applyChanges : function() {
+
+		Settings.setFromMenu();
+		Stats.saveSettings();
+
+		Game.start( this.resize );
+		Menu.hide();
+
+		$('#apply').removeClass( 'active' );
+		$('#apply').hide();
+
+		this.resize = false;
+
+	},
+
+	setScore : function( name ) {
 
 		var time = Stats.read( name );
 
@@ -512,9 +494,9 @@ var Menu = {
 
 	},
 
-	updateTime : function( name, time ) {
+	showScores : function( name ) {
 
-		this.setBestTime( name );
+		this.setScore( name );
 
 		Menu.show();
 

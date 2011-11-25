@@ -4,10 +4,12 @@ var Game = {
 
 	init : function( gl ) {
 
-		Stats.init();
-		Menu.init();
+		Settings.init();
 
-		Settings.setFromMenu();
+		Stats.init();
+		Stats.loadSettings();
+
+		Menu.init();
 
 		Camera.init();
 
@@ -130,9 +132,9 @@ var Game = {
 
 		if ( won ) {
 
-			if ( Stats.updateBestTime( name, Grid.playTime ) ) {
+			if ( Stats.updateScores( name, Grid.playTime ) ) {
 
-				Menu.updateTime( name, Grid.playTime );
+				Menu.showScores( name );
 
 			}
 

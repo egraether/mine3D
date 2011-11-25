@@ -18,10 +18,16 @@ var Settings = {
 	},
 
 	currentLevel : null,
-	mode : 'classic', // [ 'classic', 'sweep' ]
+	mode : 'sweep', // [ 'classic', 'sweep' ]
 
-	animations : false,
-	recenter : false,
+	animations : true,
+	recenter : true,
+
+	init : function() {
+
+		this.currentLevel = this.levels.easy;
+
+	},
 
 	getKey : function() {
 
