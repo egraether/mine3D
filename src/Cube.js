@@ -99,22 +99,27 @@ extend( Cube, {
 
 	draw : function( gl, shader, mine, flag, highlight, scale ) {
 
-		var colorIndex = flag ? 2 : 0,
-			colorOffset;
+		var colorIndex = flag ? 1 : 0,
+			colorOffset,
+			texOffset;
 
 		if ( Game.gameover && flag ) {
 
-			colorIndex = mine ? 3 : 1;
+			colorIndex = mine ? 3 : 2;
 
 		}
+
+		texOffset = ( 72 + 48 * colorIndex ) * 4;
 
 		if ( highlight ) {
 
-			colorIndex += 4;
+			gl.uniform1f( Element.shader.alphaUniform, mouseOverAlpha );
+
+			// colorIndex += 4;
 
 		}
 
-		colorOffset = ( 72 + 48 + colorIndex * 96 ) * 4;
+		colorOffset = ( 72 + 48 * 4 + colorIndex * 96 ) * 4;
 
 		if ( scale !== 1 ) {
 
@@ -128,11 +133,17 @@ extend( Cube, {
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 72 * 4 );
+		// gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
+		if ( highlight ) {
+
+			gl.uniform1f( Element.shader.alphaUniform, standardAlpha );
+
+		}
 
 	},
 
@@ -291,9 +302,9 @@ extend( Cube, {
 
 			convert( baseColor ),
 
-			convert( failColor ),
-
 			convert( flagColor ),
+
+			convert( failColor ),
 
 			convert( rightColor )
 
@@ -337,13 +348,49 @@ extend( Cube, {
 		}
 
 
-		var texCoords = new Float32Array( 48 );
+		// var texCoords = new Float32Array( 48 );
+		// 
+		// for ( i = 0; i < 48 * 4; i++ ) {
+		// 
+		// 	texCoords[i] = 1;
+		// 
+		// }
 
-		for ( i = 0; i < 48; i++ ) {
 
-			texCoords[i] = 1;
+		function texCoordsFromRect( x, y, w, h, px, py ) {
+
+			return [
+				x - px + w, 1 - y - py,
+				x + px, 1 - y - py,
+				x + px, 1 - (y - py + h),
+				x - px + w, 1 - (y - py + h)
+			];
 
 		}
+
+
+		var stepX = 1 / 4,
+			stepY = 1 / 8,
+			pixelX = 1 / 256,
+			pixelY = 1 / 512,
+			i, j, k,
+			texCoords = [];
+
+		for ( i = 0; i < 4; i++ ) {
+
+			for ( k = 0; k < 2; k++ ) {
+
+				for ( j = 5; j < 8; j++ ) {
+
+					texCoords = texCoords.concat( texCoordsFromRect( i * stepX, j * stepY, stepX, stepY, pixelX, pixelY ) );
+
+				}
+
+			}
+
+		}
+
+		texCoords = new Float32Array( texCoords );
 
 
 		var indices = new Uint16Array([
@@ -373,14 +420,14 @@ extend( Cube, {
 		this.indexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, (72 + 48 + colors.length * 96) * 4, gl.STATIC_DRAW );
+		gl.bufferData( gl.ARRAY_BUFFER, (72 + 48 * 4 + colors.length * 96) * 4, gl.STATIC_DRAW );
 
 		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertices );
 		gl.bufferSubData( gl.ARRAY_BUFFER, 72 * 4, texCoords);
 
 		for ( i = 0; i < colors.length; i++ ) {
 
-			gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 48 + i * 96) * 4, createColorArray( colors[i] ) );
+			gl.bufferSubData( gl.ARRAY_BUFFER, (72 + 48 * 4 + i * 96) * 4, createColorArray( colors[i] ) );
 
 		}
 

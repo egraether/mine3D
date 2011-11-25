@@ -441,6 +441,8 @@ extend( Element, {
 
 		this.resize( gl );
 
+		gl.uniform1f( this.shader.alphaUniform, standardAlpha );
+
 	},
 
 	resize : function( gl ) {
@@ -458,6 +460,7 @@ extend( Element, {
 		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
 
 		shader.textureUniform = gl.getUniformLocation( shader, "uTexture" );
+		shader.alphaUniform = gl.getUniformLocation( shader, "uAlpha" );
 
 		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
 		gl.enableVertexAttribArray( shader.positionAttribute );
@@ -474,7 +477,7 @@ extend( Element, {
 
 	initTextures : function( gl ) {
 
-		this.texture = gl.loadTexture( texturePath, function( gl, texture ) {
+		this.texture = gl.loadTexture( texturePath, useTextureFiltering, function( gl, texture ) {
 
 			gl.passTexture( texture, Element.shader.textureUniform );
 			Grid.redraw = true;

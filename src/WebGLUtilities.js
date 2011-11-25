@@ -67,7 +67,7 @@ var WebGLUtilities = {
 
 	textureCount : 0,
 
-	loadTexture : function( imagePath, callback ) {
+	loadTexture : function( imagePath, useMipmap, callback ) {
 
 		var texture = this.createTexture(),
 			self = this;
@@ -78,7 +78,7 @@ var WebGLUtilities = {
 
 		texture.image.onload = function () {
 
-			self.textureImageLoaded( texture );
+			self.textureImageLoaded( texture, useMipmap );
 
 			if ( callback ) {
 
@@ -94,7 +94,7 @@ var WebGLUtilities = {
 
 	},
 
-	textureImageLoaded : function( texture ) {
+	textureImageLoaded : function( texture, useMipmap ) {
 
 		this.activeTexture( this["TEXTURE" + texture.ID] );
 		this.bindTexture( this.TEXTURE_2D, texture );
@@ -102,13 +102,24 @@ var WebGLUtilities = {
 		this.pixelStorei( this.UNPACK_FLIP_Y_WEBGL, true );
 		this.texImage2D( this.TEXTURE_2D, 0, this.RGBA, this.RGBA, this.UNSIGNED_BYTE, texture.image );
 
-		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MAG_FILTER, this.LINEAR );
-		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MIN_FILTER, this.LINEAR );	
-
 		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_WRAP_S, this.CLAMP_TO_EDGE );
 		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_WRAP_T, this.CLAMP_TO_EDGE );
 
-		// this.generateMipmap( this.TEXTURE_2D );
+		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MAG_FILTER, this.LINEAR );
+
+
+		if ( useMipmap ) {
+
+			this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MIN_FILTER, this.LINEAR_MIPMAP_LINEAR );
+
+			this.generateMipmap( this.TEXTURE_2D );
+
+		} else {
+
+			this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MIN_FILTER, this.LINEAR );
+
+		}
+
 
 		this.bindTexture( this.TEXTURE_2D, null );
 

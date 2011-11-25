@@ -29,15 +29,7 @@
 
 	var showWelcomeScreen = false, // true or false
 
-	// cube colors
-	baseColor = 0xBBBBBB,  // grey
-	flagColor = 0xBFBB43,  // yellow
-
-	failColor = 0xE05353,  // red
-	rightColor = 0x5BC761, // green
-
-	// cube color shading
-	shadeFactor = 0.15,    // from 0.0 to 1.0
+	useTextureFiltering = true, // true or false
 
 	// cube transparency
 	standardAlpha = 1.0,   // from 0.0 to 1.0
@@ -52,6 +44,21 @@
 	// image sizes
 	numberSize = 1.0, // from 0.0 to ...
 	mineSize = 1.5;   // from 0.0 to ...
+
+
+	// NOT IN USE -------------------
+
+	// cube colors
+	baseColor = 0xBBBBBB,  // grey
+	flagColor = 0xBFBB43,  // yellow
+
+	failColor = 0xE05353,  // red
+	rightColor = 0x5BC761, // green
+
+	// cube color shading
+	shadeFactor = 0.15,    // from 0.0 to 1.0
+
+	// ------------------------------
 
 
 	window.onload = function() {
@@ -412,17 +419,17 @@
 	uniform mat4 uPMatrix;
 
 	attribute vec3 aPosition;
-	attribute vec4 aColor;
+	// attribute vec4 aColor;
 	attribute vec2 aTextureCoord;
 
-	varying vec4 vColor;
+	// varying vec4 vColor;
 	varying vec2 vTextureCoord;
 
 	void main( void ) {
 
 		gl_Position = uPMatrix * uMVMatrix * vec4( aPosition, 1.0 );
 
-		vColor = aColor;
+		// vColor = aColor;
 		vTextureCoord = aTextureCoord;
 
 	}
@@ -436,15 +443,18 @@
 	#endif
 
 	uniform sampler2D uTexture;
+	uniform float uAlpha;
 
-	varying vec4 vColor;
+	// varying vec4 vColor;
 	varying vec2 vTextureCoord;
 
 	void main(void) {
 
-		vec4 texColor = texture2D( uTexture, vTextureCoord );
+		// vec4 texColor = texture2D( uTexture, vTextureCoord );
+		// gl_FragColor = mix( vColor, texColor, texColor.a );
 
-		gl_FragColor = mix( vColor, texColor, texColor.a );
+		gl_FragColor = texture2D( uTexture, vTextureCoord );
+		gl_FragColor.a = min( gl_FragColor.a, uAlpha );
 
 	}
 
