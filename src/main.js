@@ -7,7 +7,7 @@ function init( gl ) {
 	gl.viewport( 0, 0, canvas.width, canvas.height );
 
 	gl.enable( gl.CULL_FACE );
-	// gl.enable( gl.DEPTH_TEST );
+	gl.enable( gl.DEPTH_TEST );
 
 	gl.lineWidth( 2 );
 

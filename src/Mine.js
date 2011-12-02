@@ -2,15 +2,17 @@ var Mine = {
 
 	draw : function( gl, shader ) {
 
+		mat4.scale( gl.matrix, vec3.assign( Cube.vector, mineSize ) );
+
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 4 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.drawElements( gl.TRIANGLES, 60, gl.UNSIGNED_SHORT, 0 );
+		gl.drawElements( gl.TRIANGLES, 180, gl.UNSIGNED_SHORT, 0 );
 
 	},
 
@@ -21,55 +23,98 @@ var Mine = {
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 4 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
-		gl.drawElements( gl.LINES, 120, gl.UNSIGNED_SHORT, 0 );
+		gl.drawElements( gl.LINES, 360, gl.UNSIGNED_SHORT, 0 );
 
 	},
 
 	initBuffers : function( gl ) {
 
 		var i, j, l,
+			stepX = 1 / 4,
+			stepY = 1 / 8,
+			texCoords = [],
 			t = ( 1 + Math.sqrt( 5 ) ) / 2,
-			v = [
+			v = [],
+			vertices = new Float32Array( 20 * 3 * 3 * 3 ),
+			middle = vec3.create();
 
-				0, t, 1,
-				0, -t, 1,
-				0, -t, -1,
-				0, t, -1,
 
-				t, 1, 0,
-				-t, 1, 0,
-				-t, -1, 0,
-				t, -1, 0,
+		function addVertex( x, y, z ) {
 
-				1, 0, t,
-				1, 0, -t,
-				-1, 0, -t,
-				-1, 0, t
-
-		], vertices = new Float32Array( 20 * 3 * 3 );
-
-		for ( i = 0; i < v.length; i++ ) {
-
-			v[i] /= 4;
+			v.push( vec3.normalize( vec3.assign( vec3.create(), x, y, z ) ) );
 
 		}
 
-		function addTriangle( j, a, b, c ) {
 
-			var i;
+		function texFromRect( x, y, w, h ) {
+
+			return [
+				x + w, 1 - y,
+				x, 1 - y,
+				x, 1 - (y + h)
+			];
+
+		}
+
+
+		function addTriangle( k, a, b, c ) {
+
+			var i, j;
+
+			a = v[a];
+			b = v[b];
+			c = v[c];
+
+			vec3.zero( middle );
+
+			vec3.add( middle, a );
+			vec3.add( middle, b );
+			vec3.add( middle, c );
+
+			vec3.normalize( middle );
+			vec3.scale( middle, 1.25 );
 
 			for ( i = 0; i < 3; i++ ) {
 
-				vertices[j * 9 + i] = v[a * 3 + i];
-				vertices[j * 9 + i + 3] = v[b * 3 + i];
-				vertices[j * 9 + i + 6] = v[c * 3 + i];
+				j = k * 9 * 3 + i;
+
+				vertices[j] = middle[i];
+				vertices[j + 3] = a[i];
+				vertices[j + 6] = b[i];
+
+				vertices[j + 9] = middle[i];
+				vertices[j + 12] = b[i];
+				vertices[j + 15] = c[i];
+
+				vertices[j + 18] = middle[i];
+				vertices[j + 21] = c[i];
+				vertices[j + 24] = a[i];
+
+				texCoords = texCoords.concat( texFromRect( (k % 4) * stepX, (i + 5) * stepY, stepX, stepY ) );
 
 			}
 
 		}
+
+
+		addVertex( 0, t, 1 );
+		addVertex( 0, -t, 1 );
+		addVertex( 0, -t, -1 );
+		addVertex( 0, t, -1 );
+
+		addVertex( t, 1, 0 );
+		addVertex( -t, 1, 0 );
+		addVertex( -t, -1, 0 );
+		addVertex( t, -1, 0 );
+
+		addVertex( 1, 0, t );
+		addVertex( 1, 0, -t );
+		addVertex( -1, 0, -t );
+		addVertex( -1, 0, t );
+
 
 		addTriangle( 0, 0, 3, 5 );
 		addTriangle( 1, 0, 5, 11 );
@@ -97,37 +142,12 @@ var Mine = {
 		addTriangle( 18, 5, 6, 11 );
 		addTriangle( 19, 5, 10, 6 );
 
-
-		function texCoordsFromRect( x, y, w, h, px, py ) {
-
-			return [
-				x - px + w, 1 - y - py,
-				x + px, 1 - y - py,
-				x + px, 1 - (y - py + h)
-			];
-
-		}
-
-
-		var stepX = 1 / 4,
-			stepY = 1 / 8,
-			pixelX = 1 / 256,
-			pixelY = 1 / 512,
-			i, j,
-			texCoords = [];
-
-		for ( i = 0, j = 0; i < 20; i++, j++ ) {
-
-			texCoords = texCoords.concat( texCoordsFromRect( (i % 4) * stepX, (j % 3) + 5 * stepY, stepX, stepY, pixelX, pixelY ) );
-
-		}
-
 		texCoords = new Float32Array( texCoords );
 
 
 		var indices = [];
 
-		for ( i = 0; i < 60; i++ ) {
+		for ( i = 0; i < 180; i++ ) {
 
 			indices.push( i );
 
@@ -138,17 +158,14 @@ var Mine = {
 
 		var lineIndices = [];
 
-		for ( i = 0; i < 20; i++ ) {
+		for ( i = 0; i < 60; i++ ) {
+
+			j = i * 3;
 
 			lineIndices.push( 
-				i * 3,
-				i * 3 + 1,
-
-				i * 3 + 1,
-				i * 3 + 2,
-
-				i * 3 + 2,
-				i * 3
+				j, j + 1,
+				j + 1, j + 2,
+				j + 2, j
 			);
 
 		}
@@ -161,10 +178,10 @@ var Mine = {
 		this.lineIndexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, ( 20 * 3 * 3 + 20 * 2 * 3 ) * 4, gl.STATIC_DRAW );
+		gl.bufferData( gl.ARRAY_BUFFER, ( 20 * 3 * 3 * 3 + 20 * 3 * 3 * 2 ) * 4, gl.STATIC_DRAW );
 
 		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertices );
-		gl.bufferSubData( gl.ARRAY_BUFFER, 20 * 3 * 3 * 4, texCoords);
+		gl.bufferSubData( gl.ARRAY_BUFFER, 20 * 3 * 3 * 3 * 4, texCoords);
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
