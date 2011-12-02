@@ -29,7 +29,7 @@
 
 	var showWelcomeScreen = false, // true or false
 
-	useTextureFiltering = true, // true or false
+	useTextureFiltering = false, // true or false
 
 	// cube transparency
 	standardAlpha = 1.0,   // from 0.0 to 1.0
@@ -446,9 +446,7 @@
 
 <script id="fragment-shader" type="x-shader/x-fragment" charset="utf-8">
 
-	#ifdef GL_ES
-		precision highp float;
-	#endif
+	precision mediump float;
 
 	uniform sampler2D uTexture;
 	uniform float uAlpha;
@@ -478,6 +476,7 @@
 
 <script type="text/javascript" charset="utf-8" src="src/Cube.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Face.js"></script>
+<script type="text/javascript" charset="utf-8" src="src/Mine.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Element.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="src/BSPNode.js"></script>

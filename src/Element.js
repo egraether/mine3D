@@ -130,7 +130,7 @@ Element.prototype = {
 		// vec3.assign( Cube.vector, scale );
 		// mat4.scale( gl.matrix, Cube.vector );
 
-		if ( state === "number" || ( state === 'open' && this.isMine ) ) {
+		if ( state === "number" ) { // || ( state === 'open' && this.isMine ) ) {
 
 			if ( rotation ) {
 
@@ -154,6 +154,10 @@ Element.prototype = {
 				Face.draw( gl, Element.shader, value );
 
 			}
+
+		} else if ( state === 'open' && this.isMine ) {
+
+			Mine.draw( gl, Element.shader );
 
 		// } else if ( state === 'open' ) {
 		// 
@@ -448,6 +452,7 @@ extend( Element, {
 
 		Cube.initBuffers( gl );
 		Face.initBuffers( gl );
+		Mine.initBuffers( gl );
 
 		this.resize( gl );
 
