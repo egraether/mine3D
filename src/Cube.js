@@ -136,34 +136,23 @@ extend( Cube, {
 		// gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
 		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
 
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+		if ( drawLines ) {
+
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
+
+		} else {
+
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+			gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
+		}
 
 		if ( highlight ) {
 
 			gl.uniform1f( Element.shader.alphaUniform, standardAlpha );
 
 		}
-
-	},
-
-	drawLine : function( gl, shader ) {
-
-		var colorIndex = 0,
-			colorOffset,
-			texOffset = ( 72 + 48 * colorIndex ) * 4;
-
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		// gl.vertexAttribPointer( shader.colorAttribute, 4, gl.FLOAT, false, 0, colorOffset );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
-
-
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
-		gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
 
 	},
 

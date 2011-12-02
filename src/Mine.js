@@ -11,22 +11,17 @@ var Mine = {
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
 
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.drawElements( gl.TRIANGLES, 180, gl.UNSIGNED_SHORT, 0 );
+		if ( drawLines ) {
 
-	},
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+			gl.drawElements( gl.LINES, 360, gl.UNSIGNED_SHORT, 0 );
 
-	drawLine : function( gl, shader ) {
+		} else {
 
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+			gl.drawElements( gl.TRIANGLES, 180, gl.UNSIGNED_SHORT, 0 );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
-
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
-		gl.drawElements( gl.LINES, 360, gl.UNSIGNED_SHORT, 0 );
+		}
 
 	},
 
@@ -52,8 +47,8 @@ var Mine = {
 		function texFromRect( x, y, w, h ) {
 
 			return [
-				x + w, 1 - y,
-				x, 1 - y,
+				x + w / 2, 1 - y,
+				x + w, 1 - y - h / 2,
 				x, 1 - (y + h)
 			];
 
@@ -75,7 +70,7 @@ var Mine = {
 			vec3.add( middle, c );
 
 			vec3.normalize( middle );
-			vec3.scale( middle, 1.25 );
+			vec3.scale( middle, mineSpikyness );
 
 			for ( i = 0; i < 3; i++ ) {
 
@@ -93,7 +88,7 @@ var Mine = {
 				vertices[j + 21] = c[i];
 				vertices[j + 24] = a[i];
 
-				texCoords = texCoords.concat( texFromRect( (k % 4) * stepX, (i + 5) * stepY, stepX, stepY ) );
+				texCoords = texCoords.concat( texFromRect( 3 * stepX, (i + 2) * stepY, stepX, stepY ) );
 
 			}
 
