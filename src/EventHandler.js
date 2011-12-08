@@ -231,10 +231,11 @@ var EventHandler = {
 
 	onResize : function( event ) {
 
-		canvas.width = window.innerWidth,
-		canvas.height = window.innerHeight;
+		var width = canvas.width = window.innerWidth,
+			height = canvas.height = window.innerHeight;
 
-		gl.viewport( 0, 0, canvas.width, canvas.height );
+		gl.viewport( 0, 0, width, height );
+		gl.initFBO( width, height );
 
 		Camera.resize();
 		Element.resize( gl );

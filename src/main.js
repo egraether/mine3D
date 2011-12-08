@@ -13,6 +13,9 @@ function init( gl ) {
 
 	gl.enableAlpha();
 
+	gl.initQuad();
+	gl.initFBO( canvas.width, canvas.height );
+
 	Game.init( gl );
 
 };
@@ -32,7 +35,7 @@ function start() {
 
 	if ( !!window.WebGLRenderingContext ) {
 
-		gl = canvas.getContext( "experimental-webgl" );
+		gl = canvas.getContext( "experimental-webgl", { antialias : useAntialias } );
 
 	}
 

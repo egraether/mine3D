@@ -1,18 +1,18 @@
 var WebGLUtilities = {
 
-
 	loadShaderScript : function( shaderScriptID ) {
 
 		var shaderScript = document.getElementById( shaderScriptID ),
-			shader;
+			shader,
+			t = this;
 
 		if ( shaderScript.type === "x-shader/x-fragment" ) {
 
-			shader = this.createShader( this.FRAGMENT_SHADER );
+			shader = t.createShader( t.FRAGMENT_SHADER );
 
 		} else if ( shaderScript.type === "x-shader/x-vertex" ) {
 
-			shader = this.createShader( this.VERTEX_SHADER );
+			shader = t.createShader( t.VERTEX_SHADER );
 
 		} else {
 
@@ -21,12 +21,12 @@ var WebGLUtilities = {
 		}
 
 
-		this.shaderSource( shader, shaderScript.text );
-		this.compileShader( shader );
+		t.shaderSource( shader, shaderScript.text );
+		t.compileShader( shader );
 
-		if ( !this.getShaderParameter( shader, this.COMPILE_STATUS ) ) {
+		if ( !t.getShaderParameter( shader, t.COMPILE_STATUS ) ) {
 
-			console.log( "shader " + this.getShaderInfoLog( shader ) );
+			console.log( "shader " + t.getShaderInfoLog( shader ) );
 			return null;
 
 		}
@@ -37,15 +37,16 @@ var WebGLUtilities = {
 
 	linkShaderProgramm : function( vertexShader, fragmentShader ) {
 
-		var shaderProgram = this.createProgram();
+		var t = this,
+			shaderProgram = t.createProgram();
 
-		this.attachShader( shaderProgram, vertexShader );
-		this.attachShader( shaderProgram, fragmentShader );
+		t.attachShader( shaderProgram, vertexShader );
+		t.attachShader( shaderProgram, fragmentShader );
 
-		this.linkProgram( shaderProgram );
+		t.linkProgram( shaderProgram );
 
 
-		if ( !this.getProgramParameter( shaderProgram, this.LINK_STATUS ) ) {
+		if ( !t.getProgramParameter( shaderProgram, t.LINK_STATUS ) ) {
 
 			console.log( "Unable to initialize the shader program." );
 
@@ -57,10 +58,11 @@ var WebGLUtilities = {
 
 	loadShader : function( vertexShaderID, fragmentShaderID ) {
 
-		var vertexShader = this.loadShaderScript( vertexShaderID ),
-			fragmentShader = this.loadShaderScript( fragmentShaderID );
+		var t = this,
+			vertexShader = t.loadShaderScript( vertexShaderID ),
+			fragmentShader = t.loadShaderScript( fragmentShaderID );
 
-		return this.linkShaderProgramm( vertexShader, fragmentShader );
+		return t.linkShaderProgramm( vertexShader, fragmentShader );
 
 	},
 
@@ -69,20 +71,20 @@ var WebGLUtilities = {
 
 	loadTexture : function( imagePath, useMipmap, callback ) {
 
-		var texture = this.createTexture(),
-			self = this;
+		var t = this,
+			texture = t.createTexture();
 
-		texture.ID = this.textureCount++;
+		texture.ID = t.textureCount++;
 
 		texture.image = new Image();
 
 		texture.image.onload = function () {
 
-			self.textureImageLoaded( texture, useMipmap );
+			t.textureImageLoaded( texture, useMipmap );
 
 			if ( callback ) {
 
-				callback( self, texture );
+				callback( t, texture );
 
 			}
 
@@ -96,40 +98,44 @@ var WebGLUtilities = {
 
 	textureImageLoaded : function( texture, useMipmap ) {
 
-		this.activeTexture( this["TEXTURE" + texture.ID] );
-		this.bindTexture( this.TEXTURE_2D, texture );
+		var t = this;
 
-		this.pixelStorei( this.UNPACK_FLIP_Y_WEBGL, true );
-		this.texImage2D( this.TEXTURE_2D, 0, this.RGBA, this.RGBA, this.UNSIGNED_BYTE, texture.image );
+		t.activeTexture( t["TEXTURE" + texture.ID] );
+		t.bindTexture( t.TEXTURE_2D, texture );
 
-		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_WRAP_S, this.CLAMP_TO_EDGE );
-		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_WRAP_T, this.CLAMP_TO_EDGE );
+		t.pixelStorei( t.UNPACK_FLIP_Y_WEBGL, true );
+		t.texImage2D( t.TEXTURE_2D, 0, t.RGBA, t.RGBA, t.UNSIGNED_BYTE, texture.image );
 
-		this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MAG_FILTER, this.LINEAR );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, t.CLAMP_TO_EDGE );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_T, t.CLAMP_TO_EDGE );
+
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MAG_FILTER, t.LINEAR );
 
 
 		if ( useMipmap ) {
 
-			this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MIN_FILTER, this.LINEAR_MIPMAP_LINEAR );
+			t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR_MIPMAP_LINEAR );
 
-			this.generateMipmap( this.TEXTURE_2D );
+			t.generateMipmap( t.TEXTURE_2D );
 
 		} else {
 
-			this.texParameteri( this.TEXTURE_2D, this.TEXTURE_MIN_FILTER, this.LINEAR );
+			t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR );
 
 		}
 
 
-		this.bindTexture( this.TEXTURE_2D, null );
+		t.bindTexture( t.TEXTURE_2D, null );
 
 	},
 
 	passTexture : function( texture, textureUniform ) {
 
-		this.activeTexture( this["TEXTURE" + texture.ID] );
-		this.bindTexture( this.TEXTURE_2D, texture );
-		this.uniform1i( textureUniform, texture.ID );
+		var t = this;
+
+		t.activeTexture( t["TEXTURE" + texture.ID] );
+		t.bindTexture( t.TEXTURE_2D, texture );
+		t.uniform1i( textureUniform, texture.ID );
 
 	},
 
@@ -140,9 +146,10 @@ var WebGLUtilities = {
 
 	pushMatrix : function() {
 
-		var pos = this.stackPosition,
-			stack = this.matrixStack,
-			matrix = this.matrix;
+		var t = this,
+			pos = t.stackPosition,
+			stack = t.matrixStack,
+			matrix = t.matrix;
 
 		if ( pos < stack.length ) {
 
@@ -176,14 +183,148 @@ var WebGLUtilities = {
 
 	enableAlpha : function() {
 
-		this.enable( this.BLEND );
-		this.blendFunc( this.SRC_ALPHA, this.ONE_MINUS_SRC_ALPHA );
+		var t = this;
+
+		t.enable( t.BLEND );
+		t.blendFunc( t.SRC_ALPHA, t.ONE_MINUS_SRC_ALPHA );
 
 	},
 
 	disableAlpha : function() {
 
 		this.disable( this.BLEND );
+
+	},
+
+
+	initQuad : function() {
+
+		var t = this;
+
+		t.quadAttributeBuffer = t.createBuffer();
+
+		t.bindBuffer( t.ARRAY_BUFFER, t.quadAttributeBuffer );
+		t.bufferData( t.ARRAY_BUFFER, 80, t.STATIC_DRAW );
+
+		t.bufferSubData( t.ARRAY_BUFFER, 0, new Float32Array([
+			-1, -1, 0,
+			1, -1, 0,
+			1, 1, 0,
+			-1, 1, 0
+		]));
+
+		t.bufferSubData( t.ARRAY_BUFFER, 48, new Float32Array([
+			0.0, 0.0,
+			1.0, 0.0,
+			1.0, 1.0,
+			0.0, 1.0
+		]));
+
+		t.quadIndexBuffer = t.createBuffer();
+
+		t.bindBuffer( t.ELEMENT_ARRAY_BUFFER, t.quadIndexBuffer );
+		t.bufferData( t.ELEMENT_ARRAY_BUFFER, new Uint16Array( [0, 1, 2, 3] ), t.STATIC_DRAW );
+
+	},
+
+	drawQuad : function( shader ) {
+
+		var t = this;
+
+		t.bindBuffer( t.ARRAY_BUFFER, t.quadAttributeBuffer );
+		t.vertexAttribPointer( shader.positionAttribute, 3, t.FLOAT, false, 0, 0 );
+		t.vertexAttribPointer( shader.texCoordAttribute, 2, t.FLOAT, false, 0, 48 );
+
+		t.bindBuffer( t.ELEMENT_ARRAY_BUFFER, t.quadIndexBuffer );
+		t.drawElements( t.TRIANGLE_FAN, 4, t.UNSIGNED_SHORT, 0 );
+
+	},
+
+
+	fbo : null,
+	fboTexture : null,
+	identity : null,
+
+	initFBO : function( width, height ) {
+
+		var t = this, 
+			fbo = t.fbo, 
+			fboTexture, 
+			fboDepthBuffer;
+
+		if ( !fbo ) {
+
+			t.fbo = fbo = t.createFramebuffer();
+			t.fboTexture = t.createTexture();
+			t.fboDepthBuffer = t.createRenderbuffer();
+
+			t.fboTexture.ID = t.textureCount++;
+
+			t.identity = mat4.identity( mat4.create() );
+
+		}
+
+
+		fbo.width = width * fboScale;
+		fbo.height = height * fboScale;
+
+
+		t.bindTexture( t.TEXTURE_2D, t.fboTexture );
+		t.texImage2D( t.TEXTURE_2D, 0, t.RGBA, fbo.width, fbo.height, 0, t.RGBA, t.UNSIGNED_BYTE, null );
+
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, t.CLAMP_TO_EDGE );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_T, t.CLAMP_TO_EDGE );
+
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MAG_FILTER, t.LINEAR );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR );
+
+		// t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR_MIPMAP_NEAREST );
+		// t.generateMipmap( t.TEXTURE_2D );
+
+
+		t.bindRenderbuffer( t.RENDERBUFFER, t.fboDepthBuffer );
+		t.renderbufferStorage( t.RENDERBUFFER, t.DEPTH_COMPONENT16, fbo.width, fbo.height );
+
+
+		t.bindFramebuffer( t.FRAMEBUFFER, fbo );
+		t.framebufferTexture2D( t.FRAMEBUFFER, t.COLOR_ATTACHMENT0, t.TEXTURE_2D, t.fboTexture, 0 );
+		t.framebufferRenderbuffer( t.FRAMEBUFFER, t.DEPTH_ATTACHMENT, t.RENDERBUFFER, t.fboDepthBuffer );
+
+
+		t.bindTexture( t.TEXTURE_2D, null );
+		t.bindRenderbuffer( t.RENDERBUFFER, null );
+		t.bindFramebuffer( t.FRAMEBUFFER, null );
+
+	},
+
+	bindFBO : function() {
+
+		var t = this, fbo = t.fbo;
+
+		t.bindFramebuffer( t.FRAMEBUFFER, fbo );
+		t.clear( t.COLOR_BUFFER_BIT | t.DEPTH_BUFFER_BIT );
+		t.viewport( 0, 0, fbo.width, fbo.height );
+
+	},
+
+	drawFBO : function( shader ) {
+
+		var t = this;
+
+		t.bindFramebuffer( t.FRAMEBUFFER, null );
+
+		t.viewport( 0, 0, canvas.width, canvas.height );
+
+		// t.bindTexture( t.TEXTURE_2D, t.fboTexture );
+		// t.generateMipmap( t.TEXTURE_2D );
+		// t.bindTexture( t.TEXTURE_2D, null );
+
+		t.passTexture( t.fboTexture, shader.textureUniform );
+
+		t.uniformMatrix4fv( shader.mvMatrixUniform, false, t.identity );
+		t.uniformMatrix4fv( shader.pMatrixUniform, false, t.identity );
+
+		t.drawQuad( shader );
 
 	}
 

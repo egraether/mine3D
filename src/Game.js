@@ -76,7 +76,22 @@ var Game = {
 
 			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
-			Grid.draw( gl );
+			if ( useSmoothing ) {
+
+				gl.bindFBO();
+
+				Grid.draw( gl );
+
+				gl.drawFBO( Element.shader );
+
+				gl.passTexture( Element.texture, Element.shader.textureUniform );
+				gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, Camera.getPMatrix() );
+
+			} else {
+
+				Grid.draw( gl );
+
+			}
 
 		}
 
