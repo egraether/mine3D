@@ -130,7 +130,7 @@ Element.prototype = {
 		// vec3.assign( Cube.vector, scale );
 		// mat4.scale( gl.matrix, Cube.vector );
 
-		if ( state === "number" ) { // || ( state === 'open' && this.isMine ) ) {
+		if ( state === "number" || ( !useIcosahedron && ( state === 'open' && this.isMine ) ) ) {
 
 			if ( rotation ) {
 
@@ -480,9 +480,6 @@ extend( Element, {
 		shader.positionAttribute = gl.getAttribLocation( shader, "aPosition" );
 		gl.enableVertexAttribArray( shader.positionAttribute );
 
-		shader.colorAttribute = gl.getAttribLocation( shader, "aColor" );
-		gl.enableVertexAttribArray( shader.colorAttribute );
-		
 		shader.texCoordAttribute = gl.getAttribLocation( shader, "aTextureCoord" );
 		gl.enableVertexAttribArray( shader.texCoordAttribute );
 
