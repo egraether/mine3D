@@ -29,12 +29,15 @@
 
 	var showWelcomeScreen = false, // true or false
 
-	useAntialias = false,
+	useAntialias = true,
 
 	useTextureFiltering = false, // true or false
 
-	useSmoothing = true, // true or false
-	fboScale = 1.5, // from 0.0 to ...
+	useSmoothing = false, // true or false
+
+	fboMinScale = 0.9, // from 0.0 to ...
+	fboMedScale = 1.3, // from 0.0 to ...
+	fboMaxScale = 1.5, // from 0.0 to ...
 
 	drawLines = false, // true or false
 

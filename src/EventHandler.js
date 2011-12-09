@@ -235,7 +235,12 @@ var EventHandler = {
 			height = canvas.height = window.innerHeight;
 
 		gl.viewport( 0, 0, width, height );
-		gl.initFBO( width, height );
+
+		gl.initFBO( width * fboMinScale, height * fboMinScale, Game.fboMin );
+		gl.initFBO( width * fboMedScale, height * fboMedScale, Game.fboMed );
+		gl.initFBO( width * fboMaxScale, height * fboMaxScale, Game.fboMax );
+
+		gl.passTexture( Element.texture, Element.shader.textureUniform );
 
 		Camera.resize();
 		Element.resize( gl );

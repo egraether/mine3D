@@ -2,6 +2,8 @@ var Mine = {
 
 	draw : function( gl, shader ) {
 
+		gl.enable( gl.DEPTH_TEST );
+
 		mat4.scale( gl.matrix, vec3.assign( Cube.vector, mineSize ) );
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
@@ -22,6 +24,8 @@ var Mine = {
 			gl.drawElements( gl.TRIANGLES, 180, gl.UNSIGNED_SHORT, 0 );
 
 		}
+
+		gl.disable( gl.DEPTH_TEST );
 
 	},
 

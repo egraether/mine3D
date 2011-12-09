@@ -1,6 +1,11 @@
 var Game = {
 
 	gameover : false,
+	framesSinceDraw : 0,
+
+	fboMin : null,
+	fboMed : null,
+	fboMax : null,
 
 	init : function( gl ) {
 
@@ -19,6 +24,10 @@ var Game = {
 		// moved to Menu.showHUD()
 		// EventHandler.init();
 
+		// this.fboMin = gl.initFBO( canvas.width * fboMinScale, canvas.height * fboMinScale );
+		// this.fboMed = gl.initFBO( canvas.width * fboMedScale, canvas.height * fboMedScale );
+		// this.fboMax = gl.initFBO( canvas.width * fboMaxScale, canvas.height * fboMaxScale );
+
 		this.reset();
 
 	},
@@ -33,7 +42,7 @@ var Game = {
 
 				TWEEN.completeAll();
 
-				Grid.leftClicked = Grid.rightClicked = false;
+				// Grid.leftClicked = Grid.rightClicked = false;
 
 			} else {
 
@@ -74,26 +83,51 @@ var Game = {
 
 		if ( Grid.redraw || redraw ) {
 
-			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+			// this.drawWithFBO( gl, this.fboMin );
 
-			if ( useSmoothing ) {
-
-				gl.bindFBO();
-
+			// if ( useSmoothing ) {
+			// 
+			// 	this.drawWithFBO( gl, this.fboMin );
+			// 
+			// } else {
+			// 
+				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+			
 				Grid.draw( gl );
+			// 
+			// }
 
-				gl.drawFBO( Element.shader );
-
-				gl.passTexture( Element.texture, Element.shader.textureUniform );
-				gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, Camera.getPMatrix() );
-
-			} else {
-
-				Grid.draw( gl );
-
-			}
+			framesSinceDraw = 0;
 
 		}
+		framesSinceDraw = 0;
+
+		if ( framesSinceDraw === 20 ) {
+
+			this.drawWithFBO( gl, this.fboMed );
+
+		} else if ( framesSinceDraw === 40 ) {
+
+			this.drawWithFBO( gl, this.fboMax );
+
+		}
+
+		framesSinceDraw++;
+
+	},
+
+	drawWithFBO : function( gl, fbo ) {
+
+		gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+		gl.bindFBO( fbo );
+
+		Grid.draw( gl );
+
+		gl.drawFBO( fbo, Element.shader );
+
+		gl.passTexture( Element.texture, Element.shader.textureUniform );
+		gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, Camera.getPMatrix() );
 
 	},
 

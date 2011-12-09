@@ -241,35 +241,29 @@ var WebGLUtilities = {
 	},
 
 
-	fbo : null,
-	fboTexture : null,
-	identity : null,
+	fboCount : 0,
+	identity : mat4.identity( mat4.create() ),
 
-	initFBO : function( width, height ) {
+	initFBO : function( width, height, fbo ) {
 
-		var t = this, 
-			fbo = t.fbo, 
-			fboTexture, 
-			fboDepthBuffer;
+		var t = this;
 
 		if ( !fbo ) {
 
-			t.fbo = fbo = t.createFramebuffer();
-			t.fboTexture = t.createTexture();
-			t.fboDepthBuffer = t.createRenderbuffer();
+			fbo = t.createFramebuffer();
+			fbo.texture = t.createTexture();
+			fbo.depthBuffer = t.createRenderbuffer();
 
-			t.fboTexture.ID = t.textureCount++;
-
-			t.identity = mat4.identity( mat4.create() );
+			fbo.texture.ID = t.textureCount++;
 
 		}
 
 
-		fbo.width = width * fboScale;
-		fbo.height = height * fboScale;
+		fbo.width = width;
+		fbo.height = height;
 
 
-		t.bindTexture( t.TEXTURE_2D, t.fboTexture );
+		t.bindTexture( t.TEXTURE_2D, fbo.texture );
 		t.texImage2D( t.TEXTURE_2D, 0, t.RGBA, fbo.width, fbo.height, 0, t.RGBA, t.UNSIGNED_BYTE, null );
 
 		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, t.CLAMP_TO_EDGE );
@@ -278,28 +272,27 @@ var WebGLUtilities = {
 		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MAG_FILTER, t.LINEAR );
 		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR );
 
-		// t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MIN_FILTER, t.LINEAR_MIPMAP_NEAREST );
-		// t.generateMipmap( t.TEXTURE_2D );
 
-
-		t.bindRenderbuffer( t.RENDERBUFFER, t.fboDepthBuffer );
+		t.bindRenderbuffer( t.RENDERBUFFER, fbo.depthBuffer );
 		t.renderbufferStorage( t.RENDERBUFFER, t.DEPTH_COMPONENT16, fbo.width, fbo.height );
 
 
 		t.bindFramebuffer( t.FRAMEBUFFER, fbo );
-		t.framebufferTexture2D( t.FRAMEBUFFER, t.COLOR_ATTACHMENT0, t.TEXTURE_2D, t.fboTexture, 0 );
-		t.framebufferRenderbuffer( t.FRAMEBUFFER, t.DEPTH_ATTACHMENT, t.RENDERBUFFER, t.fboDepthBuffer );
+		t.framebufferTexture2D( t.FRAMEBUFFER, t.COLOR_ATTACHMENT0, t.TEXTURE_2D, fbo.texture, 0 );
+		t.framebufferRenderbuffer( t.FRAMEBUFFER, t.DEPTH_ATTACHMENT, t.RENDERBUFFER, fbo.depthBuffer );
 
 
 		t.bindTexture( t.TEXTURE_2D, null );
 		t.bindRenderbuffer( t.RENDERBUFFER, null );
 		t.bindFramebuffer( t.FRAMEBUFFER, null );
 
+		return fbo;
+
 	},
 
-	bindFBO : function() {
+	bindFBO : function( fbo ) {
 
-		var t = this, fbo = t.fbo;
+		var t = this;
 
 		t.bindFramebuffer( t.FRAMEBUFFER, fbo );
 		t.clear( t.COLOR_BUFFER_BIT | t.DEPTH_BUFFER_BIT );
@@ -307,7 +300,7 @@ var WebGLUtilities = {
 
 	},
 
-	drawFBO : function( shader ) {
+	drawFBO : function( fbo, shader ) {
 
 		var t = this;
 
@@ -315,11 +308,7 @@ var WebGLUtilities = {
 
 		t.viewport( 0, 0, canvas.width, canvas.height );
 
-		// t.bindTexture( t.TEXTURE_2D, t.fboTexture );
-		// t.generateMipmap( t.TEXTURE_2D );
-		// t.bindTexture( t.TEXTURE_2D, null );
-
-		t.passTexture( t.fboTexture, shader.textureUniform );
+		t.passTexture( fbo.texture, shader.textureUniform );
 
 		t.uniformMatrix4fv( shader.mvMatrixUniform, false, t.identity );
 		t.uniformMatrix4fv( shader.pMatrixUniform, false, t.identity );
