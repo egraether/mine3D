@@ -180,6 +180,12 @@ var WebGLUtilities = {
 
 	},
 
+	passMatrix : function( uniform, matrix ) {
+
+		this.uniformMatrix4fv( uniform, false, matrix || this.matrix );
+
+	},
+
 
 	enableAlpha : function() {
 

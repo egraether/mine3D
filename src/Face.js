@@ -1,19 +1,12 @@
 var Face = {
 
-	draw : function( gl, shader, value ) {
+	draw : function( gl, shader, stateIndex ) {
 
-		if ( value === 28 ) {
-
-			vec3.assign( Cube.vector, mineSize / numberSize );
-			mat4.scale( gl.matrix, Cube.vector );
-
-		}
-
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+		var texOffset = (12 + ( stateIndex || 0 ) * 8) * 4;
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, (12 + value * 8) * 4 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.drawElements( gl.TRIANGLE_FAN, 4, gl.UNSIGNED_SHORT, 0 );

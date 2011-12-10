@@ -45,47 +45,56 @@ Element.prototype = {
 
 	draw : function( gl ) {
 
-		var state = this.state,
-			rotation = this.rotation,
-			value = this.value,
-			right;
-			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
-			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
+		gl.uniformMatrix4fv( Element.shader.mvMatrixUniform, false, this.matrix );
 
 		if ( this.untouched ) {
 
-			gl.uniformMatrix4fv( Element.shader.mvMatrixUniform, false, this.matrix );
+			Cube.draw( gl, Element.shader, 0 );
 
-			Cube.drawStandard( gl, Element.shader );
+		} else if ( this.state === 'number' && !this.rotation ) {
 
-			return;
+			Face.draw( gl, Element.shader, this.value );
+
+		} else {
+
+			this.drawSpecial( gl );
 
 		}
 
-		gl.pushMatrix();
-		mat4.translate( gl.matrix, this.position );
+	},
+
+	drawSpecial : function( gl ) {
+
+		var state = this.state,
+			rotation = this.rotation,
+			position = this.position,
+			value = this.value,
+			matrix = gl.matrix,
+			matrixUniform = Element.shader.mvMatrixUniform,
+			right = Camera.getRight();
+			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
+			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
 
 		// vec3.assign( Cube.vector, scale );
 		// mat4.scale( gl.matrix, Cube.vector );
 
-		if ( state === "number" || ( !useIcosahedron && ( state === 'open' && this.isMine ) ) ) {
+		if ( state === "number" ) {
 
-			if ( rotation ) {
+			mat4.identity( matrix );
+			mat4.translate( matrix, position );
 
-				right = Camera.getRight();
+			if ( rotation < -Math.PI / 2 ) {
 
-				if ( rotation < -Math.PI / 2 ) {
+				mat4.rotate( matrix, rotation + Math.PI, right );
+				value++;
 
-					mat4.rotate( gl.matrix, rotation + Math.PI, right );
-					value++;
+			} else {
 
-				} else {
-
-					mat4.rotate( gl.matrix, rotation, right );
-
-				}
+				mat4.rotate( matrix, rotation, right );
 
 			}
+
+			gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
 			if ( value ) {
 
@@ -95,7 +104,21 @@ Element.prototype = {
 
 		} else if ( state === 'open' && this.isMine ) {
 
-			Mine.draw( gl, Element.shader );
+			if ( useIcosahedron ) {
+
+				Mine.draw( gl, Element.shader );
+
+			} else {
+
+				mat4.identity( matrix );
+				mat4.translate( matrix, position );
+
+				mat4.scale( matrix, vec3.assign( Cube.vector, mineSize / numberSize ) );
+				gl.uniformMatrix4fv( matrixUniform, false, matrix );
+
+				Face.draw( gl, Element.shader, value );
+
+			}
 
 		// } else if ( state === 'open' ) {
 		// 
@@ -103,11 +126,41 @@ Element.prototype = {
 
 		} else {
 
-			Cube.draw( gl, Element.shader, this.isMine, state === "flag", this.highlight, this.scale );
+			var flag = state === 'flag',
+				alphaUniform = Element.shader.alphaUniform,
+				stateIndex = flag ? 1 : 0;
+
+			if ( this.scale !== 1 ) {
+
+				mat4.identity( matrix );
+				mat4.translate( matrix, position );
+
+				mat4.scale( matrix, vec3.assign( Cube.vector, this.scale ) );
+				gl.uniformMatrix4fv( matrixUniform, false, matrix );
+
+			}
+
+			if ( Game.gameover && flag ) {
+
+				stateIndex = this.isMine ? 3 : 2;
+
+			}
+
+			if ( this.highlight ) {
+
+				gl.uniform1f( alphaUniform, mouseOverAlpha );
+
+				Cube.draw( gl, Element.shader, stateIndex );
+
+				gl.uniform1f( alphaUniform, standardAlpha );
+
+			} else {
+
+				Cube.draw( gl, Element.shader, stateIndex );
+
+			}
 
 		}
-
-		gl.popMatrix();
 
 	},
 

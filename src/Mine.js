@@ -4,10 +4,6 @@ var Mine = {
 
 		gl.enable( gl.DEPTH_TEST );
 
-		mat4.scale( gl.matrix, vec3.assign( Cube.vector, mineSize ) );
-
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
-
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
@@ -43,7 +39,7 @@ var Mine = {
 
 		function addVertex( x, y, z ) {
 
-			v.push( vec3.normalize( vec3.assign( vec3.create(), x, y, z ) ) );
+			v.push( vec3.scale( vec3.normalize( vec3.assign( vec3.create(), x, y, z ) ), mineSize ) );
 
 		}
 
@@ -73,8 +69,7 @@ var Mine = {
 			vec3.add( middle, b );
 			vec3.add( middle, c );
 
-			vec3.normalize( middle );
-			vec3.scale( middle, mineSpikyness );
+			vec3.scale( vec3.normalize( middle ), mineSpikyness * mineSize );
 
 			for ( i = 0; i < 3; i++ ) {
 

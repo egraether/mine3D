@@ -97,64 +97,14 @@ extend( Cube, {
 
 	vector : vec3.create(),
 
-	draw : function( gl, shader, mine, flag, highlight, scale ) {
+	draw : function( gl, shader, stateIndex ) {
 
-		var stateIndex = flag ? 1 : 0,
-			texOffset;
-
-		if ( Game.gameover && flag ) {
-
-			stateIndex = mine ? 3 : 2;
-
-		}
-
-		texOffset = ( 72 + 48 * stateIndex ) * 4;
-
-		if ( highlight ) {
-
-			gl.uniform1f( Element.shader.alphaUniform, mouseOverAlpha );
-
-		}
-
-		if ( scale !== 1 ) {
-
-			mat4.scale( gl.matrix, vec3.assign( this.vector, scale ) );
-
-		}
-
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+		var texOffset = ( 72 + 48 * ( stateIndex || 0 ) ) * 4;
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
-
-		if ( drawLines ) {
-
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
-			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
-
-		} else {
-
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-			gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
-
-		}
-
-		if ( highlight ) {
-
-			gl.uniform1f( Element.shader.alphaUniform, standardAlpha );
-
-		}
-
-	},
-
-	drawStandard : function( gl, shader ) {
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 72 * 4 );
 
 		if ( drawLines ) {
 
