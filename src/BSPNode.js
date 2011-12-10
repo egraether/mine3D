@@ -112,7 +112,7 @@ BSPNode.prototype = {
 			if ( sum[direction] + epsilon > pos[direction] && 
 				sum[direction] - epsilon < pos[direction] ) {
 
-				sum[direction] -= 0.5;
+				sum[direction] += Math.random() > 0.5 ? 0.5 : -0.5;
 				break;
 
 			}
@@ -125,25 +125,45 @@ BSPNode.prototype = {
 
 	draw : function( gl, position ) {
 
-		var dir = this.direction,
-			n = this.numChildren;
+		var n = this.numChildren,
+			dir = this.direction,
+			dir2;
 
-		if ( this.untouched ) {
+		if ( useMultiCubes && this.untouched ) {
 
 			if ( n === 2 ) {
 
-				MultiCube.drawDouble( gl, Element.shader, dir, this.position );
+				Cube.drawDouble( gl, Element.shader, dir, this.position );
 				return;
 
-			} else if ( n === 4 ) {
+			} else if ( dir !== ( dir2 = this.front.direction ) ) {
 
-				MultiCube.drawQuad( gl, Element.shader, dir, this.front.direction, this.position );
-				return;
+				if ( n === 4 ) {
 
-			} else if ( n === 8 ) {
+					Cube.drawQuad( gl, Element.shader, dir, dir2, this.position );
+					return;
 
-				MultiCube.drawOct( gl, Element.shader, this.position );
-				return;
+				} else if ( n === 8 && dir !== this.front.front.direction ) {
+
+					Cube.drawOct( gl, Element.shader, this.position );
+					return;
+
+				} else if ( n === 16 ) {
+
+					Cube.drawHex( gl, Element.shader, dir, this.position );
+					return;
+
+				} else if ( n === 32 ) {
+
+					Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
+					return;
+
+				} else if ( n === 64 ) {
+
+					Cube.draw64( gl, Element.shader, this.position );
+					return;
+
+				}
 
 			}
 

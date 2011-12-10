@@ -118,7 +118,73 @@ extend( Cube, {
 
 		}
 
-		drawCalls++;
+	},
+
+	drawDouble : function( gl, shader, direction, position ) {
+
+		vec3.assign( this.vector, 1 );
+		this.vector[direction] = 2 + cubeSpacing;
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	drawQuad : function( gl, shader, direction, direction2, position ) {
+
+		vec3.assign( this.vector, 1 );
+		this.vector[direction] = 2 + cubeSpacing;
+		this.vector[direction2] = 2 + cubeSpacing;
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	drawOct : function( gl, shader, position ) {
+
+		vec3.assign( this.vector, 2 + cubeSpacing );
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	drawHex : function( gl, shader, direction, position ) {
+
+		vec3.assign( this.vector, 2 + cubeSpacing );
+		this.vector[direction] = 4 + 3 * cubeSpacing;
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	draw32 : function( gl, shader, direction, direction2, position ) {
+
+		vec3.assign( this.vector, 2 + cubeSpacing );
+		this.vector[direction] = 4 + 3 * cubeSpacing;
+		this.vector[direction2] = 4 + 3 * cubeSpacing;
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	draw64 : function( gl, shader, position ) {
+
+		vec3.assign( this.vector, 4 + 3 * cubeSpacing );
+
+		this.drawMulti( gl, shader, position );
+
+	},
+
+	drawMulti : function( gl, shader, position ) {
+
+		var matrix = gl.matrix;
+
+		mat4.identity( matrix );
+		mat4.translate( matrix, position );
+
+		mat4.scale( matrix, this.vector );
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
+
+		this.draw( gl, shader, 0 );
 
 	},
 

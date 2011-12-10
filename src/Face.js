@@ -11,8 +11,6 @@ var Face = {
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 		gl.drawElements( gl.TRIANGLE_FAN, 4, gl.UNSIGNED_SHORT, 0 );
 
-		drawCalls++;
-
 	},
 
 	initBuffers : function( gl ) {
