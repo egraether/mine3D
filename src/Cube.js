@@ -99,7 +99,7 @@ extend( Cube, {
 
 	draw : function( gl, shader, stateIndex ) {
 
-		var texOffset = ( 72 + 48 * ( stateIndex || 0 ) ) * 4;
+		var texOffset = ( 72 * 8 + 48 * ( stateIndex || 0 ) ) * 4;
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 
@@ -233,6 +233,33 @@ extend( Cube, {
 
 		]);
 
+		var vertexArray = new Float32Array( 72 * 8 );
+
+		function addCube( index, vector ) {
+
+			var i;
+
+			for ( i = 0; i < 72; i++ ) {
+
+				vertexArray[index + i] = vertices[i] + vector[i % 3];
+
+			}
+
+		}
+
+		s = s * 2 + cubeSpacing;
+
+		addCube( 0, [0, 0, 0] );
+
+		addCube( 72 * 1, [s, 0, 0] );
+		addCube( 72 * 2, [0, s, 0] );
+		addCube( 72 * 3, [s, s, 0] );
+
+		addCube( 72 * 4, [0, 0, s] );
+		addCube( 72 * 5, [s, 0, s] );
+		addCube( 72 * 6, [0, s, s] );
+		addCube( 72 * 7, [s, s, s] );
+
 		for ( i = 0; i < 24; i++ ) {
 
 			j = i * 3;
@@ -318,7 +345,8 @@ extend( Cube, {
 			pixelX = 1 / 256,
 			pixelY = 1 / 512,
 			i, j, k,
-			texCoords = [];
+			texCoords = [],
+			texCoordsArray;
 
 		for ( i = 0; i < 4; i++ ) {
 
@@ -334,10 +362,26 @@ extend( Cube, {
 
 		}
 
-		texCoords = new Float32Array( texCoords );
+		texCoordsArray = new Float32Array( 48 * 12 );
+
+		for ( i = 0; i < 48 * 4; i++ ) {
+
+			texCoordsArray[i] = texCoords[i];
+
+		}
+
+		for ( i = 0; i < 48; i++ ) {
+
+			for ( j = 4; j < 12; j++ ) {
+
+				texCoordsArray[i + j * 48] = texCoords[i];
+
+			}
+
+		}
 
 
-		var indices = new Uint16Array([
+		var singleIndices = [
 
 			// front
 			0, 1, 2, 0, 2, 3,
@@ -357,7 +401,7 @@ extend( Cube, {
 			// bottom
 			20, 21, 22, 20, 22, 23
 
-		]);
+		];
 
 		var lineIndices = new Uint16Array([
 
@@ -368,19 +412,48 @@ extend( Cube, {
 		]);
 
 
+		var indexArray = new Uint16Array( 36 * ( 1 + 2 * 3 + 4 * 3 + 8 ) );
+
+		function addIndices( index, cube ) {
+
+			var i;
+
+			for ( i = 0; i < 36; i++ ) {
+
+				indexArray[index + i] = singleIndices[i] + 24 * cube;
+
+			}
+
+		}
+
+		addIndices( 0, 0 );
+
+		// addIndices( 36 * 1, 0 );
+		// addIndices( 36 * 2, 1 );
+		// 
+		// addIndices( 36 * 1, 0 );
+		// addIndices( 36 * 2, 2 );
+		// 
+		// addIndices( 36 * 1, 0 );
+		// addIndices( 36 * 2, 4 );
+		// 
+		// addIndices( 36 * 1, 0 );
+		// addIndices( 36 * 2, 1 );
+		// addIndices( 36 * 2, 1 );
+
 		this.attributeBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, (72 + 48 * 4) * 4, gl.STATIC_DRAW );
+		gl.bufferData( gl.ARRAY_BUFFER, ( vertexArray.length + texCoordsArray.length ) * 4, gl.STATIC_DRAW );
 
-		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertices );
-		gl.bufferSubData( gl.ARRAY_BUFFER, 72 * 4, texCoords);
+		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertexArray );
+		gl.bufferSubData( gl.ARRAY_BUFFER, vertexArray.length * 4, texCoordsArray );
 
 
 		this.indexBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indexArray, gl.STATIC_DRAW);
 
 
 		this.lineIndexBuffer = gl.createBuffer();
