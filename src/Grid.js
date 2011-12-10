@@ -490,9 +490,11 @@ var Grid = {
 
 	setElementInRay : function( element ) {
 
-		if ( this.elementInRay ) {
+		var elementInRay = this.elementInRay;
 
-			this.elementInRay.highlight = false;
+		if ( elementInRay ) {
+
+			elementInRay.changeState( elementInRay.state, false );
 
 			this.redraw = true;
 
@@ -502,7 +504,7 @@ var Grid = {
 
 		if ( element ) {
 
-			element.highlight = true;
+			element.changeState( element.state, true );
 
 			this.redraw = true;
 

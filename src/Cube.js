@@ -149,6 +149,27 @@ extend( Cube, {
 
 	},
 
+	drawStandard : function( gl, shader ) {
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+
+		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 72 * 4 );
+
+		if ( drawLines ) {
+
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
+
+		} else {
+
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+			gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
+		}
+
+	},
+
 	initBuffers : function( gl ) {
 
 		var i, j, l,

@@ -243,7 +243,7 @@ var EventHandler = {
 		gl.passTexture( Element.texture, Element.shader.textureUniform );
 
 		Camera.resize();
-		Element.resize( gl );
+		Element.updateMatrix( gl );
 
 		Grid.redraw = true;
 

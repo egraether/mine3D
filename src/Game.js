@@ -60,7 +60,7 @@ var Game = {
 
 		if ( Camera.update() ) {
 
-			mat4.set( Camera.getMvMatrix(), gl.matrix );
+			Element.updateMatrix( gl );
 
 			if ( Camera.updateRotation ) {
 

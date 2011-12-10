@@ -1,7 +1,9 @@
 var Element = function( index, position ) {
 
 	this.index = index;
+
 	this.position = position;
+	this.matrix = mat4.translate( mat4.identity( mat4.create() ), position );
 
 	this.cube = new Cube( this );
 	this.neighbors = [];
@@ -23,14 +25,89 @@ Element.prototype = {
 
 	restart : function() {
 
-		this.state = "cube"; // [ 'cube', 'number', 'flag', 'open', 'opening' ]
+		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'open', 'opening' ]
 
 		this.value = this.maxValue;
 
 		this.scale = 1;
 		this.rotation = 0;
 
-		this.highlight = false;
+	},
+
+	changeState : function( state, highlight ) {
+
+		this.highlight = highlight;
+		this.state = state;
+
+		this.untouched = ( state === 'cube' && !highlight );
+
+	},
+
+	draw : function( gl ) {
+
+		var state = this.state,
+			rotation = this.rotation,
+			value = this.value,
+			right;
+			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
+			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
+
+		if ( this.untouched ) {
+
+			gl.uniformMatrix4fv( Element.shader.mvMatrixUniform, false, this.matrix );
+
+			Cube.drawStandard( gl, Element.shader );
+
+			return;
+
+		}
+
+		gl.pushMatrix();
+		mat4.translate( gl.matrix, this.position );
+
+		// vec3.assign( Cube.vector, scale );
+		// mat4.scale( gl.matrix, Cube.vector );
+
+		if ( state === "number" || ( !useIcosahedron && ( state === 'open' && this.isMine ) ) ) {
+
+			if ( rotation ) {
+
+				right = Camera.getRight();
+
+				if ( rotation < -Math.PI / 2 ) {
+
+					mat4.rotate( gl.matrix, rotation + Math.PI, right );
+					value++;
+
+				} else {
+
+					mat4.rotate( gl.matrix, rotation, right );
+
+				}
+
+			}
+
+			if ( value ) {
+
+				Face.draw( gl, Element.shader, value );
+
+			}
+
+		} else if ( state === 'open' && this.isMine ) {
+
+			Mine.draw( gl, Element.shader );
+
+		// } else if ( state === 'open' ) {
+		// 
+		// 	Cube.drawLine( gl, Element.shader );
+
+		} else {
+
+			Cube.draw( gl, Element.shader, this.isMine, state === "flag", this.highlight, this.scale );
+
+		}
+
+		gl.popMatrix();
 
 	},
 
@@ -107,69 +184,11 @@ Element.prototype = {
 
 		if ( this.state !== 'flag' ) {
 
-			this.state = 'open';
+			this.changeState( 'open', this.highlight );
 
 		}
 
 		this.value = 28;
-
-	},
-
-	draw : function( gl ) {
-
-		var state = this.state,
-			rotation = this.rotation,
-			value = this.value,
-			right;
-			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
-			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
-
-		gl.pushMatrix();
-		mat4.translate( gl.matrix, this.position );
-
-		// vec3.assign( Cube.vector, scale );
-		// mat4.scale( gl.matrix, Cube.vector );
-
-		if ( state === "number" || ( !useIcosahedron && ( state === 'open' && this.isMine ) ) ) {
-
-			if ( rotation ) {
-
-				right = Camera.getRight();
-
-				if ( rotation < -Math.PI / 2 ) {
-
-					mat4.rotate( gl.matrix, rotation + Math.PI, right );
-					value++;
-
-				} else {
-
-					mat4.rotate( gl.matrix, rotation, right );
-
-				}
-
-			}
-
-			if ( value ) {
-
-				Face.draw( gl, Element.shader, value );
-
-			}
-
-		} else if ( state === 'open' && this.isMine ) {
-
-			Mine.draw( gl, Element.shader );
-
-		// } else if ( state === 'open' ) {
-		// 
-		// 	Cube.drawLine( gl, Element.shader );
-
-		} else {
-
-			Cube.draw( gl, Element.shader, this.isMine, state === "flag", this.highlight, this.scale );
-
-		}
-
-		gl.popMatrix();
 
 	},
 
@@ -179,7 +198,7 @@ Element.prototype = {
 
 		if ( this.state === "cube" ) {
 
-			this.state = 'opening';
+			this.changeState( 'opening', this.highlight );
 
 			if ( Settings.animations ) {
 
@@ -218,7 +237,7 @@ Element.prototype = {
 
 			if ( this.isMine ) {
 
-				this.state = 'cube';
+				this.changeState( 'cube', this.highlight );
 				return Game.over();
 
 			} else {
@@ -249,11 +268,11 @@ Element.prototype = {
 
 		if ( this.value ) {
 
-			this.state = "number";
+			this.changeState( 'number', this.highlight );
 
 		} else {
 
-			this.state = "open";
+			this.changeState( 'open', this.highlight );
 
 			BSPTree.remove( this );
 
@@ -273,7 +292,7 @@ Element.prototype = {
 
 			if ( Settings.animations ) {
 
-				this.state = 'flag';
+				this.changeState( 'flag', this.highlight );
 
 				tween = new TWEEN.Tween( this );
 
@@ -288,7 +307,7 @@ Element.prototype = {
 				tween.onComplete( function() {
 
 					this.scale = 1;
-					this.state = 'opening';
+					this.changeState( 'opening', this.highlight );
 					this.openMineNow();
 
 				});
@@ -297,7 +316,7 @@ Element.prototype = {
 
 			} else {
 
-				this.state = 'opening';
+				this.changeState( 'opening', this.highlight );
 				this.openMineNow();
 
 			}
@@ -330,7 +349,7 @@ Element.prototype = {
 
 			} else {
 
-				this.state = 'cube';
+				this.changeState( 'cube', this.highlight );
 				Game.over();
 
 			}
@@ -357,12 +376,12 @@ Element.prototype = {
 
 		if ( this.state === 'cube' ) {
 
-			this.state = 'flag';
+			this.changeState( 'flag', this.highlight );
 			Grid.minesLeft--;
 
 		} else if ( this.state === 'flag' ) {
 
-			this.state = 'cube';
+			this.changeState( 'cube', this.highlight );
 			Grid.minesLeft++;
 
 		}
@@ -416,13 +435,13 @@ Element.prototype = {
 
 			if ( this.value ) {
 
-				this.state = "number";
+				this.changeState( 'number', this.highlight );
 
 			} else {
 
 				BSPTree.remove( this );
 
-				this.state = "open";
+				this.changeState( 'open', this.highlight );
 
 			}
 
@@ -454,15 +473,20 @@ extend( Element, {
 		Face.initBuffers( gl );
 		Mine.initBuffers( gl );
 
-		this.resize( gl );
+		this.updateMatrix( gl );
 
 		gl.uniform1f( this.shader.alphaUniform, standardAlpha );
 
 	},
 
-	resize : function( gl ) {
+	updateMatrix : function( gl ) {
 
-		gl.uniformMatrix4fv( this.shader.pMatrixUniform, false, Camera.getPMatrix() );
+		// mat4.set( Camera.getMvMatrix(), gl.matrix );
+
+		mat4.multiply( Camera.getPMatrix(), Camera.getMvMatrix(), gl.matrix );
+		gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, gl.matrix );
+
+		mat4.identity( gl.matrix );
 
 	},
 
