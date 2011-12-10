@@ -1,3 +1,5 @@
+var drawCalls;
+
 var Game = {
 
 	gameover : false,
@@ -92,8 +94,13 @@ var Game = {
 			// } else {
 			// 
 				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-			
+
+				drawCalls = 0;
+
 				Grid.draw( gl );
+
+				console.log( drawCalls );
+
 			// 
 			// }
 

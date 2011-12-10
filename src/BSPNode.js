@@ -11,6 +11,8 @@ var BSPNode = function( parent ) {
 	this.untouched = true;
 	this.permaTouched = false;
 
+	this.numChildren = null;
+
 };
 
 BSPNode.prototype = {
@@ -23,6 +25,8 @@ BSPNode.prototype = {
 			pos;
 
 		this.direction = direction;
+		this.numChildren = elements.length;
+
 		this.position = this.getAveragePosition( elements, direction );
 
 		frontElements = [];
@@ -121,7 +125,29 @@ BSPNode.prototype = {
 
 	draw : function( gl, position ) {
 
-		var dir = this.direction;
+		var dir = this.direction,
+			n = this.numChildren;
+
+		if ( this.untouched ) {
+
+			if ( n === 2 ) {
+
+				MultiCube.drawDouble( gl, Element.shader, dir, this.position );
+				return;
+
+			} else if ( n === 4 ) {
+
+				MultiCube.drawQuad( gl, Element.shader, dir, this.front.direction, this.position );
+				return;
+
+			} else if ( n === 8 ) {
+
+				MultiCube.drawOct( gl, Element.shader, this.position );
+				return;
+
+			}
+
+		}
 
 		if ( position[dir] > this.position[dir] ) {
 
@@ -214,7 +240,7 @@ BSPNode.prototype = {
 
 		str += "  ";
 
-		console.log( str + this.untouched );
+		console.log( str + this.direction );
 
 		// console.log( str + "front" );
 		this.front.print( str );

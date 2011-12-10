@@ -118,6 +118,8 @@ extend( Cube, {
 
 		}
 
+		drawCalls++;
+
 	},
 
 	initBuffers : function( gl ) {
