@@ -1,5 +1,6 @@
 var Element = function( index, position ) {
 
+	this.parent = null;
 	this.index = index;
 
 	this.position = position;
@@ -36,10 +37,30 @@ Element.prototype = {
 
 	changeState : function( state, highlight ) {
 
+		var untouched = ( state === 'cube' && !highlight );
+
 		this.highlight = highlight;
 		this.state = state;
 
-		this.untouched = ( state === 'cube' && !highlight );
+		if ( this.untouched !== untouched ) {
+
+			this.untouched = untouched;
+
+			if ( this.parent ) {
+
+				if ( this.untouched ) {
+
+					this.parent.untouch();
+
+				} else {
+
+					this.parent.touch();
+
+				}
+
+			}
+
+		}
 
 	},
 
@@ -506,9 +527,10 @@ Element.prototype = {
 
 	print : function( str ) {
 
-		str += "    ";
+		str += "  ";
 
-		console.log( str + vec3.str( this.position ) );
+		// console.log( str + vec3.str( this.position ) );
+		console.log( str + this.untouched );
 
 	}
 

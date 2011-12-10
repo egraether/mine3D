@@ -9,7 +9,7 @@ var BSPTree = {
 
 		if ( elements.length > 1 ) {
 
-			this.root = new BSPNode().init( elements, 0 );
+			this.root = new BSPNode( null ).init( elements, 0 );
 
 		} else if ( elements.length === 1 ) {
 
@@ -84,8 +84,6 @@ var BSPTree = {
 	},
 
 	print : function() {
-
-		console.log( "root " + vec3.str( this.root.position ) );
 
 		this.root.print( "" );
 

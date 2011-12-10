@@ -1,10 +1,15 @@
-var BSPNode = function() {
+var BSPNode = function( parent ) {
+
+	this.parent = parent;
 
 	this.front = null;
 	this.back = null;
 
 	this.position = null;
 	this.direction = null; // 0 : "x", 1 : "y", 2 : "z"
+
+	this.untouched = true;
+	this.permaTouched = false;
 
 };
 
@@ -55,20 +60,22 @@ BSPNode.prototype = {
 			if ( frontElements.length === 1 ) {
 
 				this.front = frontElements[0];
+				this.front.parent = this;
 
 			} else {
 
-				this.front = new BSPNode().init( frontElements, direction );
+				this.front = new BSPNode( this ).init( frontElements, direction );
 
 			}
 
 			if ( backElements.length === 1 ) {
 
 				this.back = backElements[0];
+				this.back.parent = this;
 
 			} else {
 
-				this.back = new BSPNode().init( backElements, direction );
+				this.back = new BSPNode( this ).init( backElements, direction );
 
 			}
 
@@ -140,6 +147,13 @@ BSPNode.prototype = {
 
 			if ( !this.front ) {
 
+				if ( this.parent ) {
+
+					this.parent.untouched = false;
+					this.parent.permaTouched = true;
+
+				}
+
 				return this.back;
 
 			}
@@ -149,6 +163,13 @@ BSPNode.prototype = {
 			this.back = this.back.remove( element );
 
 			if ( !this.back ) {
+
+				if ( this.parent ) {
+
+					this.parent.untouched = false;
+					this.parent.permaTouched = true;
+
+				}
 
 				return this.front;
 
@@ -191,13 +212,48 @@ BSPNode.prototype = {
 
 	print : function( str ) {
 
-		str += "    ";
+		str += "  ";
 
-		console.log( str + "front" );
+		console.log( str + this.untouched );
+
+		// console.log( str + "front" );
 		this.front.print( str );
 
-		console.log( str + "back");
+		// console.log( str + "back");
 		this.back.print( str );
+
+	},
+
+	touch : function() {
+
+		if ( this.untouched ) {
+
+			this.untouched = false;
+
+			if ( this.parent ) {
+
+				this.parent.touch();
+
+			}
+
+		}
+
+	},
+
+	untouch : function() {
+
+		if ( !this.untouched && !this.permaTouched &&
+			this.front.untouched && this.back.untouched ) {
+
+			this.untouched = true;
+
+			if ( this.parent ) {
+
+				this.parent.untouch();
+
+			}
+
+		}
 
 	}
 
