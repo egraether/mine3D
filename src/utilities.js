@@ -36,6 +36,24 @@ function map( x, a1, a2, b1, b2 ) {
 
 };
 
+function multipleOfTwo( x ) {
+
+	var a = x;
+
+	while ( !(a & 1) ) {
+
+		if ( ( a /= 2 ) === 1 ) {
+
+			return x;
+
+		}
+
+	}
+
+	return 0;
+
+};
+
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x;

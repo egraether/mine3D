@@ -169,13 +169,44 @@ extend( Cube, {
 
 	},
 
-	drawQuad : function( gl, shader, direction, direction2, position ) {
+	drawQuad : function( gl, shader, position, camera, direction ) {
 
-		vec3.assign( this.vector, 1 );
-		this.vector[direction] = 2 + cubeSpacing;
-		this.vector[direction2] = 2 + cubeSpacing;
+		var vector = this.vector,
+			dir = ( direction + 1 ) % 3,
+			dir2 = ( direction + 2 ) % 3,
+			start;
 
-		this.drawMulti( gl, shader, position );
+		if ( fakeCubes ) {
+
+			vec3.assign( vector, 2 + cubeSpacing );
+			vector[direction] = 1;
+
+			this.drawMulti( gl, shader, position );
+
+		} else {
+
+			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
+			vector[direction] = 0;
+
+			vec3.add( vector, position );
+
+			start = direction === 0 ? 39 : ( direction === 1 ? 23 : 7 );
+
+			if ( camera[dir] < vector[dir] ) {
+
+				start += 4;
+
+			}
+
+			if ( camera[dir2] < vector[dir2] ) {
+
+				start += 8;
+
+			}
+
+			this.drawMultiple( gl, shader, vector, 4, start );
+
+		}
 
 	},
 
@@ -452,34 +483,45 @@ extend( Cube, {
 		]);
 
 
-		var indexArray = new Uint16Array( 36 * ( 1 + 2 * 3 + 4 * 3 + 8 ) );
+		var cubes = [
 
-		function addIndices( index, cube ) {
+			0,
 
-			var i;
+			1, 0,
+			2, 0,
+			4, 0,
+
+			0, 1, 2, 3,
+			1, 0, 3, 2,
+			2, 3, 0, 1,
+			3, 2, 1, 0,
+
+			0, 4, 1, 5,
+			4, 0, 5, 1,
+			1, 5, 0, 4,
+			5, 1, 4, 0,
+
+			0, 2, 4, 6,
+			2, 0, 6, 4,
+			4, 6, 0, 2,
+			6, 4, 2, 0
+
+		];
+
+		var indexArray = new Uint16Array( 36 * cubes.length );
+
+		for ( j = 0; j < cubes.length; j++ ) {
+
+			k = j * 36;
 
 			for ( i = 0; i < 36; i++ ) {
 
-				indexArray[index + i] = singleIndices[i] + 24 * cube;
+				indexArray[k + i] = singleIndices[i] + 24 * cubes[j];
 
 			}
 
 		}
 
-		addIndices( 0, 0 );
-
-		addIndices( 36 * 1, 1 );
-		addIndices( 36 * 2, 0 );
-
-		addIndices( 36 * 3, 2 );
-		addIndices( 36 * 4, 0 );
-
-		addIndices( 36 * 5, 4 );
-		addIndices( 36 * 6, 0 );
-
-		// addIndices( 36 * 1, 0 );
-		// addIndices( 36 * 2, 1 );
-		// addIndices( 36 * 2, 1 );
 
 		this.attributeBuffer = gl.createBuffer();
 

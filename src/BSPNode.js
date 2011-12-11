@@ -25,7 +25,7 @@ BSPNode.prototype = {
 			pos;
 
 		this.direction = direction;
-		this.numChildren = elements.length;
+		this.numChildren = multipleOfTwo( elements.length );
 
 		this.position = this.getAveragePosition( elements, direction );
 
@@ -85,6 +85,15 @@ BSPNode.prototype = {
 
 		}
 
+		direction = this.direction;
+
+		if ( ( this.numChildren === 4 && direction === this.front.direction ) ||
+			( this.numChildren === 8 && ( direction === this.front.direction || direction === this.front.front.direction ) ) ) {
+
+			this.numChildren = 0;
+
+		}
+
 		return this;
 
 	},
@@ -126,46 +135,41 @@ BSPNode.prototype = {
 	draw : function( gl, position ) {
 
 		var n = this.numChildren,
-			dir = this.direction,
-			dir2;
+			dir = this.direction;
 
-		if ( useMultiCubes && this.untouched ) {
+		if ( useMultiCubes && n && this.untouched ) {
 
 			if ( n === 2 ) {
 
 				Cube.drawDouble( gl, Element.shader, this.position, position, dir );
 				return;
 
-			} else if ( dir !== ( dir2 = this.front.direction ) ) {
+			} else if ( n === 4 ) {
 
-				if ( n === 4 ) {
+				Cube.drawQuad( gl, Element.shader, this.position, position, ( ( dir + this.front.direction ) * 2 ) % 3 );
+				return;
 
-					Cube.drawQuad( gl, Element.shader, dir, dir2, this.position );
+			} else if ( n === 8 ) {
+
+				Cube.drawOct( gl, Element.shader, this.position );
+				return;
+
+			} else if ( fakeCubes ) {
+
+				if ( n === 16 ) {
+
+					Cube.drawHex( gl, Element.shader, dir, this.position );
 					return;
 
-				} else if ( n === 8 && dir !== this.front.front.direction ) {
+				} else if ( n === 32 ) {
 
-					Cube.drawOct( gl, Element.shader, this.position );
+					Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
 					return;
 
-				} else if ( fakeCubes ) {
+				} else if ( n === 64 ) {
 
-					if ( n === 16 ) {
-
-						Cube.drawHex( gl, Element.shader, dir, this.position );
-						return;
-
-					} else if ( n === 32 ) {
-
-						Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
-						return;
-
-					} else if ( n === 64 ) {
-
-						Cube.draw64( gl, Element.shader, this.position );
-						return;
-
-					}
+					Cube.draw64( gl, Element.shader, this.position );
+					return;
 
 				}
 
