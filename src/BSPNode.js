@@ -132,43 +132,44 @@ BSPNode.prototype = {
 
 	},
 
-	draw : function( gl, position ) {
+	draw : function( gl, camera ) {
 
 		var n = this.numChildren,
+			pos = this.position,
 			dir = this.direction;
 
 		if ( useMultiCubes && n && this.untouched ) {
 
 			if ( n === 2 ) {
 
-				Cube.drawDouble( gl, Element.shader, this.position, position, dir );
+				Cube.drawDouble( gl, Element.shader, pos, camera, dir );
 				return;
 
 			} else if ( n === 4 ) {
 
-				Cube.drawQuad( gl, Element.shader, this.position, position, ( ( dir + this.front.direction ) * 2 ) % 3 );
+				Cube.drawQuad( gl, Element.shader, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
 				return;
 
 			} else if ( n === 8 ) {
 
-				Cube.drawOct( gl, Element.shader, this.position );
+				Cube.drawOct( gl, Element.shader, pos, camera );
 				return;
 
 			} else if ( fakeCubes ) {
 
 				if ( n === 16 ) {
 
-					Cube.drawHex( gl, Element.shader, dir, this.position );
+					Cube.drawHex( gl, Element.shader, dir, pos );
 					return;
 
 				} else if ( n === 32 ) {
 
-					Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
+					Cube.draw32( gl, Element.shader, dir, this.front.direction, pos );
 					return;
 
 				} else if ( n === 64 ) {
 
-					Cube.draw64( gl, Element.shader, this.position );
+					Cube.draw64( gl, Element.shader, pos );
 					return;
 
 				}
@@ -177,15 +178,15 @@ BSPNode.prototype = {
 
 		}
 
-		if ( position[dir] > this.position[dir] ) {
+		if ( camera[dir] > pos[dir] ) {
 
-			this.back.draw( gl, position );
-			this.front.draw( gl, position );
+			this.back.draw( gl, camera );
+			this.front.draw( gl, camera );
 
 		} else {
 
-			this.front.draw( gl, position );
-			this.back.draw( gl, position );
+			this.front.draw( gl, camera );
+			this.back.draw( gl, camera );
 
 		}
 

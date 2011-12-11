@@ -210,11 +210,45 @@ extend( Cube, {
 
 	},
 
-	drawOct : function( gl, shader, position ) {
+	drawOct : function( gl, shader, position, camera ) {
 
-		vec3.assign( this.vector, 2 + cubeSpacing );
+		var vector = this.vector,
+			start, i;
 
-		this.drawMulti( gl, shader, position );
+		if ( fakeCubes ) {
+
+			vec3.assign( this.vector, 2 + cubeSpacing );
+
+			this.drawMulti( gl, shader, position );
+
+		} else {
+
+			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
+			vec3.add( vector, position );
+
+			start = 55;
+
+			if ( camera[0] < vector[0] ) {
+
+				start += 8;
+
+			}
+
+			if ( camera[1] < vector[1] ) {
+
+				start += 16;
+
+			}
+
+			if ( camera[2] < vector[2] ) {
+
+				start += 32;
+
+			}
+
+			this.drawMultiple( gl, shader, vector, 8, start );
+
+		}
 
 	},
 
@@ -504,7 +538,17 @@ extend( Cube, {
 			0, 2, 4, 6,
 			2, 0, 6, 4,
 			4, 6, 0, 2,
-			6, 4, 2, 0
+			6, 4, 2, 0,
+
+			0, 1, 2, 3, 4, 5, 6, 7,
+			1, 0, 3, 2, 5, 4, 7, 6,
+			2, 3, 0, 1, 6, 7, 4, 5,
+			3, 2, 1, 0, 7, 6, 5, 4,
+
+			4, 5, 6, 7, 0, 1, 2, 3,
+			5, 4, 7, 6, 1, 0, 3, 2,
+			6, 7, 4, 5, 2, 3, 0, 1,
+			7, 6, 5, 4, 3, 2, 1, 0
 
 		];
 
