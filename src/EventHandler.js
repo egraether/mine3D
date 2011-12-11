@@ -231,14 +231,11 @@ var EventHandler = {
 
 	onResize : function( event ) {
 
-		var width = canvas.width = window.innerWidth,
-			height = canvas.height = window.innerHeight;
+		setViewport();
 
-		gl.viewport( 0, 0, width, height );
-
-		gl.initFBO( width * fboMinScale, height * fboMinScale, Game.fboMin );
-		gl.initFBO( width * fboMedScale, height * fboMedScale, Game.fboMed );
-		gl.initFBO( width * fboMaxScale, height * fboMaxScale, Game.fboMax );
+		// gl.initFBO( width * fboMinScale, height * fboMinScale, Game.fboMin );
+		// gl.initFBO( width * fboMedScale, height * fboMedScale, Game.fboMed );
+		// gl.initFBO( width * fboMaxScale, height * fboMaxScale, Game.fboMax );
 
 		gl.passTexture( Element.texture, Element.shader.textureUniform );
 

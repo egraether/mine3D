@@ -24,9 +24,9 @@ var Game = {
 		// moved to Menu.showHUD()
 		// EventHandler.init();
 
-		// this.fboMin = gl.initFBO( canvas.width * fboMinScale, canvas.height * fboMinScale );
-		// this.fboMed = gl.initFBO( canvas.width * fboMedScale, canvas.height * fboMedScale );
-		// this.fboMax = gl.initFBO( canvas.width * fboMaxScale, canvas.height * fboMaxScale );
+		// this.fboMin = gl.initFBO( width * fboMinScale, height * fboMinScale );
+		// this.fboMed = gl.initFBO( width * fboMedScale, height * fboMedScale );
+		// this.fboMax = gl.initFBO( width * fboMaxScale, height * fboMaxScale );
 
 		this.reset();
 

@@ -1,10 +1,12 @@
 var canvas,
+	width, height,
 	gl;
 
 function init( gl ) {
 
+	setViewport();
+
 	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
-	gl.viewport( 0, 0, canvas.width, canvas.height );
 
 	gl.enable( gl.CULL_FACE );
 	// gl.enable( gl.DEPTH_TEST );
@@ -18,6 +20,21 @@ function init( gl ) {
 	Game.init( gl );
 
 };
+
+function setViewport() {
+
+	canvas.width = width = canvas.clientWidth;
+	canvas.height = height = canvas.clientHeight;
+
+	// canvas.width = 1024;
+	// canvas.height = 768;
+
+	// width = canvas.clientWidth;
+	// height = canvas.clientHeight;
+
+	gl.viewport( 0, 0, canvas.width, canvas.height );
+
+}
 
 function draw() {
 
@@ -58,8 +75,8 @@ function start() {
 	document.querySelector( "#container" ).appendChild( canvas );
 	canvas.style.backgroundColor = "black";
 
-	canvas.width = window.innerWidth,
-	canvas.height = window.innerHeight;
+	canvas.style.width = '100%';
+	canvas.style.height = '100%';
 
 	extend( gl, WebGLUtilities );
 

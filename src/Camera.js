@@ -11,9 +11,6 @@ var Camera = new ( function() {
 		pMatrix = mat4.create(),
 		mvMatrix = mat4.create(),
 
-		width = 0,
-		height = 0,
-
 		radius = 0,
 		zoomDelta = 1,
 
@@ -62,9 +59,6 @@ var Camera = new ( function() {
 	};
 
 	this.resize = function() {
-
-		width = canvas.width;
-		height = canvas.height;
 
 		mat4.perspective( 45, width / height, 0.1, 1000, pMatrix );
 
