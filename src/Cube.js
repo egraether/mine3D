@@ -120,12 +120,52 @@ extend( Cube, {
 
 	},
 
-	drawDouble : function( gl, shader, direction, position ) {
+	drawMultiple : function( gl, shader, position, count, start ) {
 
-		vec3.assign( this.vector, 1 );
-		this.vector[direction] = 2 + cubeSpacing;
+		var matrix = gl.matrix;
 
-		this.drawMulti( gl, shader, position );
+		mat4.identity( matrix );
+		mat4.translate( matrix, position );
+
+		// vec3.assign( this.vector, 0.9 );
+		// mat4.scale( matrix, this.vector );
+
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
+
+		// var texOffset = ( 72 * 8 + 48 * 4 ) * 4;
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+
+		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 3072 );
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+		gl.drawElements( gl.TRIANGLES, 36 * count, gl.UNSIGNED_SHORT, 72 * start );
+
+	},
+
+	drawDouble : function( gl, shader, position, camera, direction ) {
+
+		var vector = this.vector,
+			start;
+
+		if ( fakeCubes ) {
+
+			vec3.assign( vector, 1 );
+			vector[direction] = 2 + cubeSpacing;
+
+			this.drawMulti( gl, shader, position );
+
+		} else {
+
+			vec3.set( position, vector );
+			vector[direction] -= 0.5 + cubeSpacing * 0.5;
+
+			start = 2 * direction + ( camera[direction] > vector[direction] ? 0 : 1 );
+
+			this.drawMultiple( gl, shader, vector, 2, start );
+
+		}
 
 	},
 
@@ -428,15 +468,15 @@ extend( Cube, {
 
 		addIndices( 0, 0 );
 
-		// addIndices( 36 * 1, 0 );
-		// addIndices( 36 * 2, 1 );
-		// 
-		// addIndices( 36 * 1, 0 );
-		// addIndices( 36 * 2, 2 );
-		// 
-		// addIndices( 36 * 1, 0 );
-		// addIndices( 36 * 2, 4 );
-		// 
+		addIndices( 36 * 1, 1 );
+		addIndices( 36 * 2, 0 );
+
+		addIndices( 36 * 3, 2 );
+		addIndices( 36 * 4, 0 );
+
+		addIndices( 36 * 5, 4 );
+		addIndices( 36 * 6, 0 );
+
 		// addIndices( 36 * 1, 0 );
 		// addIndices( 36 * 2, 1 );
 		// addIndices( 36 * 2, 1 );

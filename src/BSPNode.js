@@ -133,7 +133,7 @@ BSPNode.prototype = {
 
 			if ( n === 2 ) {
 
-				Cube.drawDouble( gl, Element.shader, dir, this.position );
+				Cube.drawDouble( gl, Element.shader, this.position, position, dir );
 				return;
 
 			} else if ( dir !== ( dir2 = this.front.direction ) ) {
@@ -148,20 +148,24 @@ BSPNode.prototype = {
 					Cube.drawOct( gl, Element.shader, this.position );
 					return;
 
-				} else if ( n === 16 ) {
+				} else if ( fakeCubes ) {
 
-					Cube.drawHex( gl, Element.shader, dir, this.position );
-					return;
+					if ( n === 16 ) {
 
-				} else if ( n === 32 ) {
+						Cube.drawHex( gl, Element.shader, dir, this.position );
+						return;
 
-					Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
-					return;
+					} else if ( n === 32 ) {
 
-				} else if ( n === 64 ) {
+						Cube.draw32( gl, Element.shader, dir, this.front.direction, this.position );
+						return;
 
-					Cube.draw64( gl, Element.shader, this.position );
-					return;
+					} else if ( n === 64 ) {
+
+						Cube.draw64( gl, Element.shader, this.position );
+						return;
+
+					}
 
 				}
 
