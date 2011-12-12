@@ -233,9 +233,13 @@ var EventHandler = {
 
 		setViewport();
 
-		// gl.initFBO( width * fboMinScale, height * fboMinScale, Game.fboMin );
-		// gl.initFBO( width * fboMedScale, height * fboMedScale, Game.fboMed );
-		// gl.initFBO( width * fboMaxScale, height * fboMaxScale, Game.fboMax );
+		if ( useSmoothing ) {
+
+			gl.initFBO( width * fboMinScale, height * fboMinScale, Game.fboMin );
+			gl.initFBO( width * fboMedScale, height * fboMedScale, Game.fboMed );
+			gl.initFBO( width * fboMaxScale, height * fboMaxScale, Game.fboMax );
+
+		}
 
 		gl.passTexture( Element.texture, Element.shader.textureUniform );
 

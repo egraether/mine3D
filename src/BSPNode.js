@@ -92,6 +92,13 @@ BSPNode.prototype = {
 
 		}
 
+		if ( ( fakeCubes && this.numChildren > 64 ) || 
+			( !fakeCubes && this.numChildren > 8 ) ) {
+
+			this.numChildren = 0
+
+		}
+
 		return this;
 
 	},
@@ -141,42 +148,34 @@ BSPNode.prototype = {
 			if ( n === 2 ) {
 
 				Cube.drawDouble( gl, pos, camera, dir );
-				return;
 
 			} else if ( n === 4 ) {
 
 				Cube.drawQuad( gl, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
-				return;
 
 			} else if ( n === 8 ) {
 
 				Cube.drawOct( gl, pos, camera );
-				return;
 
 			} else if ( fakeCubes ) {
 
 				if ( n === 16 ) {
 
 					Cube.drawHex( gl, pos, dir );
-					return;
 
 				} else if ( n === 32 ) {
 
 					Cube.draw32( gl, pos, ( ( dir + this.front.direction ) * 2 ) % 3 );
-					return;
 
-				} else if ( n === 64 ) {
+				} else {
 
 					Cube.draw64( gl, pos );
-					return;
 
 				}
 
 			}
 
-		}
-
-		if ( camera[dir] > pos[dir] ) {
+		} else if ( camera[dir] > pos[dir] ) {
 
 			this.back.draw( gl, camera );
 			this.front.draw( gl, camera );

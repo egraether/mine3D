@@ -24,9 +24,13 @@ var Game = {
 		// moved to Menu.showHUD()
 		// EventHandler.init();
 
-		// this.fboMin = gl.initFBO( width * fboMinScale, height * fboMinScale );
-		// this.fboMed = gl.initFBO( width * fboMedScale, height * fboMedScale );
-		// this.fboMax = gl.initFBO( width * fboMaxScale, height * fboMaxScale );
+		if ( useSmoothing ) {
+
+			this.fboMin = gl.initFBO( width * fboMinScale, height * fboMinScale );
+			this.fboMed = gl.initFBO( width * fboMedScale, height * fboMedScale );
+			this.fboMax = gl.initFBO( width * fboMaxScale, height * fboMaxScale );
+
+		}
 
 		this.reset();
 
@@ -83,38 +87,31 @@ var Game = {
 
 		if ( Grid.redraw || redraw ) {
 
-			// this.drawWithFBO( gl, this.fboMin );
+			if ( useSmoothing ) {
 
-			// if ( useSmoothing ) {
-			// 
-			// 	this.drawWithFBO( gl, this.fboMin );
-			// 
-			// } else {
-			// 
+				this.drawWithFBO( gl, this.fboMin );
+
+			} else {
 
 				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
 				Grid.draw( gl );
 
-			// 
-			// }
+			}
 
-			framesSinceDraw = 0;
+			this.framesSinceDraw = 0;
 
-		}
-		framesSinceDraw = 0;
-
-		if ( framesSinceDraw === 20 ) {
+		} else if ( useSmoothing && this.framesSinceDraw === 20 ) {
 
 			this.drawWithFBO( gl, this.fboMed );
 
-		} else if ( framesSinceDraw === 40 ) {
+		} else if ( useSmoothing && this.framesSinceDraw === 40 ) {
 
 			this.drawWithFBO( gl, this.fboMax );
 
 		}
 
-		framesSinceDraw++;
+		this.framesSinceDraw++;
 
 	},
 
@@ -129,7 +126,7 @@ var Game = {
 		gl.drawFBO( fbo, Element.shader );
 
 		gl.passTexture( Element.texture, Element.shader.textureUniform );
-		gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, Camera.getPMatrix() );
+		Element.updateMatrix( gl );
 
 	},
 

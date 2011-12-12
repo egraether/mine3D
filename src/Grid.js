@@ -359,7 +359,7 @@ var Grid = {
 	update : function() {
 
 		var elementInRay = this.elementInRay,
-			t, dt;
+			t, dt, pt;
 
 		if ( elementInRay ) {
 
@@ -406,15 +406,21 @@ var Grid = {
 
 		if ( this.started && !Game.gameover ) {
 
+			pt = this.playTime;
+
 			t = new Date().getTime();
 			dt = t - this.time;
 
 			dt = dt > 500 ? 100 : dt;
 
+			if ( pt % 1000 < ( pt + dt ) % 1000 ) {
+
+				Menu.setTime( pt + dt );
+
+			}
+
 			this.playTime += dt;
 			this.time = t;
-
-			Menu.setTime( this.playTime );
 
 			if ( ( Settings.mode === 'classic' && this.cubeCount === Settings.currentLevel.mines ) ||
 				( Settings.mode === 'sweep' && this.cubeCount === this.minesLeft ) ) {
