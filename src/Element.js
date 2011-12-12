@@ -434,14 +434,14 @@ Element.prototype = {
 
 	openNeighbors : function() {
 
-		var i = 0,
+		var i,
 			neighbors = this.neighbors;
 
-		do {
+		for ( i = 0; i < neighbors.length; i++ ) {
 
 			neighbors[i].openCube();
 
-		} while ( ++i < neighbors.length );
+		}
 
 	},
 

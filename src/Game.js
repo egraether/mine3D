@@ -180,7 +180,8 @@ var Game = {
 
 		if ( won ) {
 
-			if ( Stats.updateScores( name, Grid.playTime ) ) {
+			if ( Settings.currentLevel.name !== 'custom' && 
+				Stats.updateScores( name, Grid.playTime ) ) {
 
 				Menu.showScores( name );
 

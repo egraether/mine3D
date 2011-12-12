@@ -300,7 +300,14 @@ var Grid = {
 
 		if ( elementAmount - openElementIndices.length < mines ) {
 
-			throw 'more mines than left elements';
+			// throw 'more mines than left elements';
+
+			mines = this.minesLeft = Math.floor( ( elementAmount - openElementIndices.length ) * 0.9 );
+
+			console.log( mines );
+
+			Settings.currentLevel.mines = mines;
+			Menu.reset( 0, mines );
 
 		}
 

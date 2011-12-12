@@ -20,7 +20,7 @@ BSPNode.prototype = {
 		var frontElements,
 			backElements,
 			element,
-			pos;
+			pos, dir, dir2;
 
 		this.direction = direction;
 		this.numChildren = multipleOfTwo( elements.length );
@@ -85,10 +85,24 @@ BSPNode.prototype = {
 
 		direction = this.direction;
 
-		if ( ( this.numChildren === 4 && direction === this.front.direction ) ||
-			( this.numChildren === 8 && ( direction === this.front.direction || direction === this.front.front.direction ) ) ) {
+		if ( this.numChildren === 4 ) {
 
-			this.numChildren = 0;
+			if ( direction === this.front.direction ) {
+
+				this.numChildren = 0;
+
+			}
+
+		} else if ( this.numChildren === 8 ) {
+
+			dir = this.front.direction;
+			dir2 = this.front.front.direction;
+
+			if ( direction + dir + dir2 !== 3 || dir === dir2 ) {
+
+				this.numChildren = 0;
+
+			}
 
 		}
 

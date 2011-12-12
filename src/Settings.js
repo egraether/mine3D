@@ -43,6 +43,25 @@ var Settings = {
 		this.animations = Menu.animations;
 		this.recenter = Menu.recenter;
 
+	},
+
+	setCustom : function( x, y, z, m ) {
+
+		var custom = this.levels.custom;
+
+		x = clamp( x, 1, 50 );
+		y = clamp( y, 1, 50 );
+		z = clamp( z, 1, 50 );
+
+		m = clamp( m, 1, x * y * z );
+
+		vec3.assign( custom.dimensions, x, y, z );
+		custom.mines = m;
+
+		this.currentLevel = custom;
+
+		Game.start( true );
+
 	}
 
 };
