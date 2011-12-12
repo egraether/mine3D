@@ -2,7 +2,7 @@ var Face = {
 
 	draw : function( gl, shader, stateIndex ) {
 
-		var texOffset = (12 + ( stateIndex || 0 ) * 8) * 4;
+		var texOffset = (12 + ( stateIndex || 0 ) * 8 ) * 4;
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
 		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
@@ -15,7 +15,11 @@ var Face = {
 
 	initBuffers : function( gl ) {
 
-		var s = numberSize;
+		var s = numberSize,
+			stepX = 1 / 4,
+			stepY = 1 / 8,
+			i, j,
+			texCoords = [];
 
 		this.vertices = new Float32Array([
 
@@ -27,28 +31,25 @@ var Face = {
 		]);
 
 
-		function texCoordsFromRect( x, y, w, h ) {
+		function addTexCoords( x, y, w, h ) {
 
-			return [
-				x + w, 1 - y,
-				x, 1 - y,
-				x, 1 - (y + h),
-				x + w, 1 - (y + h)
-			];
+			texCoords.push(
+				x + w, y,
+				x, y,
+				x, y + h,
+				x + w, y + h
+			);
 
 		}
 
 
-		var stepX = 1 / 4,
-			stepY = 1 / 8,
-			i, j,
-			texCoords = texCoordsFromRect( 3 * stepX, 0, stepX, stepY );
+		addTexCoords( 3 * stepX, 0, stepX, stepY );
 
 		for ( i = 0; i < 3; i++ ) {
 
 			for ( j = 0; j < 3; j++ ) {
 
-				texCoords = texCoords.concat( texCoordsFromRect( j * stepX, i * stepY, stepX, stepY ) );
+				addTexCoords( j * stepX, i * stepY, stepX, stepY );
 
 			}
 
@@ -61,13 +62,13 @@ var Face = {
 
 			for ( j = 0; j < 6; j++ ) {
 
-				texCoords = texCoords.concat( texCoordsFromRect( j * stepX, i * stepY, stepX, stepY ) );
+				addTexCoords( j * stepX, i * stepY, stepX, stepY );
 
 			}
 
 		}
 
-		texCoords = texCoords.concat( texCoordsFromRect(  3 / 4, 0, 1 / 4, 1 / 8 ) );
+		addTexCoords(  3 / 4, 0, 1 / 4, 1 / 8 );
 
 		texCoords = new Float32Array( texCoords );
 
@@ -75,10 +76,10 @@ var Face = {
 		this.attributeBuffer = gl.createBuffer();
 
 		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, (12 + 29 * 8) * 4, gl.STATIC_DRAW );
+		gl.bufferData( gl.ARRAY_BUFFER, (this.vertices.length + texCoords.length) * 4, gl.STATIC_DRAW );
 
 		gl.bufferSubData( gl.ARRAY_BUFFER, 0, this.vertices );
-		gl.bufferSubData( gl.ARRAY_BUFFER, 12 * 4, texCoords );
+		gl.bufferSubData( gl.ARRAY_BUFFER, this.vertices.length * 4, texCoords );
 
 
 		this.indexBuffer = gl.createBuffer();

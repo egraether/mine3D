@@ -103,7 +103,6 @@ var WebGLUtilities = {
 		t.activeTexture( t["TEXTURE" + texture.ID] );
 		t.bindTexture( t.TEXTURE_2D, texture );
 
-		t.pixelStorei( t.UNPACK_FLIP_Y_WEBGL, true );
 		t.texImage2D( t.TEXTURE_2D, 0, t.RGBA, t.RGBA, t.UNSIGNED_BYTE, texture.image );
 
 		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, t.CLAMP_TO_EDGE );

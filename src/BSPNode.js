@@ -9,9 +9,7 @@ var BSPNode = function( parent ) {
 	this.direction = null; // 0 : "x", 1 : "y", 2 : "z"
 
 	this.untouched = true;
-	this.permaTouched = false;
-
-	this.numChildren = null;
+	this.numChildren = 0;
 
 };
 
@@ -142,34 +140,34 @@ BSPNode.prototype = {
 
 			if ( n === 2 ) {
 
-				Cube.drawDouble( gl, Element.shader, pos, camera, dir );
+				Cube.drawDouble( gl, pos, camera, dir );
 				return;
 
 			} else if ( n === 4 ) {
 
-				Cube.drawQuad( gl, Element.shader, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
+				Cube.drawQuad( gl, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
 				return;
 
 			} else if ( n === 8 ) {
 
-				Cube.drawOct( gl, Element.shader, pos, camera );
+				Cube.drawOct( gl, pos, camera );
 				return;
 
 			} else if ( fakeCubes ) {
 
 				if ( n === 16 ) {
 
-					Cube.drawHex( gl, Element.shader, dir, pos );
+					Cube.drawHex( gl, pos, dir );
 					return;
 
 				} else if ( n === 32 ) {
 
-					Cube.draw32( gl, Element.shader, dir, this.front.direction, pos );
+					Cube.draw32( gl, pos, ( ( dir + this.front.direction ) * 2 ) % 3 );
 					return;
 
 				} else if ( n === 64 ) {
 
-					Cube.draw64( gl, Element.shader, pos );
+					Cube.draw64( gl, pos );
 					return;
 
 				}
@@ -205,7 +203,7 @@ BSPNode.prototype = {
 				if ( this.parent ) {
 
 					this.parent.untouched = false;
-					this.parent.permaTouched = true;
+					this.parent.numChildren = 0;
 
 				}
 
@@ -222,7 +220,7 @@ BSPNode.prototype = {
 				if ( this.parent ) {
 
 					this.parent.untouched = false;
-					this.parent.permaTouched = true;
+					this.parent.numChildren = 0;
 
 				}
 
@@ -297,7 +295,7 @@ BSPNode.prototype = {
 
 	untouch : function() {
 
-		if ( !this.untouched && !this.permaTouched &&
+		if ( !this.untouched && this.numChildren &&
 			this.front.untouched && this.back.untouched ) {
 
 			this.untouched = true;

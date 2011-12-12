@@ -120,9 +120,10 @@ extend( Cube, {
 
 	},
 
-	drawMultiple : function( gl, shader, position, count, start ) {
+	drawMultiple : function( gl, position, count, start ) {
 
-		var matrix = gl.matrix;
+		var matrix = gl.matrix,
+			shader = Element.shader;
 
 		mat4.identity( matrix );
 		mat4.translate( matrix, position );
@@ -144,7 +145,7 @@ extend( Cube, {
 
 	},
 
-	drawDouble : function( gl, shader, position, camera, direction ) {
+	drawDouble : function( gl, position, camera, direction ) {
 
 		var vector = this.vector,
 			start;
@@ -154,7 +155,7 @@ extend( Cube, {
 			vec3.assign( vector, 1 );
 			vector[direction] = 2 + cubeSpacing;
 
-			this.drawMulti( gl, shader, position );
+			this.drawMulti( gl, position );
 
 		} else {
 
@@ -163,13 +164,13 @@ extend( Cube, {
 
 			start = 2 * direction + ( camera[direction] > vector[direction] ? 0 : 1 );
 
-			this.drawMultiple( gl, shader, vector, 2, start );
+			this.drawMultiple( gl, vector, 2, start );
 
 		}
 
 	},
 
-	drawQuad : function( gl, shader, position, camera, direction ) {
+	drawQuad : function( gl, position, camera, direction ) {
 
 		var vector = this.vector,
 			dir = ( direction + 1 ) % 3,
@@ -181,7 +182,7 @@ extend( Cube, {
 			vec3.assign( vector, 2 + cubeSpacing );
 			vector[direction] = 1;
 
-			this.drawMulti( gl, shader, position );
+			this.drawMulti( gl, position );
 
 		} else {
 
@@ -190,27 +191,27 @@ extend( Cube, {
 
 			vec3.add( vector, position );
 
-			start = direction === 0 ? 39 : ( direction === 1 ? 23 : 7 );
+			start = direction === 0 ? 26 : ( direction === 1 ? 16 : 6 );
 
 			if ( camera[dir] < vector[dir] ) {
 
-				start += 4;
+				start += 5;
 
 			}
 
 			if ( camera[dir2] < vector[dir2] ) {
 
-				start += 8;
+				start += 2;
 
 			}
 
-			this.drawMultiple( gl, shader, vector, 4, start );
+			this.drawMultiple( gl, vector, 4, start );
 
 		}
 
 	},
 
-	drawOct : function( gl, shader, position, camera ) {
+	drawOct : function( gl, position, camera ) {
 
 		var vector = this.vector,
 			start, i;
@@ -219,69 +220,69 @@ extend( Cube, {
 
 			vec3.assign( this.vector, 2 + cubeSpacing );
 
-			this.drawMulti( gl, shader, position );
+			this.drawMulti( gl, position );
 
 		} else {
 
 			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
 			vec3.add( vector, position );
 
-			start = 55;
+			start = 37;
 
 			if ( camera[0] < vector[0] ) {
 
-				start += 8;
+				start += 12;
 
 			}
 
 			if ( camera[1] < vector[1] ) {
 
-				start += 16;
+				start += 24;
 
 			}
 
 			if ( camera[2] < vector[2] ) {
 
-				start += 32;
+				start += 4;
 
 			}
 
-			this.drawMultiple( gl, shader, vector, 8, start );
+			this.drawMultiple( gl, vector, 8, start );
 
 		}
 
 	},
 
-	drawHex : function( gl, shader, direction, position ) {
+	drawHex : function( gl, position, direction ) {
 
 		vec3.assign( this.vector, 2 + cubeSpacing );
 		this.vector[direction] = 4 + 3 * cubeSpacing;
 
-		this.drawMulti( gl, shader, position );
+		this.drawMulti( gl, position );
 
 	},
 
-	draw32 : function( gl, shader, direction, direction2, position ) {
+	draw32 : function( gl, position, direction ) {
 
-		vec3.assign( this.vector, 2 + cubeSpacing );
-		this.vector[direction] = 4 + 3 * cubeSpacing;
-		this.vector[direction2] = 4 + 3 * cubeSpacing;
+		vec3.assign( this.vector, 4 + 3 * cubeSpacing );
+		this.vector[direction] = 2 + cubeSpacing;
 
-		this.drawMulti( gl, shader, position );
+		this.drawMulti( gl, position );
 
 	},
 
-	draw64 : function( gl, shader, position ) {
+	draw64 : function( gl, position ) {
 
 		vec3.assign( this.vector, 4 + 3 * cubeSpacing );
 
-		this.drawMulti( gl, shader, position );
+		this.drawMulti( gl, position );
 
 	},
 
-	drawMulti : function( gl, shader, position ) {
+	drawMulti : function( gl, position ) {
 
-		var matrix = gl.matrix;
+		var matrix = gl.matrix,
+			shader = Element.shader;
 
 		mat4.identity( matrix );
 		mat4.translate( matrix, position );
@@ -295,7 +296,40 @@ extend( Cube, {
 
 	initBuffers : function( gl ) {
 
-		var i, j, l,
+		var vertexArray = this.initVertices(),
+			texCoordsArray = this.initTexCoords(),
+			indexArray = this.initIndices(),
+			lineIndexArray = this.initLineIndices();
+
+		this.initNormals();
+
+		this.attributeBuffer = gl.createBuffer();
+
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+		gl.bufferData( gl.ARRAY_BUFFER, ( vertexArray.length + texCoordsArray.length ) * 4, gl.STATIC_DRAW );
+
+		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertexArray );
+		gl.bufferSubData( gl.ARRAY_BUFFER, vertexArray.length * 4, texCoordsArray );
+
+
+		this.indexBuffer = gl.createBuffer();
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indexArray, gl.STATIC_DRAW);
+
+
+		this.lineIndexBuffer = gl.createBuffer();
+
+		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
+		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, lineIndexArray, gl.STATIC_DRAW);
+
+	},
+
+	initVertices : function() {
+
+		var i, j, k,
+			vertexArray,
+			cubePositions,
 			s = 0.5,
 			vV = this.vertexVectors = [],
 			vertices = new Float32Array([
@@ -338,32 +372,38 @@ extend( Cube, {
 
 		]);
 
-		var vertexArray = new Float32Array( 72 * 8 );
 
-		function addCube( index, vector ) {
+		s = s * 2 + cubeSpacing;
 
-			var i;
+		cubePositions = [
+
+			[0, 0, 0],
+
+			[s, 0, 0],
+			[0, s, 0],
+			[s, s, 0],
+
+			[0, 0, s],
+			[s, 0, s],
+			[0, s, s],
+			[s, s, s],
+
+		];
+
+		vertexArray = new Float32Array( 72 * cubePositions.length );
+
+		for ( j = 0; j < cubePositions.length; j++ ) {
+
+			k = 72 * j;
 
 			for ( i = 0; i < 72; i++ ) {
 
-				vertexArray[index + i] = vertices[i] + vector[i % 3];
+				vertexArray[k + i] = vertices[i] + cubePositions[j][i % 3];
 
 			}
 
 		}
 
-		s = s * 2 + cubeSpacing;
-
-		addCube( 0, [0, 0, 0] );
-
-		addCube( 72 * 1, [s, 0, 0] );
-		addCube( 72 * 2, [0, s, 0] );
-		addCube( 72 * 3, [s, s, 0] );
-
-		addCube( 72 * 4, [0, 0, s] );
-		addCube( 72 * 5, [s, 0, s] );
-		addCube( 72 * 6, [0, s, s] );
-		addCube( 72 * 7, [s, s, s] );
 
 		for ( i = 0; i < 24; i++ ) {
 
@@ -378,50 +418,29 @@ extend( Cube, {
 
 		}
 
-		var nV = this.normalVectors = [],
+		return vertexArray;
+
+	},
+
+	initNormals : function() {
+
+		var i, j,
+			nV = this.normalVectors = [],
 			normals = new Float32Array([
 
-			// front
 			1, 0, 0,
-			1, 0, 0,
-			1, 0, 0,
-			1, 0, 0,
-
-			// right
 			0, 1, 0,
-			0, 1, 0,
-			0, 1, 0,
-			0, 1, 0,
-
-			// top
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
 			0, 0, 1,
 
-			// back
 			-1, 0, 0,
-			-1, 0, 0,
-			-1, 0, 0,
-			-1, 0, 0,
-
-			// left
 			0, -1, 0,
-			0, -1, 0,
-			0, -1, 0,
-			0, -1, 0,
-
-			// bottom
-			0, 0, -1,
-			0, 0, -1,
-			0, 0, -1,
 			0, 0, -1
 
 		]);
 
 		for ( i = 0; i < 6; i++ ) {
 
-			j = i * 12;
+			j = i * 3;
 
 			nV.push( vec3.assign(
 				vec3.create(), 
@@ -432,26 +451,26 @@ extend( Cube, {
 
 		}
 
+	},
 
-		function texCoordsFromRect( x, y, w, h, px, py ) {
-
-			return [
-				x - px + w, 1 - y - py,
-				x + px, 1 - y - py,
-				x + px, 1 - (y - py + h),
-				x - px + w, 1 - (y - py + h)
-			];
-
-		}
-
+	initTexCoords : function() {
 
 		var stepX = 1 / 4,
 			stepY = 1 / 8,
-			pixelX = 1 / 256,
-			pixelY = 1 / 512,
 			i, j, k,
 			texCoords = [],
 			texCoordsArray;
+
+		function addTexCoords( x, y, w, h ) {
+
+			texCoords.push(
+				x + w, y,
+				x, y,
+				x, y + h,
+				x + w, y + h
+			);
+
+		}
 
 		for ( i = 0; i < 4; i++ ) {
 
@@ -459,7 +478,7 @@ extend( Cube, {
 
 				for ( j = 5; j < 8; j++ ) {
 
-					texCoords = texCoords.concat( texCoordsFromRect( i * stepX, j * stepY, stepX, stepY, pixelX, pixelY ) );
+					addTexCoords( i * stepX, j * stepY, stepX, stepY );
 
 				}
 
@@ -485,8 +504,16 @@ extend( Cube, {
 
 		}
 
+		return texCoordsArray;
 
-		var singleIndices = [
+	},
+
+	initIndices : function() {
+
+		var i, j, k,
+			indexArray,
+			cubeList,
+			singleIndices = [
 
 			// front
 			0, 1, 2, 0, 2, 3,
@@ -508,84 +535,62 @@ extend( Cube, {
 
 		];
 
-		var lineIndices = new Uint16Array([
+
+		cubeList = [
+
+			// single
+			0,
+
+			// doubles
+			1, 0,
+			2, 0,
+			4, 0,
+
+			// quads
+			1, 2, 3, 0, 1,
+			0, 3, 2, 1, 0,
+
+			4, 1, 5, 0, 4,
+			0, 5, 1, 4, 0,
+
+			2, 4, 6, 0, 2,
+			0, 6, 4, 2, 0,
+
+			// octs
+			0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3,
+			1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2,
+			2, 3, 0, 1, 6, 7, 4, 5, 2, 3, 0, 1,
+			3, 2, 1, 0, 7, 6, 5, 4, 3, 2, 1, 0
+
+		];
+
+		indexArray = new Uint16Array( 36 * cubeList.length );
+
+		for ( j = 0; j < cubeList.length; j++ ) {
+
+			k = j * 36;
+
+			for ( i = 0; i < 36; i++ ) {
+
+				indexArray[k + i] = singleIndices[i] + 24 * cubeList[j];
+
+			}
+
+		}
+
+		return indexArray;
+
+	},
+
+	initLineIndices : function() {
+
+		return new Uint16Array([
 
 			0, 1, 3, 0, 0, 12, 1, 2, 2, 3,
 			12, 13, 13, 14, 14, 15, 15, 12,
 			1, 15, 2, 14, 3, 13
 
 		]);
-
-
-		var cubes = [
-
-			0,
-
-			1, 0,
-			2, 0,
-			4, 0,
-
-			0, 1, 2, 3,
-			1, 0, 3, 2,
-			2, 3, 0, 1,
-			3, 2, 1, 0,
-
-			0, 4, 1, 5,
-			4, 0, 5, 1,
-			1, 5, 0, 4,
-			5, 1, 4, 0,
-
-			0, 2, 4, 6,
-			2, 0, 6, 4,
-			4, 6, 0, 2,
-			6, 4, 2, 0,
-
-			0, 1, 2, 3, 4, 5, 6, 7,
-			1, 0, 3, 2, 5, 4, 7, 6,
-			2, 3, 0, 1, 6, 7, 4, 5,
-			3, 2, 1, 0, 7, 6, 5, 4,
-
-			4, 5, 6, 7, 0, 1, 2, 3,
-			5, 4, 7, 6, 1, 0, 3, 2,
-			6, 7, 4, 5, 2, 3, 0, 1,
-			7, 6, 5, 4, 3, 2, 1, 0
-
-		];
-
-		var indexArray = new Uint16Array( 36 * cubes.length );
-
-		for ( j = 0; j < cubes.length; j++ ) {
-
-			k = j * 36;
-
-			for ( i = 0; i < 36; i++ ) {
-
-				indexArray[k + i] = singleIndices[i] + 24 * cubes[j];
-
-			}
-
-		}
-
-
-		this.attributeBuffer = gl.createBuffer();
-
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
-		gl.bufferData( gl.ARRAY_BUFFER, ( vertexArray.length + texCoordsArray.length ) * 4, gl.STATIC_DRAW );
-
-		gl.bufferSubData( gl.ARRAY_BUFFER, 0, vertexArray );
-		gl.bufferSubData( gl.ARRAY_BUFFER, vertexArray.length * 4, texCoordsArray );
-
-
-		this.indexBuffer = gl.createBuffer();
-
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
-		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, indexArray, gl.STATIC_DRAW);
-
-
-		this.lineIndexBuffer = gl.createBuffer();
-
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
-		gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, lineIndices, gl.STATIC_DRAW);
 
 	}
 

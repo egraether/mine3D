@@ -127,7 +127,7 @@ Element.prototype = {
 
 			if ( useIcosahedron ) {
 
-				Mine.draw( gl, Element.shader );
+				Icosahedron.draw( gl, Element.shader );
 
 			} else {
 
@@ -546,7 +546,7 @@ extend( Element, {
 
 		Cube.initBuffers( gl );
 		Face.initBuffers( gl );
-		Mine.initBuffers( gl );
+		Icosahedron.initBuffers( gl );
 
 		this.updateMatrix( gl );
 

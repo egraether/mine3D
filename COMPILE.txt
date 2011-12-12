@@ -16,6 +16,7 @@
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Cube.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Face.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Icosahedron.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Element.js
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/BSPNode.js
