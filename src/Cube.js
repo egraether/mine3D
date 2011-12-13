@@ -101,20 +101,38 @@ extend( Cube, {
 
 		var texOffset = ( 72 * 8 + 48 * ( stateIndex || 0 ) ) * 4;
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+		if ( gl.lastDraw !== 'c' ) {
 
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
+			gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+
+			gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+
+			gl.lastTexOffset = -1;
+
+		}
+
+		if ( gl.lastTexOffset !== texOffset ) {
+
+			gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, texOffset );
+
+			gl.lastTexOffset = texOffset;
+
+		}
+
 
 		if ( drawLines ) {
 
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
 			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
 
+			gl.lastDraw = null;
+
 		} else {
 
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 			gl.drawElements( gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0 );
+
+			gl.lastDraw = 'c';
 
 		}
 
@@ -128,20 +146,29 @@ extend( Cube, {
 		mat4.identity( matrix );
 		mat4.translate( matrix, position );
 
-		// vec3.assign( this.vector, 0.9 );
-		// mat4.scale( matrix, this.vector );
-
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
 
-		// var texOffset = ( 72 * 8 + 48 * 4 ) * 4;
+		if ( gl.lastDraw !== 'c' ) {
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+			gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 3072 );
+			gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
 
-		gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+			gl.lastTexOffset = -1;
+
+		}
+
+		if ( gl.lastTexOffset !== 3072 ) {
+
+			gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 3072 );
+			gl.lastTexOffset = 3072;
+
+		}
+
 		gl.drawElements( gl.TRIANGLES, 36 * count, gl.UNSIGNED_SHORT, 72 * start );
+
+		gl.lastDraw = 'c';
 
 	},
 

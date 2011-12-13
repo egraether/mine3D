@@ -444,6 +444,8 @@ var Grid = {
 
 	draw : function( gl ) {
 
+		gl.lastDraw = null;
+
 		BSPTree.draw( gl, Camera.getPosition() );
 
 		this.redraw = false;

@@ -4,10 +4,15 @@ var Icosahedron = {
 
 		gl.enable( gl.DEPTH_TEST );
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+		if ( gl.lastDraw !== 'i' ) {
 
-		gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
-		gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
+			gl.bindBuffer( gl.ARRAY_BUFFER, this.attributeBuffer );
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
+
+			gl.vertexAttribPointer( shader.positionAttribute, 3, gl.FLOAT, false, 0, 0 );
+			gl.vertexAttribPointer( shader.texCoordAttribute, 2, gl.FLOAT, false, 0, 20 * 3 * 3 * 3 * 4 );
+
+		}
 
 		if ( drawLines ) {
 
@@ -16,10 +21,11 @@ var Icosahedron = {
 
 		} else {
 
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer );
 			gl.drawElements( gl.TRIANGLES, 180, gl.UNSIGNED_SHORT, 0 );
 
 		}
+
+		gl.lastDraw = 'i';
 
 		gl.disable( gl.DEPTH_TEST );
 
