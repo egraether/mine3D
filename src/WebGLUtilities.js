@@ -300,8 +300,17 @@ var WebGLUtilities = {
 		var t = this;
 
 		t.bindFramebuffer( t.FRAMEBUFFER, fbo );
-		t.clear( t.COLOR_BUFFER_BIT | t.DEPTH_BUFFER_BIT );
 		t.viewport( 0, 0, fbo.width, fbo.height );
+
+		if ( Game.gameover ) {
+
+			t.clear( t.COLOR_BUFFER_BIT | t.DEPTH_BUFFER_BIT );
+
+		} else {
+
+			t.clear( t.COLOR_BUFFER_BIT );
+
+		}
 
 	},
 

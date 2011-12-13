@@ -19,11 +19,11 @@ var BSPTree = {
 
 	},
 
-	draw : function( gl, position ) {
+	draw : function( gl, camera ) {
 
 		if ( this.root ) {
 
-			this.root.draw( gl, position );
+			this.root.draw( gl, camera );
 
 		}
 

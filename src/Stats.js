@@ -79,9 +79,17 @@ var Stats = {
 
 	saveSettings : function() {
 
+		var levelName = Settings.currentLevel.name;
+
+		if ( levelName === 'custom' ) {
+
+			levelName = 'easy';
+
+		}
+
 		this.storage.setItem( 'settings', true );
 
-		this.storage.setItem( 'level', Settings.currentLevel.name );
+		this.storage.setItem( 'level', levelName );
 		this.storage.setItem( 'mode', Settings.mode );
 
 		this.storage.setItem( 'animations', Settings.animations );

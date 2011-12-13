@@ -206,7 +206,7 @@ var EventHandler = {
 
 	onKeyUp : function( event ) {
 
-		// console.log( event.keyCode );
+		console.log( event.keyCode );
 
 		if ( this.isMouseKey( event.keyCode ) ) {
 
@@ -217,13 +217,21 @@ var EventHandler = {
 			Game.start();
 			Menu.hide();
 
-		} else if (event.keyCode === 27 /* ECS */ ) {
+		} else if ( event.keyCode === 27 /* ECS */ ) {
 
 			Menu.toggle( true );
 
-		} else if (event.keyCode === 82 /* R */ ) {
+		} else if ( event.keyCode === 82 /* R */ ) {
 
 			Camera.reset();
+
+		} else if ( event.keyCode === 73 /* I */ ) {
+
+			stats.toggle();
+
+		} else if ( event.keyCode === 79 /* O */ ) {
+
+			stats.switchMode();
 
 		}
 

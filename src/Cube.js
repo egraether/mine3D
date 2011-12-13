@@ -121,7 +121,7 @@ extend( Cube, {
 		}
 
 
-		if ( drawLines ) {
+		if ( gl.drawLines ) {
 
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
 			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
@@ -141,10 +141,10 @@ extend( Cube, {
 	drawMultiple : function( gl, position, count, start ) {
 
 		var matrix = gl.matrix,
-			shader = Element.shader;
+			shader = gl.Element.shader;
 
-		mat4.identity( matrix );
-		mat4.translate( matrix, position );
+		gl.mat4.identity( matrix );
+		gl.mat4.translate( matrix, position );
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
 
@@ -177,17 +177,17 @@ extend( Cube, {
 		var vector = this.vector,
 			start;
 
-		if ( fakeCubes ) {
+		if ( gl.fakeCubes ) {
 
-			vec3.assign( vector, 1 );
-			vector[direction] = 2 + cubeSpacing;
+			gl.vec3.assign( vector, 1 );
+			vector[direction] = 2 + gl.cubeSpacing;
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			vec3.set( position, vector );
-			vector[direction] -= 0.5 + cubeSpacing * 0.5;
+			gl.vec3.set( position, vector );
+			vector[direction] -= 0.5 + gl.cubeSpacing * 0.5;
 
 			start = 2 * direction + ( camera[direction] > vector[direction] ? 0 : 1 );
 
@@ -204,19 +204,19 @@ extend( Cube, {
 			dir2 = ( direction + 2 ) % 3,
 			start;
 
-		if ( fakeCubes ) {
+		if ( gl.fakeCubes ) {
 
-			vec3.assign( vector, 2 + cubeSpacing );
+			gl.vec3.assign( vector, 2 + gl.cubeSpacing );
 			vector[direction] = 1;
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
+			gl.vec3.assign( vector, - 0.5 - gl.cubeSpacing * 0.5 );
 			vector[direction] = 0;
 
-			vec3.add( vector, position );
+			gl.vec3.add( vector, position );
 
 			start = direction === 0 ? 26 : ( direction === 1 ? 16 : 6 );
 
@@ -243,16 +243,16 @@ extend( Cube, {
 		var vector = this.vector,
 			start, i;
 
-		if ( fakeCubes ) {
+		if ( gl.fakeCubes ) {
 
-			vec3.assign( this.vector, 2 + cubeSpacing );
+			gl.vec3.assign( this.vector, 2 + gl.cubeSpacing );
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
-			vec3.add( vector, position );
+			gl.vec3.assign( vector, - 0.5 - gl.cubeSpacing * 0.5 );
+			gl.vec3.add( vector, position );
 
 			start = 37;
 

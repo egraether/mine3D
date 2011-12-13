@@ -93,7 +93,15 @@ var Game = {
 
 			} else {
 
-				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+				if ( this.gameover ) {
+
+					gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+				} else {
+
+					gl.clear( gl.COLOR_BUFFER_BIT );
+
+				}
 
 				Grid.draw( gl );
 
@@ -117,7 +125,15 @@ var Game = {
 
 	drawWithFBO : function( gl, fbo ) {
 
-		gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+		if ( this.gameover ) {
+
+			gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+		} else {
+
+			gl.clear( gl.COLOR_BUFFER_BIT );
+
+		}
 
 		gl.bindFBO( fbo );
 

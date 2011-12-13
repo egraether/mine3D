@@ -302,11 +302,9 @@ var Grid = {
 
 			// throw 'more mines than left elements';
 
-			mines = this.minesLeft = Math.floor( ( elementAmount - openElementIndices.length ) * 0.9 );
+			mines = Math.floor( ( elementAmount - openElementIndices.length ) * 0.9 );
 
-			console.log( mines );
-
-			Settings.currentLevel.mines = mines;
+			Settings.currentLevel.mines = this.minesLeft = mines;
 			Menu.reset( 0, mines );
 
 		}
@@ -506,6 +504,12 @@ var Grid = {
 	setElementInRay : function( element ) {
 
 		var elementInRay = this.elementInRay;
+
+		if ( elementInRay && element && elementInRay.index === element.index ) {
+
+			return;
+
+		}
 
 		if ( elementInRay ) {
 

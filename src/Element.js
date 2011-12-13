@@ -66,15 +66,17 @@ Element.prototype = {
 
 	draw : function( gl ) {
 
-		gl.uniformMatrix4fv( Element.shader.mvMatrixUniform, false, this.matrix );
+		var shader = gl.Element.shader;
+
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
 
 		if ( this.untouched ) {
 
-			Cube.draw( gl, Element.shader, 0 );
+			gl.Cube.draw( gl, shader, 0 );
 
 		} else if ( this.state === 'number' && !this.rotation ) {
 
-			Face.draw( gl, Element.shader, this.value );
+			gl.Face.draw( gl, shader, this.value );
 
 		} else {
 
@@ -91,8 +93,10 @@ Element.prototype = {
 			position = this.position,
 			value = this.value,
 			matrix = gl.matrix,
-			matrixUniform = Element.shader.mvMatrixUniform,
-			right = Camera.getRight();
+			shader = gl.Element.shader,
+			matrixUniform = shader.mvMatrixUniform,
+			right = gl.Camera.getRight(),
+			mat4 = gl.mat4;
 			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
 			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
 
@@ -119,25 +123,25 @@ Element.prototype = {
 
 			if ( value ) {
 
-				Face.draw( gl, Element.shader, value );
+				gl.Face.draw( gl, shader, value );
 
 			}
 
 		} else if ( state === 'open' && this.isMine ) {
 
-			if ( useIcosahedron ) {
+			if ( gl.useIcosahedron ) {
 
-				Icosahedron.draw( gl, Element.shader );
+				gl.Icosahedron.draw( gl, shader );
 
 			} else {
 
 				mat4.identity( matrix );
 				mat4.translate( matrix, position );
 
-				mat4.scale( matrix, vec3.assign( Cube.vector, mineSize / numberSize ) );
+				mat4.scale( matrix, gl.vec3.assign( gl.Cube.vector, gl.mineSize / gl.numberSize ) );
 				gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
-				Face.draw( gl, Element.shader, value );
+				gl.Face.draw( gl, shader, value );
 
 			}
 
@@ -148,7 +152,7 @@ Element.prototype = {
 		} else {
 
 			var flag = state === 'flag',
-				alphaUniform = Element.shader.alphaUniform,
+				alphaUniform = shader.alphaUniform,
 				stateIndex = flag ? 1 : 0;
 
 			if ( this.scale !== 1 ) {
@@ -156,12 +160,12 @@ Element.prototype = {
 				mat4.identity( matrix );
 				mat4.translate( matrix, position );
 
-				mat4.scale( matrix, vec3.assign( Cube.vector, this.scale ) );
+				mat4.scale( matrix, gl.vec3.assign( gl.Cube.vector, this.scale ) );
 				gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
 			}
 
-			if ( Game.gameover && flag ) {
+			if ( gl.Game.gameover && flag ) {
 
 				stateIndex = this.isMine ? 3 : 2;
 
@@ -169,15 +173,15 @@ Element.prototype = {
 
 			if ( this.highlight ) {
 
-				gl.uniform1f( alphaUniform, mouseOverAlpha );
+				gl.uniform1f( alphaUniform, gl.mouseOverAlpha );
 
-				Cube.draw( gl, Element.shader, stateIndex );
+				gl.Cube.draw( gl, shader, stateIndex );
 
-				gl.uniform1f( alphaUniform, standardAlpha );
+				gl.uniform1f( alphaUniform, gl.standardAlpha );
 
 			} else {
 
-				Cube.draw( gl, Element.shader, stateIndex );
+				gl.Cube.draw( gl, shader, stateIndex );
 
 			}
 
@@ -568,7 +572,7 @@ extend( Element, {
 	initShader : function( gl ) {
 
 		var shader = gl.loadShader( "vertex-shader", "fragment-shader" );
-		gl.useProgram(shader);
+		gl.useProgram( shader );
 
 		shader.mvMatrixUniform = gl.getUniformLocation( shader, "uMVMatrix" );
 		shader.pMatrixUniform = gl.getUniformLocation( shader, "uPMatrix" );
