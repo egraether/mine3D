@@ -12,7 +12,7 @@ function init( gl ) {
 	gl.enable( gl.CULL_FACE );
 	// gl.enable( gl.DEPTH_TEST );
 
-	gl.lineWidth( 2 );
+	gl.lineWidth( 3 );
 
 	gl.enableAlpha();
 
@@ -97,7 +97,10 @@ function start() {
 	container.appendChild( stats.domElement );
 
 
+	applyURLParams();
+
 	extend( gl, WebGLUtilities );
+
 
 	init( gl );
 

@@ -157,7 +157,7 @@ BSPNode.prototype = {
 			pos = this.position,
 			dir = this.direction;
 
-		if ( useMultiCubes && n && this.untouched ) {
+		if ( multiCubes && n && this.untouched ) {
 
 			if ( n === 2 ) {
 

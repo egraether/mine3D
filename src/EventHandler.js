@@ -206,7 +206,7 @@ var EventHandler = {
 
 	onKeyUp : function( event ) {
 
-		console.log( event.keyCode );
+		// console.log( event.keyCode );
 
 		if ( this.isMouseKey( event.keyCode ) ) {
 

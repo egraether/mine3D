@@ -121,7 +121,7 @@ extend( Cube, {
 		}
 
 
-		if ( gl.drawLines ) {
+		if ( drawLines ) {
 
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
 			gl.drawElements( gl.LINES, 24, gl.UNSIGNED_SHORT, 0 );
@@ -498,7 +498,7 @@ extend( Cube, {
 			// );
 
 			x += w / 2;
-			y += h / 2;
+			y += h * 2 / 3;
 
 			texCoords.push(
 				x, y,

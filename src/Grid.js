@@ -3,8 +3,6 @@ var Grid = {
 	elements : [],
 	cubeCount : 0,
 
-	spacing : cubeSpacing,
-
 	minesLeft : 0,
 	minesSet : false,
 
@@ -90,7 +88,7 @@ var Grid = {
 			rightBorder, leftBorder,
 			frontBorder, backBorder,
 			k, j, i,
-			spacing = this.spacing,
+			spacing = cubeSpacing,
 			position = vec3.create(),
 			dim = Settings.currentLevel.dimensions;
 	

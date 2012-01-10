@@ -54,11 +54,11 @@ function multipleOfTwo( x ) {
 
 };
 
-function getURLParams( ) {
+function getURLParams() {
 
 	var params = {},
 		floatRegex = /^[-+]?\d*\.?\d+$/,
-		results = window.location.href.match( /[^?&#]*=[^&#]*/g ),
+		results = window.location.href.match( /[^?&#]*=[^&#]*/g ) || [],
 		a, i;
 
 	for ( i = 0; i < results.length; i++ ) {
@@ -71,7 +71,25 @@ function getURLParams( ) {
 
 	return params;
 
-}
+};
+
+function applyURLParams( scope ) {
+
+	var params = getURLParams();
+
+	scope = scope || window;
+
+	for ( var key in params ) {
+
+		if ( params.hasOwnProperty( key ) && scope.hasOwnProperty( key ) ) {
+
+			scope[key] = params[key];
+
+		}
+
+	}
+
+};
 
 vec3.assign = function( dest, x, y, z ) {
 

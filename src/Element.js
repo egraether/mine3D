@@ -176,7 +176,7 @@ Element.prototype = {
 
 				Cube.draw( gl, shader, stateIndex );
 
-				gl.uniform1f( alphaUniform, standardAlpha );
+				gl.uniform1f( alphaUniform, cubeAlpha );
 
 			} else {
 
@@ -553,7 +553,7 @@ extend( Element, {
 
 		this.updateMatrix( gl );
 
-		gl.uniform1f( this.shader.alphaUniform, standardAlpha );
+		gl.uniform1f( this.shader.alphaUniform, cubeAlpha );
 
 	},
 

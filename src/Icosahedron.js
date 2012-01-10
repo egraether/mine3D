@@ -14,7 +14,7 @@ var Icosahedron = {
 
 		}
 
-		if ( gl.drawLines ) {
+		if ( drawLines ) {
 
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.lineIndexBuffer );
 			gl.drawElements( gl.LINES, 360, gl.UNSIGNED_SHORT, 0 );
