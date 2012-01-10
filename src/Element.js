@@ -66,17 +66,17 @@ Element.prototype = {
 
 	draw : function( gl ) {
 
-		var shader = gl.Element.shader;
+		var shader = Element.shader;
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
 
 		if ( this.untouched ) {
 
-			gl.Cube.draw( gl, shader, 0 );
+			Cube.draw( gl, shader, 0 );
 
 		} else if ( this.state === 'number' && !this.rotation ) {
 
-			gl.Face.draw( gl, shader, this.value );
+			Face.draw( gl, shader, this.value );
 
 		} else {
 
@@ -93,10 +93,9 @@ Element.prototype = {
 			position = this.position,
 			value = this.value,
 			matrix = gl.matrix,
-			shader = gl.Element.shader,
+			shader = Element.shader,
 			matrixUniform = shader.mvMatrixUniform,
-			right = gl.Camera.getRight(),
-			mat4 = gl.mat4;
+			right = Camera.getRight();
 			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
 			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
 
@@ -123,25 +122,25 @@ Element.prototype = {
 
 			if ( value ) {
 
-				gl.Face.draw( gl, shader, value );
+				Face.draw( gl, shader, value );
 
 			}
 
 		} else if ( state === 'open' && this.isMine ) {
 
-			if ( gl.useIcosahedron ) {
+			if ( useIcosahedron ) {
 
-				gl.Icosahedron.draw( gl, shader );
+				Icosahedron.draw( gl, shader );
 
 			} else {
 
 				mat4.identity( matrix );
 				mat4.translate( matrix, position );
 
-				mat4.scale( matrix, gl.vec3.assign( gl.Cube.vector, gl.mineSize / gl.numberSize ) );
+				mat4.scale( matrix, vec3.assign( Cube.vector, mineSize / numberSize ) );
 				gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
-				gl.Face.draw( gl, shader, value );
+				Face.draw( gl, shader, value );
 
 			}
 
@@ -160,12 +159,12 @@ Element.prototype = {
 				mat4.identity( matrix );
 				mat4.translate( matrix, position );
 
-				mat4.scale( matrix, gl.vec3.assign( gl.Cube.vector, this.scale ) );
+				mat4.scale( matrix, vec3.assign( Cube.vector, this.scale ) );
 				gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
 			}
 
-			if ( gl.Game.gameover && flag ) {
+			if ( Game.gameover && flag ) {
 
 				stateIndex = this.isMine ? 3 : 2;
 
@@ -173,15 +172,15 @@ Element.prototype = {
 
 			if ( this.highlight ) {
 
-				gl.uniform1f( alphaUniform, gl.mouseOverAlpha );
+				gl.uniform1f( alphaUniform, mouseOverAlpha );
 
-				gl.Cube.draw( gl, shader, stateIndex );
+				Cube.draw( gl, shader, stateIndex );
 
-				gl.uniform1f( alphaUniform, gl.standardAlpha );
+				gl.uniform1f( alphaUniform, standardAlpha );
 
 			} else {
 
-				gl.Cube.draw( gl, shader, stateIndex );
+				Cube.draw( gl, shader, stateIndex );
 
 			}
 

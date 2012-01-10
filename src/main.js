@@ -7,8 +7,6 @@ function init( gl ) {
 
 	setViewport();
 
-	setReferences();
-
 	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 
 	gl.enable( gl.CULL_FACE );
@@ -36,36 +34,6 @@ function setViewport() {
 	// height = canvas.clientHeight;
 
 	gl.viewport( 0, 0, canvas.width, canvas.height );
-
-}
-
-function setReferences() {
-
-	gl.cubeSpacing = cubeSpacing;
-
-	gl.numberSize = numberSize;
-	gl.mineSize = mineSize;
-
-	gl.standardAlpha = standardAlpha;
-	gl.mouseOverAlpha = mouseOverAlpha;
-
-	gl.drawLines = drawLines;
-	gl.useMultiCubes = useMultiCubes;
-	gl.fakeCubes = fakeCubes;
-	gl.useIcosahedron = useIcosahedron;
-
-	gl.Camera = Camera;
-	gl.Element = Element;
-
-	gl.Cube = Cube;
-	gl.Face = Face;
-	gl.Icosahedron = Icosahedron;
-
-	gl.Game = Game;
-	gl.Grid = Grid;
-
-	gl.vec3 = vec3;
-	gl.mat4 = mat4;
 
 }
 

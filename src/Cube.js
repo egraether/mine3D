@@ -141,10 +141,10 @@ extend( Cube, {
 	drawMultiple : function( gl, position, count, start ) {
 
 		var matrix = gl.matrix,
-			shader = gl.Element.shader;
+			shader = Element.shader;
 
-		gl.mat4.identity( matrix );
-		gl.mat4.translate( matrix, position );
+		mat4.identity( matrix );
+		mat4.translate( matrix, position );
 
 		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
 
@@ -177,17 +177,17 @@ extend( Cube, {
 		var vector = this.vector,
 			start;
 
-		if ( gl.fakeCubes ) {
+		if ( fakeCubes ) {
 
-			gl.vec3.assign( vector, 1 );
-			vector[direction] = 2 + gl.cubeSpacing;
+			vec3.assign( vector, 1 );
+			vector[direction] = 2 + cubeSpacing;
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			gl.vec3.set( position, vector );
-			vector[direction] -= 0.5 + gl.cubeSpacing * 0.5;
+			vec3.set( position, vector );
+			vector[direction] -= 0.5 + cubeSpacing * 0.5;
 
 			start = 2 * direction + ( camera[direction] > vector[direction] ? 0 : 1 );
 
@@ -204,19 +204,19 @@ extend( Cube, {
 			dir2 = ( direction + 2 ) % 3,
 			start;
 
-		if ( gl.fakeCubes ) {
+		if ( fakeCubes ) {
 
-			gl.vec3.assign( vector, 2 + gl.cubeSpacing );
+			vec3.assign( vector, 2 + cubeSpacing );
 			vector[direction] = 1;
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			gl.vec3.assign( vector, - 0.5 - gl.cubeSpacing * 0.5 );
+			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
 			vector[direction] = 0;
 
-			gl.vec3.add( vector, position );
+			vec3.add( vector, position );
 
 			start = direction === 0 ? 26 : ( direction === 1 ? 16 : 6 );
 
@@ -243,16 +243,16 @@ extend( Cube, {
 		var vector = this.vector,
 			start, i;
 
-		if ( gl.fakeCubes ) {
+		if ( fakeCubes ) {
 
-			gl.vec3.assign( this.vector, 2 + gl.cubeSpacing );
+			vec3.assign( this.vector, 2 + cubeSpacing );
 
 			this.drawMulti( gl, position );
 
 		} else {
 
-			gl.vec3.assign( vector, - 0.5 - gl.cubeSpacing * 0.5 );
-			gl.vec3.add( vector, position );
+			vec3.assign( vector, - 0.5 - cubeSpacing * 0.5 );
+			vec3.add( vector, position );
 
 			start = 37;
 
@@ -490,11 +490,21 @@ extend( Cube, {
 
 		function addTexCoords( x, y, w, h ) {
 
+			// texCoords.push(
+			// 	x + w, y,
+			// 	x, y,
+			// 	x, y + h,
+			// 	x + w, y + h
+			// );
+
+			x += w / 2;
+			y += h / 2;
+
 			texCoords.push(
-				x + w, y,
 				x, y,
-				x, y + h,
-				x + w, y + h
+				x, y,
+				x, y,
+				x, y
 			);
 
 		}

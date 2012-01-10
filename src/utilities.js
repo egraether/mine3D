@@ -54,6 +54,25 @@ function multipleOfTwo( x ) {
 
 };
 
+function getURLParams( ) {
+
+	var params = {},
+		floatRegex = /^[-+]?\d*\.?\d+$/,
+		results = window.location.href.match( /[^?&#]*=[^&#]*/g ),
+		a, i;
+
+	for ( i = 0; i < results.length; i++ ) {
+
+		a = results[i].split('=');
+
+		params[a[0]] = floatRegex.test( a[1] ) ? parseFloat( a[1] ) : a[1];
+
+	}
+
+	return params;
+
+}
+
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x;

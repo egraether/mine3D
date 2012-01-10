@@ -157,33 +157,33 @@ BSPNode.prototype = {
 			pos = this.position,
 			dir = this.direction;
 
-		if ( gl.useMultiCubes && n && this.untouched ) {
+		if ( useMultiCubes && n && this.untouched ) {
 
 			if ( n === 2 ) {
 
-				gl.Cube.drawDouble( gl, pos, camera, dir );
+				Cube.drawDouble( gl, pos, camera, dir );
 
 			} else if ( n === 4 ) {
 
-				gl.Cube.drawQuad( gl, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
+				Cube.drawQuad( gl, pos, camera, ( ( dir + this.front.direction ) * 2 ) % 3 );
 
 			} else if ( n === 8 ) {
 
-				gl.Cube.drawOct( gl, pos, camera );
+				Cube.drawOct( gl, pos, camera );
 
-			} else if ( gl.fakeCubes ) {
+			} else if ( fakeCubes ) {
 
 				if ( n === 16 ) {
 
-					gl.Cube.drawHex( gl, pos, dir );
+					Cube.drawHex( gl, pos, dir );
 
 				} else if ( n === 32 ) {
 
-					gl.Cube.draw32( gl, pos, ( ( dir + this.front.direction ) * 2 ) % 3 );
+					Cube.draw32( gl, pos, ( ( dir + this.front.direction ) * 2 ) % 3 );
 
 				} else {
 
-					gl.Cube.draw64( gl, pos );
+					Cube.draw64( gl, pos );
 
 				}
 
