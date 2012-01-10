@@ -23,9 +23,24 @@ var Settings = {
 	animations : true,
 	recenter : true,
 
+
 	init : function() {
 
-		this.currentLevel = this.levels.easy;
+		// optinally defined in the URL as "d=1,2,3,4"
+
+		var p = parseFloat;
+
+		if ( window.d ) { 
+
+			d = d.split(',');
+
+			this.setCustom( p( d[0] ), p( d[1] ), p( d[2] ), p( d[3] ) );
+
+		} else if ( !this.currentLevel ) {
+
+			this.currentLevel = this.levels.easy;
+
+		}
 
 	},
 
@@ -60,7 +75,7 @@ var Settings = {
 
 		this.currentLevel = custom;
 
-		Game.start( true );
+		// Game.start( true );
 
 	}
 

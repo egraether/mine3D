@@ -75,7 +75,8 @@ var Camera = new ( function() {
 			isRecentering = false;
 			return true;
 
-		} else if ( !updateView && this.recenter && Settings.recenter ) {
+		} else if ( !updateView && this.recenter && 
+			Settings.recenter && EventHandler.state === 'up' ) {
 
 			return this.recenterView( Settings.animations );
 

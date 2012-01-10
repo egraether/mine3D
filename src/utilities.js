@@ -26,7 +26,7 @@ function extend( destination, source ) {
 
 function clamp( x, a, b ) {
 
-	return x < a ? a : x > b ? b : x;
+	return x ? x < a ? a : x > b ? b : x : a;
 
 };
 
@@ -81,7 +81,7 @@ function applyURLParams( scope ) {
 
 	for ( var key in params ) {
 
-		if ( params.hasOwnProperty( key ) && scope.hasOwnProperty( key ) ) {
+		if ( params.hasOwnProperty( key ) ) { // && scope.hasOwnProperty( key ) ) {
 
 			scope[key] = params[key];
 
@@ -93,7 +93,7 @@ function applyURLParams( scope ) {
 
 vec3.assign = function( dest, x, y, z ) {
 
-	dest[0] = x;
+	dest[0] = x = typeof x === 'number' ? x : 0;
 	dest[1] = typeof y === 'number' ? y : x;
 	dest[2] = typeof z === 'number' ? z : x;
 

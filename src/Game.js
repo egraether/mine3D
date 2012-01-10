@@ -9,10 +9,10 @@ var Game = {
 
 	init : function( gl ) {
 
-		Settings.init();
-
 		Stats.init();
 		Stats.loadSettings();
+
+		Settings.init();
 
 		Menu.init();
 
