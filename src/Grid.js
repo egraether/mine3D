@@ -31,11 +31,25 @@ var Grid = {
 
 	reset : function() {
 
+		var i, center = Cube.vector;
+
+		TWEEN.removeAll();
+
 		BSPTree.createPartition( this.elements.concat() );
 
 		this.elementList = this.elements.concat();
 
 		this.cubeCount = this.elements.length;
+
+		BSPTree.getCenterAndVisionSize( center );
+
+		vec3.set( this.elements[Math.floor( Math.random() * this.cubeCount )].position, center );
+
+		for ( i = 0; i < this.elements.length; i++ ) {
+
+			this.elements[i].reset( center );
+
+		}
 
 		this.redraw = true;
 
@@ -54,13 +68,13 @@ var Grid = {
 
 	start : function() {
 
-		var i;
-
-		for ( i = 0; i < this.elements.length; i++ ) {
-
-			this.elements[i].reset();
-
-		}
+		// var i;
+		// 
+		// for ( i = 0; i < this.elements.length; i++ ) {
+		// 
+		// 	this.elements[i].reset();
+		// 
+		// }
 
 		this.reset();
 
@@ -339,21 +353,14 @@ var Grid = {
 
 	},
 
-	showMines : function() {
+	showMines : function( won, element ) {
 
 		var i,
-			element,
 			elements = this.elementList;
 
 		for ( i = 0; i < elements.length; i++ ) {
 
-			element = elements[i];
-
-			if ( (element.state === 'cube' || element.state === 'flag') && element.isMine ) {
-
-				element.showMine();
-
-			}
+			elements[i].showMine( won, element );
 
 		}
 
@@ -549,6 +556,12 @@ var Grid = {
 		}
 
 		this.elementList.splice( index, 1 );
+
+	},
+
+	forceRedraw : function() {
+
+		Grid.redraw = true;
 
 	}
 

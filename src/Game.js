@@ -46,7 +46,7 @@ var Game = {
 
 				TWEEN.completeAll();
 
-				// Grid.leftClicked = Grid.rightClicked = false;
+				Grid.leftClicked = Grid.rightClicked = false;
 
 			} else {
 
@@ -150,8 +150,6 @@ var Game = {
 
 		this.gameover = false;
 
-		TWEEN.removeAll();
-
 		Camera.reset();
 
 	},
@@ -184,7 +182,7 @@ var Game = {
 
 	},
 
-	over : function( won ) {
+	over : function( won, element ) {
 
 		var name = Settings.getKey();
 
@@ -192,7 +190,7 @@ var Game = {
 
 		this.gameover = true;
 
-		Grid.showMines();
+		Grid.showMines( won, element );
 
 		if ( won ) {
 

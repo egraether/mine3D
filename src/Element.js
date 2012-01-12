@@ -15,18 +15,52 @@ var Element = function( index, position ) {
 
 Element.prototype = {
 
-	reset : function() {
+	reset : function( center ) {
 
 		this.maxValue = 0;
 		this.isMine = false;
 
-		this.restart();
+		this.untouched = true;
+		this.animated = false;
+
+		if ( Settings.animations ) {
+
+			vec3.zero( Element.vector );
+
+			if ( center ) {
+
+				vec3.subtract( center, this.position, Element.vector );
+
+			}
+
+			this.scale = 0;
+			this.changeState( 'animating', false );
+
+			tween = new TWEEN.Tween( this );
+
+			tween.to( { scale : 1 }, 200 );
+
+			tween.easing( TWEEN.Easing.Back.EaseOut );
+
+			tween.delay( vec3.length( Element.vector ) * ( 70 + Math.random() * 30 ) );
+
+			tween.onUpdate( Grid.forceRedraw );
+
+			tween.onComplete( this.restart );
+
+			tween.start();
+
+		} else {
+
+			this.restart();
+
+		}
 
 	},
 
 	restart : function() {
 
-		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'open', 'opening' ]
+		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'open', 'opening', 'animating' ]
 
 		this.value = this.maxValue;
 
@@ -35,11 +69,12 @@ Element.prototype = {
 
 	},
 
-	changeState : function( state, highlight ) {
+	changeState : function( state, highlight, animated ) {
 
-		var untouched = ( state === 'cube' && !highlight );
+		var untouched = ( state === 'cube' && !highlight && !animated );
 
 		this.highlight = highlight;
+		this.animated = animated;
 		this.state = state;
 
 		if ( this.untouched !== untouched ) {
@@ -68,7 +103,17 @@ Element.prototype = {
 
 		var shader = Element.shader;
 
-		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
+		if ( this.animated ) {
+
+			mat4.identity( gl.matrix );
+			mat4.translate( gl.matrix, this.position );
+			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
+
+		} else {
+
+			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
+
+		}
 
 		if ( this.untouched ) {
 
@@ -257,15 +302,83 @@ Element.prototype = {
 
 	},
 
-	showMine : function() {
+	showMine : function( won, element ) {
 
-		if ( this.state !== 'flag' ) {
+		var vec,
+			self = this;
 
-			this.changeState( 'open', this.highlight );
+		if ( Settings.animations && !won && this.index !== element.index ) {
+
+			vec = vec3.create();
+			vec3.subtract( this.position, element.position, vec );
+
+			tween = new TWEEN.Tween( this );
+			tween.to( null, 0 );
+
+			tween.delay( vec3.length( vec ) * 100 );
+
+			vec3.normalize( vec );
+			vec3.scale( vec, 0.5 * ( element.isMine ? 1 : -1 ) );
+
+			tween.onComplete( function() {
+
+				self.showMineNow();
+
+				self.changeState( self.state, self.highlight, true );
+
+				self.moveTo( vec, 150, function() {
+
+					self.moveTo( vec3.scale( vec, -1 ), 200, function() {
+
+						self.changeState( self.state, self.highlight );
+
+					});
+
+				});
+
+			});
+
+			tween.start();
+
+		} else {
+
+			this.showMineNow();
 
 		}
 
-		this.value = 28;
+	},
+
+	showMineNow : function() {
+
+		if ( ( this.state === 'cube' ) && this.isMine ) {
+
+			this.changeState( 'open', this.highlight );
+
+			this.value = 28;
+
+		}
+
+	},
+
+	moveTo : function( position, time, onComplete ) {
+
+		var pos = this.position;
+
+		tween = new TWEEN.Tween( pos );
+
+		tween.to( { 
+			0 : pos[0] + position[0],
+			1 : pos[1] + position[1],
+			2 : pos[2] + position[2]
+		}, time );
+
+		tween.easing( TWEEN.Easing.Quartic.EaseOut );
+
+		tween.onUpdate( Grid.forceRedraw );
+
+		tween.onComplete( onComplete );
+
+		tween.start();
 
 	},
 
@@ -281,20 +394,11 @@ Element.prototype = {
 
 				tween = new TWEEN.Tween( this );
 
-				tween.to( { scale : 0 }, 150 );
+				tween.to( { scale : 0 }, Math.random() * 150 + 100 );
 
-				tween.onUpdate( function () {
+				tween.onUpdate( Grid.forceRedraw );
 
-					Grid.redraw = true;
-
-				});
-
-				tween.onComplete( function() {
-
-					this.scale = 1;
-					this.openCubeNow();
-
-				});
+				tween.onComplete( this.openCubeNow );
 
 				tween.start();
 
@@ -310,12 +414,14 @@ Element.prototype = {
 
 	openCubeNow : function() {
 
+		this.scale = 1;
+
 		if ( this.state === 'opening' ) {
 
 			if ( this.isMine ) {
 
 				this.changeState( 'cube', this.highlight );
-				return Game.over();
+				Game.over( false, this );
 
 			} else {
 
@@ -376,11 +482,7 @@ Element.prototype = {
 
 				tween.to( { scale : 0 }, 200 );
 
-				tween.onUpdate( function () {
-
-					Grid.redraw = true;
-
-				});
+				tween.onUpdate( Grid.forceRedraw );
 
 				tween.onComplete( function() {
 
@@ -410,9 +512,9 @@ Element.prototype = {
 
 		if ( this.state === 'opening' ) {
 
-			if ( this.isMine ) {
+			this.open();
 
-				this.open();
+			if ( this.isMine ) {
 
 				neighbors = this.neighbors;
 
@@ -427,8 +529,7 @@ Element.prototype = {
 
 			} else {
 
-				this.changeState( 'cube', this.highlight );
-				Game.over();
+				Game.over( false, this );
 
 			}
 
@@ -541,6 +642,8 @@ Element.prototype = {
 };
 
 extend( Element, {
+
+	vector : vec3.create(),
 
 	init : function( gl ) {
 
