@@ -490,22 +490,22 @@ extend( Cube, {
 
 		function addTexCoords( x, y, w, h ) {
 
-			// texCoords.push(
-			// 	x + w, y,
-			// 	x, y,
-			// 	x, y + h,
-			// 	x + w, y + h
-			// );
-
-			x += w / 2;
-			y += h * 2 / 3;
-
 			texCoords.push(
+				x + w, y,
 				x, y,
-				x, y,
-				x, y,
-				x, y
+				x, y + h,
+				x + w, y + h
 			);
+
+			// x += w / 2;
+			// y += h * 2 / 3;
+			// 
+			// texCoords.push(
+			// 	x, y,
+			// 	x, y,
+			// 	x, y,
+			// 	x, y
+			// );
 
 		}
 

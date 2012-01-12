@@ -352,6 +352,7 @@ Element.prototype = {
 			this.changeState( 'open', this.highlight );
 
 			BSPTree.remove( this );
+			Grid.remove( this );
 
 			this.openNeighbors();
 
@@ -473,7 +474,6 @@ Element.prototype = {
 
 		} else {
 
-			console.log("wtf");
 			throw "wtf";
 
 		}
@@ -517,6 +517,7 @@ Element.prototype = {
 			} else {
 
 				BSPTree.remove( this );
+				Grid.remove( this );
 
 				this.changeState( 'open', this.highlight );
 

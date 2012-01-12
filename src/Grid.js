@@ -1,6 +1,7 @@
 var Grid = {
 
 	elements : [],
+	elementList : [],
 	cubeCount : 0,
 
 	minesLeft : 0,
@@ -31,6 +32,8 @@ var Grid = {
 	reset : function() {
 
 		BSPTree.createPartition( this.elements.concat() );
+
+		this.elementList = this.elements.concat();
 
 		this.cubeCount = this.elements.length;
 
@@ -340,7 +343,7 @@ var Grid = {
 
 		var i,
 			element,
-			elements = this.elements;
+			elements = this.elementList;
 
 		for ( i = 0; i < elements.length; i++ ) {
 
@@ -455,7 +458,7 @@ var Grid = {
 
 		var i,
 			min = Infinity,
-			elements = this.elements,
+			elements = this.elementList,
 			element,
 			cube,
 			distanceFromOrigin,
@@ -526,6 +529,26 @@ var Grid = {
 			this.redraw = true;
 
 		}
+
+	},
+
+	remove : function( element ) {
+
+		var index = Math.min( element.index, this.elementList.length - 1 );
+
+		while ( element.index !== this.elementList[index].index ) {
+
+			index--;
+
+			if ( index < 0 ) {
+
+				throw "wtf";
+
+			}
+
+		}
+
+		this.elementList.splice( index, 1 );
 
 	}
 

@@ -26,11 +26,11 @@ var Settings = {
 
 	init : function() {
 
-		// optinally defined in the URL as "d=1,2,3,4"
-
 		var p = parseFloat;
 
-		if ( window.d ) { 
+		// optinally defined in the URL as "d=1,2,3,4"
+
+		if ( window.d ) {
 
 			d = d.split(',');
 
