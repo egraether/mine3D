@@ -106,8 +106,8 @@ BSPNode.prototype = {
 
 		}
 
-		if ( ( fakeCubes && this.numChildren > 64 ) || 
-			( !fakeCubes && this.numChildren > 8 ) ) {
+		if ( ( drawBigCubes && this.numChildren > 64 ) || 
+			( !drawBigCubes && this.numChildren > 8 ) ) {
 
 			this.numChildren = 0
 
@@ -157,7 +157,7 @@ BSPNode.prototype = {
 			pos = this.position,
 			dir = this.direction;
 
-		if ( multiCubes && n && this.untouched ) {
+		if ( n && this.untouched && ( drawLines ? drawBigCubes : true ) ) {
 
 			if ( n === 2 ) {
 
@@ -171,7 +171,7 @@ BSPNode.prototype = {
 
 				Cube.drawOct( gl, pos, camera );
 
-			} else if ( fakeCubes ) {
+			} else if ( drawBigCubes ) {
 
 				if ( n === 16 ) {
 

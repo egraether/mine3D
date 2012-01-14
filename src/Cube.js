@@ -177,7 +177,7 @@ extend( Cube, {
 		var vector = this.vector,
 			start;
 
-		if ( fakeCubes ) {
+		if ( drawBigCubes ) {
 
 			vec3.assign( vector, 1 );
 			vector[direction] = 2 + cubeSpacing;
@@ -204,7 +204,7 @@ extend( Cube, {
 			dir2 = ( direction + 2 ) % 3,
 			start;
 
-		if ( fakeCubes ) {
+		if ( drawBigCubes ) {
 
 			vec3.assign( vector, 2 + cubeSpacing );
 			vector[direction] = 1;
@@ -243,7 +243,7 @@ extend( Cube, {
 		var vector = this.vector,
 			start, i;
 
-		if ( fakeCubes ) {
+		if ( drawBigCubes ) {
 
 			vec3.assign( this.vector, 2 + cubeSpacing );
 
@@ -490,11 +490,14 @@ extend( Cube, {
 
 		function addTexCoords( x, y, w, h ) {
 
+			var wo = w * 0.125,
+				ho = h * 0.125;
+
 			texCoords.push(
-				x + w, y,
-				x, y,
-				x, y + h,
-				x + w, y + h
+				x + 7 * wo, y + ho,
+				x + wo, y + ho,
+				x + wo, y + 7 * ho,
+				x + 7 * wo, y + 7 * ho
 			);
 
 			// x += w / 2;

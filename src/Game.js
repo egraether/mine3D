@@ -1,11 +1,6 @@
 var Game = {
 
 	gameover : false,
-	framesSinceDraw : 0,
-
-	fboMin : null,
-	fboMed : null,
-	fboMax : null,
 
 	init : function( gl ) {
 
@@ -23,14 +18,6 @@ var Game = {
 
 		// moved to Menu.showHUD()
 		// EventHandler.init();
-
-		if ( useSmoothing ) {
-
-			this.fboMin = gl.initFBO( width * fboMinScale, height * fboMinScale );
-			this.fboMed = gl.initFBO( width * fboMedScale, height * fboMedScale );
-			this.fboMax = gl.initFBO( width * fboMaxScale, height * fboMaxScale );
-
-		}
 
 		this.reset();
 
@@ -87,39 +74,19 @@ var Game = {
 
 		if ( Grid.redraw || redraw ) {
 
-			if ( useSmoothing ) {
+			if ( this.gameover ) {
 
-				this.drawWithFBO( gl, this.fboMin );
+				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
 			} else {
 
-				if ( this.gameover ) {
-
-					gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-
-				} else {
-
-					gl.clear( gl.COLOR_BUFFER_BIT );
-
-				}
-
-				Grid.draw( gl );
+				gl.clear( gl.COLOR_BUFFER_BIT );
 
 			}
 
-			this.framesSinceDraw = 0;
-
-		} else if ( useSmoothing && this.framesSinceDraw === 20 ) {
-
-			this.drawWithFBO( gl, this.fboMed );
-
-		} else if ( useSmoothing && this.framesSinceDraw === 40 ) {
-
-			this.drawWithFBO( gl, this.fboMax );
+			Grid.draw( gl );
 
 		}
-
-		this.framesSinceDraw++;
 
 	},
 

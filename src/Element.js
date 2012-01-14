@@ -60,7 +60,7 @@ Element.prototype = {
 
 	restart : function() {
 
-		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'open', 'opening', 'animating' ]
+		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'flagopen', 'open', 'opening', 'animating' ]
 
 		this.value = this.maxValue;
 
@@ -141,11 +141,6 @@ Element.prototype = {
 			shader = Element.shader,
 			matrixUniform = shader.mvMatrixUniform,
 			right = Camera.getRight();
-			// distance = vec3.lengthSquared( vec3.subtract( Camera.getEye(), this.position, Cube.vector ) ),
-			// scale = 1 - clamp( map( distance, 70, 200, 0, 0.5 ), 0, 0.5 );
-
-		// vec3.assign( Cube.vector, scale );
-		// mat4.scale( gl.matrix, Cube.vector );
 
 		if ( state === "number" ) {
 
@@ -189,15 +184,10 @@ Element.prototype = {
 
 			}
 
-		// } else if ( state === 'open' ) {
-		// 
-		// 	Cube.drawLine( gl, Element.shader );
-
 		} else {
 
-			var flag = state === 'flag',
-				alphaUniform = shader.alphaUniform,
-				stateIndex = flag ? 1 : 0;
+			var alphaUniform = shader.alphaUniform,
+				stateIndex = state === 'flag' ? 1 : 0;
 
 			if ( this.scale !== 1 ) {
 
@@ -209,7 +199,7 @@ Element.prototype = {
 
 			}
 
-			if ( Game.gameover && flag ) {
+			if ( state === 'flagopen' ) {
 
 				stateIndex = this.isMine ? 3 : 2;
 
@@ -315,10 +305,10 @@ Element.prototype = {
 			tween = new TWEEN.Tween( this );
 			tween.to( null, 0 );
 
-			tween.delay( vec3.length( vec ) * 100 );
+			tween.delay( vec3.length( vec ) * 100 - 100 * Math.random() );
 
 			vec3.normalize( vec );
-			vec3.scale( vec, 0.5 * ( element.isMine ? 1 : -1 ) );
+			vec3.scale( vec, 0.4 * ( element.isMine ? 1 : -1 ) );
 
 			tween.onComplete( function() {
 
@@ -326,9 +316,9 @@ Element.prototype = {
 
 				self.changeState( self.state, self.highlight, true );
 
-				self.moveTo( vec, 150, function() {
+				self.moveTo( vec, 150, TWEEN.Easing.Sinusoidal.EaseOut, function() {
 
-					self.moveTo( vec3.scale( vec, -1 ), 200, function() {
+					self.moveTo( vec3.scale( vec, -1 ), 200, TWEEN.Easing.Sinusoidal.EaseIn, function() {
 
 						self.changeState( self.state, self.highlight );
 
@@ -356,11 +346,17 @@ Element.prototype = {
 
 			this.value = 28;
 
+			// this.openCube();
+
+		} else if ( this.state === 'flag' ) {
+
+			this.changeState( 'flagopen', this.highlight );
+
 		}
 
 	},
 
-	moveTo : function( position, time, onComplete ) {
+	moveTo : function( position, time, easing, onComplete ) {
 
 		var pos = this.position;
 
@@ -372,7 +368,7 @@ Element.prototype = {
 			2 : pos[2] + position[2]
 		}, time );
 
-		tween.easing( TWEEN.Easing.Quartic.EaseOut );
+		tween.easing( easing );
 
 		tween.onUpdate( Grid.forceRedraw );
 
@@ -394,7 +390,9 @@ Element.prototype = {
 
 				tween = new TWEEN.Tween( this );
 
-				tween.to( { scale : 0 }, Math.random() * 150 + 100 );
+				tween.to( { scale : 0 }, 150 );
+
+				tween.delay( Math.random() * 100 );
 
 				tween.onUpdate( Grid.forceRedraw );
 
@@ -420,8 +418,16 @@ Element.prototype = {
 
 			if ( this.isMine ) {
 
-				this.changeState( 'cube', this.highlight );
-				Game.over( false, this );
+				// if ( Game.gameover ) {
+				// 
+				// 	this.changeState( 'open', this.highlight );
+				// 
+				// } else {
+
+					this.changeState( 'cube', this.highlight );
+					Game.over( false, this );
+
+				// }
 
 			} else {
 
@@ -662,8 +668,6 @@ extend( Element, {
 	},
 
 	updateMatrix : function( gl ) {
-
-		// mat4.set( Camera.getMvMatrix(), gl.matrix );
 
 		mat4.multiply( Camera.getPMatrix(), Camera.getMvMatrix(), gl.matrix );
 		gl.uniformMatrix4fv( Element.shader.pMatrixUniform, false, gl.matrix );
