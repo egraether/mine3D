@@ -86,6 +86,9 @@ var Game = {
 
 			Grid.draw( gl );
 
+			// gl.uniformMatrix4fv( Element.shader.mvMatrixUniform, false, mat4.identity( mat4.create() ) );
+			// Icosahedron.draw( gl, Element.shader, 0 );
+
 		}
 
 	},

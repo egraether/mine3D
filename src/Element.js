@@ -571,6 +571,8 @@ Element.prototype = {
 
 		}
 
+		Menu.setMines( Grid.minesLeft );
+
 	},
 
 	remove : function( element ) {
