@@ -6,6 +6,9 @@ var Element = function( index, position ) {
 	this.position = position;
 	this.matrix = mat4.translate( mat4.identity( mat4.create() ), position );
 
+	this.offset = vec3.create();
+	this.vector = vec3.create();
+
 	this.cube = new Cube( this );
 	this.neighbors = [];
 
@@ -34,7 +37,7 @@ Element.prototype = {
 			}
 
 			this.scale = 0;
-			this.changeState( 'animating', false );
+			this.changeState( 'cube', false, true );
 
 			tween = new TWEEN.Tween( this );
 
@@ -60,7 +63,7 @@ Element.prototype = {
 
 	restart : function() {
 
-		this.changeState( 'cube', false ); // [ 'cube', 'number', 'flag', 'flagopen', 'open', 'opening', 'animating' ]
+		this.changeState( 'cube' ); // [ 'cube', 'number', 'flag', 'flagopen', 'open', 'opening' ]
 
 		this.value = this.maxValue;
 
@@ -106,7 +109,7 @@ Element.prototype = {
 		if ( this.animated ) {
 
 			mat4.identity( gl.matrix );
-			mat4.translate( gl.matrix, this.position );
+			mat4.translate( gl.matrix, this.offset );
 			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
 
 		} else {
@@ -294,21 +297,22 @@ Element.prototype = {
 
 	showMine : function( won, element ) {
 
-		var vec,
+		var vec = this.vector,
 			self = this;
 
 		if ( Settings.animations && !won && this.index !== element.index ) {
 
-			vec = vec3.create();
 			vec3.subtract( this.position, element.position, vec );
 
 			tween = new TWEEN.Tween( this );
 			tween.to( null, 0 );
 
-			tween.delay( vec3.length( vec ) * 100 - 100 * Math.random() );
+			tween.delay( vec3.length( vec ) * 50 - 50 * Math.random() );
 
 			vec3.normalize( vec );
-			vec3.scale( vec, 0.4 * ( element.isMine ? 1 : -1 ) );
+			vec3.scale( vec, 0.5 * ( element.isMine ? 1 : -1 ) );
+
+			vec3.set( this.position, this.offset );
 
 			tween.onComplete( function() {
 
@@ -316,9 +320,9 @@ Element.prototype = {
 
 				self.changeState( self.state, self.highlight, true );
 
-				self.moveTo( vec, 150, TWEEN.Easing.Sinusoidal.EaseOut, function() {
+				self.moveTo( vec, 150, TWEEN.Easing.Cubic.EaseOut, function() {
 
-					self.moveTo( vec3.scale( vec, -1 ), 200, TWEEN.Easing.Sinusoidal.EaseIn, function() {
+					self.moveTo( vec3.scale( vec, -1 ), 250, TWEEN.Easing.Cubic.EaseIn, function() {
 
 						self.changeState( self.state, self.highlight );
 
@@ -358,7 +362,7 @@ Element.prototype = {
 
 	moveTo : function( position, time, easing, onComplete ) {
 
-		var pos = this.position;
+		var pos = this.offset;
 
 		tween = new TWEEN.Tween( pos );
 

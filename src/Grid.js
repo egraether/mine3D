@@ -41,7 +41,7 @@ var Grid = {
 
 		this.cubeCount = this.elements.length;
 
-		BSPTree.getCenterAndVisionSize( center );
+		// BSPTree.getCenterAndVisionSize( center );
 
 		vec3.set( this.elements[Math.floor( Math.random() * this.cubeCount )].position, center );
 
