@@ -37,7 +37,7 @@ Element.prototype = {
 			}
 
 			this.scale = 0;
-			this.changeState( 'cube', false, true );
+			this.changeState( 'animating', false, true );
 
 			tween = new TWEEN.Tween( this );
 
