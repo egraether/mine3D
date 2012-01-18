@@ -7,7 +7,7 @@ function init( gl ) {
 
 	setViewport();
 
-	gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+	gl.clearColor.apply( gl, hexToRGB( backgroundColor ) );
 
 	gl.enable( gl.CULL_FACE );
 	// gl.enable( gl.DEPTH_TEST );

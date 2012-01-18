@@ -91,6 +91,17 @@ function applyURLParams( scope ) {
 
 };
 
+function hexToRGB( hex ) {
+
+	return [ 
+		( hex >> 16 & 255 ) / 255,
+		( hex >> 8 & 255 ) / 255,
+		( hex & 255 ) / 255,
+		1.0
+	];
+
+};
+
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x = typeof x === 'number' ? x : 0;
