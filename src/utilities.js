@@ -139,3 +139,21 @@ vec3.equal = function( vec, vec2 ) {
 	return vec[0] === vec2[0] && vec[1] === vec2[1] && vec[2] === vec2[2];
 
 };
+
+Clock = {
+
+	time : null,
+
+	start : function() {
+
+		this.time = new Date().getTime();
+
+	},
+
+	stop : function() {
+
+		console.log( new Date().getTime() - this.time );
+
+	}
+
+};

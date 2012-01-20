@@ -12,13 +12,11 @@ var Element = function( index, position ) {
 	this.cube = new Cube( this );
 	this.neighbors = [];
 
-	this.reset();
-
 };
 
 Element.prototype = {
 
-	reset : function( center ) {
+	start : function( center ) {
 
 		this.maxValue = 0;
 		this.isMine = false;

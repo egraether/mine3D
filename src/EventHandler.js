@@ -233,6 +233,11 @@ var EventHandler = {
 
 			stats.switchMode();
 
+		} else if ( event.keyCode === 89 /* Y */ ) {
+
+			Game.restart();
+			Menu.hide();
+
 		}
 
 	},

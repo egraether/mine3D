@@ -25,29 +25,27 @@ var Grid = {
 		this.createGrid();
 		this.setNeighbors();
 
-		this.reset();
+		this.start();
 
 	},
 
-	reset : function() {
+	reset : function( elementResetFunction ) {
 
-		var i, center = Cube.vector;
+		var i, center, elements = this.elements;
 
 		TWEEN.removeAll();
 
-		BSPTree.createPartition( this.elements.concat() );
+		BSPTree.createPartition( elements.concat() );
 
-		this.elementList = this.elements.concat();
+		this.elementList = elements.concat();
 
-		this.cubeCount = this.elements.length;
+		this.cubeCount = elements.length;
 
-		// BSPTree.getCenterAndVisionSize( center );
+		center = elements[Math.floor( Math.random() * elements.length )].position;
 
-		vec3.set( this.elements[Math.floor( Math.random() * this.cubeCount )].position, center );
+		for ( i = 0; i < elements.length; i++ ) {
 
-		for ( i = 0; i < this.elements.length; i++ ) {
-
-			this.elements[i].reset( center );
+			elementResetFunction.call( elements[i], center );
 
 		}
 
@@ -68,29 +66,14 @@ var Grid = {
 
 	start : function() {
 
-		// var i;
-		// 
-		// for ( i = 0; i < this.elements.length; i++ ) {
-		// 
-		// 	this.elements[i].reset();
-		// 
-		// }
-
-		this.reset();
+		this.reset( Element.prototype.start );
 
 	},
 
 	restart : function() {
 
-		var i;
+		this.reset( Element.prototype.restart );
 
-		for ( i = 0; i < this.elements.length; i++ ) {
-
-			this.elements[i].restart();
-
-		}
-
-		this.reset();
 		this.minesSet = true;
 
 	},
