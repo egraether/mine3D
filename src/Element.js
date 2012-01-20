@@ -35,13 +35,14 @@ Element.prototype = {
 
 		this.untouched = true;
 
-		this.highlight = false;
-		this.rotation = 0;
-		this.scale = 1;
-		this.moving = false;
 		this.flagged = false;
+		this.highlight = false;
 
 		this.opening = false;
+		this.moving = false;
+
+		this.rotation = 0;
+		this.scale = 1;
 
 		this.changeState( 'cube' ); // [ 'cube', 'number', 'mine', 'open' ]
 
@@ -86,9 +87,9 @@ Element.prototype = {
 
 	adjustState : function() {
 
-		var animating = this.highlight || this.rotation || this.scale !== 1 || this.moving || this.flagged;
+		var modified = this.highlight || this.rotation || this.scale !== 1 || this.moving || this.flagged;
 
-		if ( this.untouched !== ( this.state === 'cube' && !animating ) ) {
+		if ( this.untouched !== ( this.state === 'cube' && !modified ) ) {
 
 			this.untouched = !this.untouched;
 
@@ -139,35 +140,35 @@ Element.prototype = {
 	drawCube : function( gl, shader ) {
 
 		var alphaUniform = shader.alphaUniform,
-			stateIndex = this.flagged ? 1 : 0,
-			matrix = gl.matrix
-			matrixUniform = shader.mvMatrixUniform,
-			scale = this.scale;
+			matrix = gl.matrix,
+			scale = this.scale,
+			stateIndex = this.flagged ? 1 : 0;
+
 
 		if ( !scale ) {
 
 			return;
 
-		} else if ( this.scale !== 1 ) {
+		} else if ( scale !== 1 ) {
 
 			mat4.identity( matrix );
 			mat4.translate( matrix, this.position );
 
-			mat4.scale( matrix, vec3.assign( Element.vector, this.scale ) );
-			gl.uniformMatrix4fv( matrixUniform, false, matrix );
+			mat4.scale( matrix, vec3.assign( Element.vector, scale ) );
 
 		} else if ( this.moving ) {
 
 			mat4.identity( matrix );
 			mat4.translate( matrix, this.offset );
 
-			gl.uniformMatrix4fv( matrixUniform, false, matrix );
-
 		} else {
 
-			gl.uniformMatrix4fv( matrixUniform, false, this.matrix );
+			matrix = this.matrix;
 
 		}
+
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
+
 
 		if ( this.flagged && this.opening ) {
 
@@ -195,8 +196,8 @@ Element.prototype = {
 
 		var matrix = gl.matrix,
 			rotation = this.rotation,
-			right = Camera.getRight(),
-			value = this.value;
+			value = this.value,
+			right;
 
 		if ( this.moving ) {
 
@@ -208,6 +209,8 @@ Element.prototype = {
 			matrix = this.matrix;
 
 		} else {
+
+			right = Camera.getRight();
 
 			mat4.identity( matrix );
 			mat4.translate( matrix, this.position );
@@ -386,13 +389,17 @@ Element.prototype = {
 
 	showMineNow : function() {
 
-		if ( ( this.state === 'cube' ) && this.isMine && !this.flagged ) {
+		if ( ( this.state === 'cube' ) && this.isMine ) {
 
-			this.changeState( 'mine' );
+			if ( this.flagged ) {
 
-		} else {
+				this.opening = true;
 
-			this.opening = true;
+			} else {
+
+				this.changeState( 'mine' );
+
+			}
 
 		}
 
@@ -546,9 +553,9 @@ Element.prototype = {
 
 		if ( this.state === 'cube' ) {
 
-			if ( this.isMine ) {
+			this.open();
 
-				this.open();
+			if ( this.isMine ) {
 
 				neighbors = this.neighbors;
 
@@ -589,17 +596,10 @@ Element.prototype = {
 
 		this.flagged = !this.flagged;
 
-		if ( this.flagged ) {
-
-			Grid.minesLeft--;
-
-		} else {
-
-			Grid.minesLeft++;
-
-		}
-
 		this.adjustState();
+
+
+		Grid.minesLeft += this.flagged ? -1 : 1;
 
 		Menu.setMines( Grid.minesLeft );
 
@@ -651,14 +651,14 @@ Element.prototype = {
 
 			if ( this.value ) {
 
-				this.changeState( 'number', this.highlight );
+				this.changeState( 'number' );
 
 			} else {
 
 				BSPTree.remove( this );
 				Grid.remove( this );
 
-				this.changeState( 'open', this.highlight );
+				this.changeState( 'open' );
 
 			}
 

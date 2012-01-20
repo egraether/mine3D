@@ -98,52 +98,25 @@ var Grid = {
 
 	createGrid : function( ) {
 
-		var index = 0,
-			elements = this.elements,
-			topBorder = true,
-			bottomBorder = false,
-			rightBorder, leftBorder,
-			frontBorder, backBorder,
+		var elements = this.elements,
 			k, j, i,
-			spacing = cubeSpacing,
+			spacing = 1 + cubeSpacing,
 			position = vec3.create(),
-			dim = Settings.currentLevel.dimensions;
-	
-		position[2] = ( dim[2] - 1 ) * ( 1 + spacing ) / 2;
+			dim = Settings.currentLevel.dimensions,
+			index = 0;
 
-		for ( k = dim[2] - 1; k >= 0; k-- ) {
 
-			if ( k === 0 ) {
+		position[2] = ( dim[2] - 1 ) * spacing / -2;
 
-				bottomBorder = true;
+		for ( k = 0; k < dim[2]; k++ ) {
 
-			}
+			position[1] = ( dim[1] - 1 ) * spacing / -2;
 
-			rightBorder = true;
-			leftBorder = false;
+			for ( j = 0; j < dim[1]; j++ ) {
 
-			position[1] = ( dim[1] - 1 ) * ( 1 + spacing ) / 2;
+				position[0] = ( dim[0] - 1 ) * spacing / -2;
 
-			for ( j = dim[1] - 1; j >= 0; j-- ) {
-
-				if ( j === 0 ) {
-
-					leftBorder = true;
-
-				}
-
-				frontBorder = true;
-				backBorder = false;
-
-				position[0] = ( dim[0] - 1 ) * ( 1 + spacing ) / 2;
-
-				for ( i = dim[0] - 1; i >= 0; i-- ) {
-
-					if ( i === 0 ) {
-
-						backBorder = true;
-
-					}
+				for ( i = 0; i < dim[0]; i++ ) {
 
 					elements.push( new Element(
 						index,
@@ -152,18 +125,15 @@ var Grid = {
 
 					index++;
 
-					position[0] -= 1 + spacing;
-					frontBorder = false;
+					position[0] += spacing;
 
 				}
 
-				position[1] -= 1 + spacing;
-				rightBorder = false;
+				position[1] += spacing;
 
 			}
 
-			position[2] -= 1 + spacing;
-			topBorder = false;
+			position[2] += spacing;
 
 		}
 
@@ -173,43 +143,38 @@ var Grid = {
 
 		var index = 0,
 			elements = this.elements,
-			topBorder = true,
-			bottomBorder = false,
-			frontBorder, backBorder, 
-			rightBorder, leftBorder,
+			top = true,
+			bottom, left,
+			front, back,
 			k, j, i,
 			dim = Settings.currentLevel.dimensions,
 			element;
 
 		for ( k = dim[2] - 1; k >= 0; k-- ) {
 
-			if ( k === 0 ) {
+			bottom = ( k === 0 );
 
-				bottomBorder = true;
-
-			}
-
-			frontBorder = true;
+			front = true;
 
 			for ( j = dim[1] - 1; j >= 0; j-- ) {
 
-				backBorder = ( j === 0 ? true : false );
+				back = ( j === 0 );
 
 				for ( i = dim[0] - 1; i >= 0; i-- ) {
 
-					leftBorder = ( i === 0 ? true : false );
+					left = ( i === 0 );
 
 					element = elements[index];
 
-					if ( !leftBorder ) {
+					if ( !left ) {
 
 						element.addNeighbor( elements[index + 1], true );
 
-						if ( !backBorder ) {
+						if ( !back ) {
 
 							element.addNeighbor( elements[index + 1 + dim[0]], true );
 
-							if ( !topBorder ) {
+							if ( !top ) {
 
 								element.addNeighbor( elements[index + 1 + dim[0] - dim[0] * dim[1]], true );
 
@@ -217,11 +182,11 @@ var Grid = {
 
 						}
 
-						if ( !frontBorder ) {
+						if ( !front ) {
 
 							element.addNeighbor( elements[index + 1 - dim[0]], true );
 
-							if ( !topBorder ) {
+							if ( !top ) {
 
 								element.addNeighbor( elements[index + 1 - dim[0] - dim[0] * dim[1]], true );
 
@@ -229,7 +194,7 @@ var Grid = {
 
 						}
 
-						if ( !topBorder ) {
+						if ( !top ) {
 
 							element.addNeighbor( elements[index + 1 - dim[0] * dim[1]], true );
 
@@ -237,11 +202,11 @@ var Grid = {
 
 					}
 
-					if ( !backBorder ) {
+					if ( !back ) {
 
 						element.addNeighbor( elements[index + dim[0]], true );
 
-						if (!topBorder) {
+						if ( !top ) {
 
 							element.addNeighbor( elements[index + dim[0] - dim[0] * dim[1]], true);
 
@@ -249,21 +214,21 @@ var Grid = {
 
 					}
 
-					if ( !bottomBorder ) {
+					if ( !bottom ) {
 
 						element.addNeighbor( elements[index + dim[0] * dim[1]], true );
 
-						if ( !leftBorder ) {
+						if ( !left ) {
 
 							element.addNeighbor( elements[index + 1 + dim[0] * dim[1]], true );
 
-							if ( !backBorder ) {
+							if ( !back ) {
 
 								element.addNeighbor( elements[index + 1 + dim[0] + dim[0] * dim[1]], true );
 
 							}
 
-							if ( !frontBorder ) {
+							if ( !front ) {
 
 								element.addNeighbor( elements[index + 1 - dim[0] + dim[0] * dim[1]], true );
 
@@ -271,7 +236,7 @@ var Grid = {
 
 						}
 
-						if ( !backBorder ) {
+						if ( !back ) {
 
 							element.addNeighbor( elements[index + dim[0] + dim[0] * dim[1]], true );
 
@@ -283,11 +248,11 @@ var Grid = {
 
 				}
 
-				frontBorder = false;
+				front = false;
 
 			}
 
-			topBorder = false;
+			top = false;
 
 		}
 
@@ -314,8 +279,6 @@ var Grid = {
 
 
 		if ( elementAmount - openElementIndices.length < mines ) {
-
-			// throw 'more mines than left elements';
 
 			mines = Math.floor( ( elementAmount - openElementIndices.length ) * 0.9 );
 
@@ -480,7 +443,7 @@ var Grid = {
 
 			element = elements[i];
 
-			if ( element.state === "cube" || element.state === "flag" ) {
+			if ( element.state === 'cube' ) {
 
 				vec3.subtract( element.position, origin, vector );
 				distanceFromOrigin = vec3.lengthSquared( vector );

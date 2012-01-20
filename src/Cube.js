@@ -500,16 +500,6 @@ extend( Cube, {
 				x + 7 * wo, y + 7 * ho
 			);
 
-			// x += w / 2;
-			// y += h * 2 / 3;
-			// 
-			// texCoords.push(
-			// 	x, y,
-			// 	x, y,
-			// 	x, y,
-			// 	x, y
-			// );
-
 		}
 
 		for ( i = 0; i < 4; i++ ) {
