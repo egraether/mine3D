@@ -521,7 +521,8 @@ var Grid = {
 
 		if ( elementInRay ) {
 
-			elementInRay.changeState( elementInRay.state, false );
+			elementInRay.highlight = false;
+			elementInRay.adjustState();
 
 			this.redraw = true;
 
@@ -531,7 +532,8 @@ var Grid = {
 
 		if ( element ) {
 
-			element.changeState( element.state, true );
+			element.highlight = true;
+			element.adjustState();
 
 			this.redraw = true;
 

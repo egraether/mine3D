@@ -23,21 +23,40 @@ Element.prototype = {
 		this.maxValue = 0;
 		this.isMine = false;
 
+		this.restart( center );
+
+	},
+
+	restart : function( center ) {
+
+		var vec = this.vector;
+
+		this.value = this.maxValue;
+
 		this.untouched = true;
-		this.animated = false;
+
+		this.highlight = false;
+		this.rotation = 0;
+		this.scale = 1;
+		this.moving = false;
+		this.flagged = false;
+
+		this.opening = false;
+
+		this.changeState( 'cube' ); // [ 'cube', 'number', 'mine', 'open' ]
 
 		if ( Settings.animations ) {
 
-			vec3.zero( Element.vector );
+			vec3.zero( vec );
 
 			if ( center ) {
 
-				vec3.subtract( center, this.position, Element.vector );
+				vec3.subtract( center, this.position, vec );
 
 			}
 
 			this.scale = 0;
-			this.changeState( 'animating', false, true );
+			this.adjustState();
 
 			tween = new TWEEN.Tween( this );
 
@@ -45,44 +64,33 @@ Element.prototype = {
 
 			tween.easing( TWEEN.Easing.Back.EaseOut );
 
-			tween.delay( vec3.length( Element.vector ) * ( 70 + Math.random() * 30 ) );
+			tween.delay( vec3.length( vec ) * ( 70 + Math.random() * 30 ) );
 
 			tween.onUpdate( Grid.forceRedraw );
 
-			tween.onComplete( this.restart );
+			tween.onComplete( this.adjustState );
 
 			tween.start();
-
-		} else {
-
-			this.restart();
 
 		}
 
 	},
 
-	restart : function() {
+	changeState : function( state ) {
 
-		this.changeState( 'cube' ); // [ 'cube', 'number', 'flag', 'flagopen', 'open', 'opening' ]
+		this.state = state;
 
-		this.value = this.maxValue;
-
-		this.scale = 1;
-		this.rotation = 0;
+		this.adjustState();
 
 	},
 
-	changeState : function( state, highlight, animated ) {
+	adjustState : function() {
 
-		var untouched = ( state === 'cube' && !highlight && !animated );
+		var animating = this.highlight || this.rotation || this.scale !== 1 || this.moving || this.flagged;
 
-		this.highlight = highlight;
-		this.animated = animated;
-		this.state = state;
+		if ( this.untouched !== ( this.state === 'cube' && !animating ) ) {
 
-		if ( this.untouched !== untouched ) {
-
-			this.untouched = untouched;
+			this.untouched = !this.untouched;
 
 			if ( this.parent ) {
 
@@ -104,51 +112,105 @@ Element.prototype = {
 
 	draw : function( gl ) {
 
-		var shader = Element.shader;
-
-		if ( this.animated ) {
-
-			mat4.identity( gl.matrix );
-			mat4.translate( gl.matrix, this.offset );
-			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, gl.matrix );
-
-		} else {
-
-			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
-
-		}
+		var shader = Element.shader,
+			state = this.state;
 
 		if ( this.untouched ) {
 
+			gl.uniformMatrix4fv( shader.mvMatrixUniform, false, this.matrix );
 			Cube.draw( gl, shader, 0 );
 
-		} else if ( this.state === 'number' && !this.rotation ) {
+		} else if ( state === 'number' ) {
 
-			Face.draw( gl, shader, this.value );
+			this.drawNumber( gl, shader );
 
-		} else {
+		} else if ( state === 'cube' ) {
 
-			this.drawSpecial( gl );
+			this.drawCube( gl, shader );
+
+		} else if ( state === 'mine' ) {
+
+			this.drawMine( gl, shader );
 
 		}
 
 	},
 
-	drawSpecial : function( gl ) {
+	drawCube : function( gl, shader ) {
 
-		var state = this.state,
-			rotation = this.rotation,
-			position = this.position,
-			value = this.value,
-			matrix = gl.matrix,
-			shader = Element.shader,
+		var alphaUniform = shader.alphaUniform,
+			stateIndex = this.flagged ? 1 : 0,
+			matrix = gl.matrix
 			matrixUniform = shader.mvMatrixUniform,
-			right = Camera.getRight();
+			scale = this.scale;
 
-		if ( state === "number" ) {
+		if ( !scale ) {
+
+			return;
+
+		} else if ( this.scale !== 1 ) {
 
 			mat4.identity( matrix );
-			mat4.translate( matrix, position );
+			mat4.translate( matrix, this.position );
+
+			mat4.scale( matrix, vec3.assign( Element.vector, this.scale ) );
+			gl.uniformMatrix4fv( matrixUniform, false, matrix );
+
+		} else if ( this.moving ) {
+
+			mat4.identity( matrix );
+			mat4.translate( matrix, this.offset );
+
+			gl.uniformMatrix4fv( matrixUniform, false, matrix );
+
+		} else {
+
+			gl.uniformMatrix4fv( matrixUniform, false, this.matrix );
+
+		}
+
+		if ( this.flagged && this.opening ) {
+
+			stateIndex = this.isMine ? 3 : 2;
+
+		}
+
+		if ( this.highlight ) {
+
+			gl.uniform1f( alphaUniform, mouseOverAlpha );
+
+			Cube.draw( gl, shader, stateIndex );
+
+			gl.uniform1f( alphaUniform, cubeAlpha );
+
+		} else {
+
+			Cube.draw( gl, shader, stateIndex );
+
+		}
+
+	},
+
+	drawNumber : function( gl, shader ) {
+
+		var matrix = gl.matrix,
+			rotation = this.rotation,
+			right = Camera.getRight(),
+			value = this.value;
+
+		if ( this.moving ) {
+
+			mat4.identity( matrix );
+			mat4.translate( matrix, this.offset );
+
+		} else if ( !rotation ) {
+
+			matrix = this.matrix;
+
+		} else {
+
+			mat4.identity( matrix );
+			mat4.translate( matrix, this.position );
 
 			if ( rotation < -Math.PI / 2 ) {
 
@@ -161,66 +223,47 @@ Element.prototype = {
 
 			}
 
-			gl.uniformMatrix4fv( matrixUniform, false, matrix );
+		}
 
-			if ( value ) {
+		gl.uniformMatrix4fv( shader.mvMatrixUniform, false, matrix );
 
-				Face.draw( gl, shader, value );
+		if ( value ) {
 
-			}
+			Face.draw( gl, shader, value );
 
-		} else if ( state === 'open' && this.isMine ) {
+		}
 
-			if ( useIcosahedron ) {
+	},
 
-				Icosahedron.draw( gl, shader );
+	drawMine : function( gl, shader ) {
 
-			} else {
+		var matrix = gl.matrix,
+			matrixUniform = shader.mvMatrixUniform;
 
-				mat4.identity( matrix );
-				mat4.translate( matrix, position );
+		if ( this.moving ) {
 
-				mat4.scale( matrix, vec3.assign( Cube.vector, mineSize / numberSize ) );
-				gl.uniformMatrix4fv( matrixUniform, false, matrix );
-
-				Face.draw( gl, shader, value );
-
-			}
+			mat4.identity( matrix );
+			mat4.translate( matrix, this.offset );
 
 		} else {
 
-			var alphaUniform = shader.alphaUniform,
-				stateIndex = state === 'flag' ? 1 : 0;
+			matrix = this.matrix;
 
-			if ( this.scale !== 1 ) {
+		}
 
-				mat4.identity( matrix );
-				mat4.translate( matrix, position );
+		if ( useIcosahedron ) {
 
-				mat4.scale( matrix, vec3.assign( Cube.vector, this.scale ) );
-				gl.uniformMatrix4fv( matrixUniform, false, matrix );
+			gl.uniformMatrix4fv( matrixUniform, false, matrix );
+			Icosahedron.draw( gl, shader );
 
-			}
+		} else {
 
-			if ( state === 'flagopen' ) {
+			matrix = mat4.set( matrix, gl.matrix );
 
-				stateIndex = this.isMine ? 3 : 2;
+			mat4.scale( matrix, vec3.assign( Cube.vector, mineSize / numberSize ) );
+			gl.uniformMatrix4fv( matrixUniform, false, matrix );
 
-			}
-
-			if ( this.highlight ) {
-
-				gl.uniform1f( alphaUniform, mouseOverAlpha );
-
-				Cube.draw( gl, shader, stateIndex );
-
-				gl.uniform1f( alphaUniform, cubeAlpha );
-
-			} else {
-
-				Cube.draw( gl, shader, stateIndex );
-
-			}
+			Face.draw( gl, shader, 28 );
 
 		}
 
@@ -318,13 +361,12 @@ Element.prototype = {
 
 				self.showMineNow();
 
-				self.changeState( self.state, self.highlight, true );
-
 				self.moveTo( vec, 150, TWEEN.Easing.Cubic.EaseOut, function() {
 
 					self.moveTo( vec3.scale( vec, -1 ), 250, TWEEN.Easing.Cubic.EaseIn, function() {
 
-						self.changeState( self.state, self.highlight );
+						self.moving = false;
+						self.adjustState();
 
 					});
 
@@ -344,17 +386,13 @@ Element.prototype = {
 
 	showMineNow : function() {
 
-		if ( ( this.state === 'cube' ) && this.isMine ) {
+		if ( ( this.state === 'cube' ) && this.isMine && !this.flagged ) {
 
-			this.changeState( 'open', this.highlight );
+			this.changeState( 'mine' );
 
-			this.value = 28;
+		} else {
 
-			// this.openCube();
-
-		} else if ( this.state === 'flag' ) {
-
-			this.changeState( 'flagopen', this.highlight );
+			this.opening = true;
 
 		}
 
@@ -363,6 +401,9 @@ Element.prototype = {
 	moveTo : function( position, time, easing, onComplete ) {
 
 		var pos = this.offset;
+
+		this.moving = true;
+		this.adjustState();
 
 		tween = new TWEEN.Tween( pos );
 
@@ -386,11 +427,14 @@ Element.prototype = {
 
 		var tween;
 
-		if ( this.state === "cube" ) {
+		if ( this.state === "cube" && !this.opening ) {
 
-			this.changeState( 'opening', this.highlight );
+			this.opening = true;
 
 			if ( Settings.animations ) {
+
+				this.scale = 0.99;
+				this.adjustState();
 
 				tween = new TWEEN.Tween( this );
 
@@ -418,26 +462,13 @@ Element.prototype = {
 
 		this.scale = 1;
 
-		if ( this.state === 'opening' ) {
+		if ( this.isMine ) {
 
-			if ( this.isMine ) {
+			Game.over( false, this );
 
-				// if ( Game.gameover ) {
-				// 
-				// 	this.changeState( 'open', this.highlight );
-				// 
-				// } else {
+		} else {
 
-					this.changeState( 'cube', this.highlight );
-					Game.over( false, this );
-
-				// }
-
-			} else {
-
-				this.open();
-
-			}
+			this.open();
 
 		}
 
@@ -449,10 +480,7 @@ Element.prototype = {
 
 			return;
 
-		}
-
-
-		if ( this.state === 'opening' ) {
+		} else if ( this.state === 'cube' ) {
 
 			Grid.cubeCount--;
 
@@ -461,11 +489,11 @@ Element.prototype = {
 
 		if ( this.value ) {
 
-			this.changeState( 'number', this.highlight );
+			this.changeState( 'number' );
 
 		} else {
 
-			this.changeState( 'open', this.highlight );
+			this.changeState( 'open' );
 
 			BSPTree.remove( this );
 			Grid.remove( this );
@@ -486,7 +514,8 @@ Element.prototype = {
 
 			if ( Settings.animations ) {
 
-				this.changeState( 'flag', this.highlight );
+				this.flagged = true;
+				this.adjustState();
 
 				tween = new TWEEN.Tween( this );
 
@@ -494,19 +523,12 @@ Element.prototype = {
 
 				tween.onUpdate( Grid.forceRedraw );
 
-				tween.onComplete( function() {
-
-					this.scale = 1;
-					this.changeState( 'opening', this.highlight );
-					this.openMineNow();
-
-				});
+				tween.onComplete( this.openMineNow );
 
 				tween.start();
 
 			} else {
 
-				this.changeState( 'opening', this.highlight );
 				this.openMineNow();
 
 			}
@@ -520,11 +542,13 @@ Element.prototype = {
 		var i,
 			neighbors;
 
-		if ( this.state === 'opening' ) {
+		this.scale = 1;
 
-			this.open();
+		if ( this.state === 'cube' ) {
 
 			if ( this.isMine ) {
+
+				this.open();
 
 				neighbors = this.neighbors;
 
@@ -563,17 +587,19 @@ Element.prototype = {
 
 	flag : function() {
 
-		if ( this.state === 'cube' ) {
+		this.flagged = !this.flagged;
 
-			this.changeState( 'flag', this.highlight );
+		if ( this.flagged ) {
+
 			Grid.minesLeft--;
 
-		} else if ( this.state === 'flag' ) {
+		} else {
 
-			this.changeState( 'cube', this.highlight );
 			Grid.minesLeft++;
 
 		}
+
+		this.adjustState();
 
 		Menu.setMines( Grid.minesLeft );
 
