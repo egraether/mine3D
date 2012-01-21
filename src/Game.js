@@ -33,13 +33,11 @@ var Game = {
 
 				TWEEN.completeAll();
 
-				Grid.leftClicked = Grid.rightClicked = false;
-
-			} else {
-
-				TWEEN.update();
+				// Grid.leftClicked = Grid.rightClicked = false;
 
 			}
+
+			TWEEN.update();
 
 			redraw = true;
 

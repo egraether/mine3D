@@ -230,6 +230,12 @@ Element.prototype = {
 
 		if ( value ) {
 
+			if ( invertedNumbers ) {
+
+				value = this.neighbors.length - value;
+
+			}
+
 			Face.draw( gl, shader, value );
 
 		}

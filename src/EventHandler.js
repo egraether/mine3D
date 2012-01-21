@@ -48,6 +48,12 @@ var EventHandler = {
 		this.state = "down";
 		this.button = event.button;
 
+		if ( invertedControls ) {
+
+			this.button = ( this.button + 2 ) % 4;
+
+		}
+
 		var oldMouse = this.getMouse( event, this.oldMouse );
 
 		if ( this.button === 0 ) {
@@ -107,10 +113,6 @@ var EventHandler = {
 
 				Camera.rotate();
 
-			} else if ( this.button === 1 ) {
-
-				Camera.reset();
-
 			} else if ( this.button === 2 ) {
 
 				Camera.pan();
@@ -132,6 +134,10 @@ var EventHandler = {
 			if ( this.button === 0 ) {
 
 				Grid.leftClicked = true;
+
+			} else if ( this.button === 1 ) {
+
+				Camera.reset();
 
 			} else if ( this.button === 2 ) {
 

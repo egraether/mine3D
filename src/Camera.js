@@ -215,6 +215,14 @@ var Camera = new ( function() {
 		var angle = vec3.angle( start, end ),
 			axis;
 
+		if ( invertedControls ) {
+
+			angle *= -1;
+
+		}
+
+		angle *= controlSpeed;
+
 		if ( angle ) {
 
 			axis = vec3.cross( end, start, vector );
@@ -248,7 +256,13 @@ var Camera = new ( function() {
 	this.panCamera = function() {
 
 		var pan = vector2,
-			panFactor = 0.3;
+			panFactor = 0.3 * controlSpeed;
+
+		if ( invertedControls ) {
+
+			panFactor *= -1;
+
+		}
 
 		getMouseOnScreen( mouse, end );
 		vec3.subtract( start, end, vector );
@@ -271,6 +285,15 @@ var Camera = new ( function() {
 	this.zoom = function( delta ) {
 
 		isZooming = true;
+
+		if ( invertedControls ) {
+
+			delta = 1 / delta;
+
+		}
+
+		delta = Math.pow( delta, controlSpeed );
+
 		zoomDelta *= delta;
 
 	};
@@ -279,18 +302,19 @@ var Camera = new ( function() {
 
 		var len = vec3.length( eye );
 
-		vec3.normalize( eye );
-		vec3.scale( eye, len * zoomDelta );
+		vec3.scale( vec3.normalize( eye ), len * zoomDelta );
 
 		len = vec3.lengthSquared( eye );
 
-		if ( len > 3 * 150 * 150 ) {
+		if ( len > 10000 ) {
 
-			vec3.assign( eye, 150 );
+			vec3.scale( vec3.normalize( eye ), 100 );
+			zoomDelta = 1;
 
-		} else if ( len < 0.03 ) {
+		} else if ( len < 0.09 ) {
 
-			vec3.assign( eye, 0.1 );
+			vec3.scale( vec3.normalize( eye ), 0.3 );
+			zoomDelta = 1;
 
 		}
 
