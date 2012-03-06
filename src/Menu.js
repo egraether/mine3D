@@ -72,12 +72,6 @@ var Menu = {
 
 		});
 
-		$('#updateButton').click(function() {
-
-			toggleButton( 'update' );
-
-		});
-
 
 		this.initMenu();
 
@@ -357,11 +351,9 @@ var Menu = {
 
 				$('#shareButton').removeClass('active');
 				$('#feedbackButton').removeClass('active');
-				$('#updateButton').removeClass('active');
 
 				$('#share').hide();
 				$('#feedback').hide();
-				$('#update').hide();
 
 				this.overlayCounter = 1;
 				this.updateOverlay( false );
@@ -418,7 +410,6 @@ var Menu = {
 
 		$('#shareButton').show();
 		$('#feedbackButton').show();
-		$('#updateButton').show();
 
 		$('#timeDisplay').show();
 		$('#mineDisplay').show();
