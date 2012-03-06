@@ -393,13 +393,13 @@ Element.prototype = {
 
 	showMineNow : function() {
 
-		if ( ( this.state === 'cube' ) && this.isMine ) {
+		if ( ( this.state === 'cube' ) ) {
 
 			if ( this.flagged ) {
 
 				this.opening = true;
 
-			} else {
+			} else if ( this.isMine ) {
 
 				this.changeState( 'mine' );
 

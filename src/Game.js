@@ -16,6 +16,12 @@ var Game = {
 		Element.init( gl );
 		Grid.init();
 
+		if ( useBackgroundTextures ) {
+
+			Background.init( gl );
+
+		}
+
 		// moved to Menu.showHUD()
 		// EventHandler.init();
 
@@ -72,13 +78,13 @@ var Game = {
 
 		if ( Grid.redraw || redraw ) {
 
-			if ( this.gameover ) {
+			if ( useBackgroundTextures ) {
 
-				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+				Background.draw( gl );
 
 			} else {
 
-				gl.clear( gl.COLOR_BUFFER_BIT );
+				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
 			}
 

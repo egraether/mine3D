@@ -69,7 +69,7 @@ var WebGLUtilities = {
 
 	textureCount : 0,
 
-	loadTexture : function( imagePath, useMipmap, callback ) {
+	loadTexture : function( imagePath, useMipmap, callback, repeat ) {
 
 		var t = this,
 			texture = t.createTexture();
@@ -80,7 +80,7 @@ var WebGLUtilities = {
 
 		texture.image.onload = function () {
 
-			t.textureImageLoaded( texture, useMipmap );
+			t.textureImageLoaded( texture, useMipmap, repeat );
 
 			if ( callback ) {
 
@@ -96,17 +96,18 @@ var WebGLUtilities = {
 
 	},
 
-	textureImageLoaded : function( texture, useMipmap ) {
+	textureImageLoaded : function( texture, useMipmap, repeat ) {
 
 		var t = this;
+			wrapping = repeat ? t.REPEAT : t.CLAMP_TO_EDGE;
 
 		t.activeTexture( t["TEXTURE" + texture.ID] );
 		t.bindTexture( t.TEXTURE_2D, texture );
 
 		t.texImage2D( t.TEXTURE_2D, 0, t.RGBA, t.RGBA, t.UNSIGNED_BYTE, texture.image );
 
-		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, t.CLAMP_TO_EDGE );
-		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_T, t.CLAMP_TO_EDGE );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_S, wrapping );
+		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_WRAP_T, wrapping );
 
 		t.texParameteri( t.TEXTURE_2D, t.TEXTURE_MAG_FILTER, t.LINEAR );
 
@@ -209,20 +210,24 @@ var WebGLUtilities = {
 		t.quadAttributeBuffer = t.createBuffer();
 
 		t.bindBuffer( t.ARRAY_BUFFER, t.quadAttributeBuffer );
-		t.bufferData( t.ARRAY_BUFFER, 80, t.STATIC_DRAW );
+		t.bufferData( t.ARRAY_BUFFER, 112, t.STATIC_DRAW );
 
 		t.bufferSubData( t.ARRAY_BUFFER, 0, new Float32Array([
+			-1, 1, 0,
 			-1, -1, 0,
 			1, -1, 0,
-			1, 1, 0,
-			-1, 1, 0
+			1, 1, 0
 		]));
 
 		t.bufferSubData( t.ARRAY_BUFFER, 48, new Float32Array([
 			0.0, 0.0,
-			1.0, 0.0,
+			0.0, 1.0,
 			1.0, 1.0,
-			0.0, 1.0
+			1.0, 0.0,
+			0.0, 0.0,
+			0.0, 1.0,
+			20.0, 1.0,
+			20.0, 0.0
 		]));
 
 		t.quadIndexBuffer = t.createBuffer();
@@ -232,13 +237,33 @@ var WebGLUtilities = {
 
 	},
 
-	drawQuad : function( shader ) {
+	updateQuadTexCoords : function( sections ) {
 
 		var t = this;
 
 		t.bindBuffer( t.ARRAY_BUFFER, t.quadAttributeBuffer );
+
+		t.bufferSubData( t.ARRAY_BUFFER, 48, new Float32Array([
+			0.0, 0.0,
+			0.0, 1.0,
+			1.0, 1.0,
+			1.0, 0.0,
+			0.0, 0.0,
+			0.0, 1.0,
+			sections, 1.0,
+			sections, 0.0
+		]));
+
+	},
+
+	drawQuad : function( shader, texOffset ) {
+
+		var t = this;
+		texOffset = 48 + ( texOffset || 0 );
+
+		t.bindBuffer( t.ARRAY_BUFFER, t.quadAttributeBuffer );
 		t.vertexAttribPointer( shader.positionAttribute, 3, t.FLOAT, false, 0, 0 );
-		t.vertexAttribPointer( shader.texCoordAttribute, 2, t.FLOAT, false, 0, 48 );
+		t.vertexAttribPointer( shader.texCoordAttribute, 2, t.FLOAT, false, 0, texOffset );
 
 		t.bindBuffer( t.ELEMENT_ARRAY_BUFFER, t.quadIndexBuffer );
 		t.drawElements( t.TRIANGLE_FAN, 4, t.UNSIGNED_SHORT, 0 );

@@ -29,19 +29,24 @@
 
 
 	texturePath = "textures/tex26.png"
-	backgroundColor = 0xD7E1F7
+
+	useBackgroundTextures = false
+
+	backgroundPatternTexture = "textures/back.png"
+	backgroundGlowTexture = "textures/glow.png"
+
+	backgroundColor = 0xFFFFFF
 
 	cubeAlpha = 1.0
 	mouseOverAlpha = 0.65
 
 	cubeSpacing = 0.1
 
-	numberSize = 0.3
-	mineSize = 0.35
+	numberSize = 0.17
+	mineSize = 0.3
 
+	useIcosahedron = false
 	mineSpikyness = 1.25
-
-	useIcosahedron = true
 
 	useAntialias = true
 	useTextureFiltering = true
@@ -49,7 +54,7 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = false
+	showWelcomeScreen = true
 
 	invertedControls = false
 	controlSpeed = 1
@@ -451,6 +456,39 @@
 
 </script>
 
+<script id="texture-vertex-shader" type="x-shader/x-vertex" charset="utf-8">
+
+	attribute vec3 aPosition;
+	attribute vec2 aTextureCoord;
+
+	varying vec2 vTextureCoord;
+
+	void main(void) {
+
+		gl_Position = vec4( aPosition, 1.0 );
+
+		vTextureCoord = aTextureCoord;
+
+	}
+
+</script>
+
+<script id="texture-fragment-shader" type="x-shader/x-fragment" charset="utf-8">
+
+	precision mediump float;
+
+	uniform sampler2D uTexture;
+
+	varying vec2 vTextureCoord;
+
+	void main(void) {
+
+		gl_FragColor = texture2D( uTexture, vTextureCoord );
+
+	}
+
+</script>
+
 <script type="text/javascript" charset="utf-8" src="lib/requestAnimationFrame.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/glMatrix.js"></script>
 <script type="text/javascript" charset="utf-8" src="lib/Tween.js"></script>
@@ -471,6 +509,7 @@
 <script type="text/javascript" charset="utf-8" src="src/Settings.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Stats.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/Menu.js"></script>
+<script type="text/javascript" charset="utf-8" src="src/Background.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="src/Grid.js"></script>
 <script type="text/javascript" charset="utf-8" src="src/EventHandler.js"></script>

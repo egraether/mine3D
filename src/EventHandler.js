@@ -255,7 +255,17 @@ var EventHandler = {
 		Camera.resize();
 		Element.updateMatrix( gl );
 
+		if ( useBackgroundTextures ) {
+
+			Background.resize();
+
+		}
+
 		Grid.redraw = true;
+
+		requestAnimationFrame( function() {
+			Grid.redraw = true;
+		});
 
 	}
 
