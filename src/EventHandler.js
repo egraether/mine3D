@@ -225,7 +225,7 @@ var EventHandler = {
 
 		} else if ( event.keyCode === 27 /* ECS */ ) {
 
-			Menu.toggle( true );
+			Menu.toggle();
 
 		} else if ( event.keyCode === 82 /* R */ ) {
 

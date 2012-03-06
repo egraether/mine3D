@@ -18,7 +18,26 @@ function init( gl ) {
 
 	gl.initQuad();
 
+
+	Stats.init();
+	Stats.loadSettings();
+
+	Settings.init();
+
 	Game.init( gl );
+
+
+	Menu.init();
+
+	if ( showWelcomeScreen) {
+
+		Menu.fsm.showWelcome();
+
+	} else {
+
+		Menu.showHUD();
+
+	}
 
 };
 
@@ -64,16 +83,6 @@ function start() {
 
 		Menu.error();
 		return;
-
-	}
-
-	if ( showWelcomeScreen) {
-
-		Menu.showWelcome();
-
-	} else {
-
-		Menu.showHUD();
 
 	}
 

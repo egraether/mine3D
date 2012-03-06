@@ -27,14 +27,52 @@ var Menu = {
 		'sweep' + 'hard'
 	],
 
-	overlayCounter : 1,
+	fsm : null,
 
 	init : function() {
+
+		this.fsm = new StateMachine( this );
+
+		this.fsm.init({
+
+			initial : 'init',
+
+			states : [
+				{ name : 'init' },
+				{ name : 'welcome', enter : this.enterWelcome, exit : this.exitWelcome },
+				{ name : 'level', enter : this.enterLevel, exit : this.exitLevel },
+				{ name : 'play', enter : this.enterPlay },
+				{ name : 'menu', enter : this.enterMenu, exit : this.exitMenu },
+				{ name : 'custom'},
+				{ name : 'info'},
+				{ name : 'gameover'},
+				{ name : 'error'}
+			],
+
+			transitions : [
+				{ name : 'showWelcome', from : 'init', to: 'welcome' },
+				{ name : 'chooseLevel', from : 'welcome', to: 'level' },
+
+				{ name : 'play', from : '*', to: 'play', callback : this.onPlay },
+
+				{ name : 'showMenu', from : 'play', to: 'menu', callback : this.onShowMenu },
+
+				{ name : 'setCustom', from : 'menu', to: 'custom', callback : this.onSetCustom },
+				{ name : 'backToMenu', from : 'custom', to: 'menu', callback : this.onBackToMenu },
+
+				{ name : 'win', from : 'play', to: 'gameover', callback : this.onWin },
+				{ name : 'lose', from : 'play', to: 'gameover', callback : this.onLose },
+
+				{ name : 'showInfo', from : 'play', to: 'info', callback : this.onInfo },
+			]
+
+		});
+
 
 		$('#newButton').click(function () {
 
 			Game.start();
-			Menu.hide();
+			Menu.fsm.play();
 
 		});
 
@@ -47,28 +85,26 @@ var Menu = {
 		$('#restartButton').click(function() {
 
 			Game.restart();
-			Menu.hide();
+			Menu.fsm.play();
 
 		});
 
-		function toggleButton( name ) {
-
-			$('#' + name + 'Button').toggleClass('active');
-			$('#' + name).toggle();
-
-			Menu.updateOverlay( $('#' + name + 'Button').hasClass('active') );
-
-		};
+		// function toggleButton( name ) {
+		// 
+		// 	$('#' + name + 'Button').toggleClass('active');
+		// 	$('#' + name).toggle();
+		// 
+		// };
 
 		$('#shareButton').click(function() {
 
-			toggleButton( 'share' );
+			// toggleButton( 'share' );
 
 		});
 
 		$('#feedbackButton').click(function() {
 
-			toggleButton( 'feedback' );
+			// toggleButton( 'feedback' );
 
 		});
 
@@ -109,86 +145,34 @@ var Menu = {
 
 	initSettings : function() {
 
-		function setMode( modeName ) {
-
-			if ( !($('#' + modeName).hasClass( 'active' )) ) {
-
-				$('#classic').removeClass( 'active' );
-				$('#sweep').removeClass( 'active' );
-
-				$('#' + modeName).addClass( 'active' );
-				Menu.mode = modeName;
-
-				Menu.changedSettings( false );
-
-			}
-
-		};
-
 		$('#classic').click(function() {
 
-			setMode( 'classic' );
+			Menu.setMode( 'classic' );
 
 		});
 
 		$('#sweep').click(function() {
 
-			setMode( 'sweep' );
+			Menu.setMode( 'sweep' );
 
 		});
 
-
-		$('#playClassicButton').click(function() {
-
-			setMode( 'classic' );
-
-			Menu.showHUD();
-			Menu.applyChanges();
-
-		});
-
-		$('#playSweepButton').click(function() {
-
-			setMode( 'sweep' );
-
-			Menu.showHUD();
-			Menu.applyChanges();
-
-		});
-
-
-		function setLevel( levelName ) {
-
-			if ( !( $('#' + levelName).hasClass( 'active') ) ) {
-
-				$('#easy').removeClass( 'active' );
-				$('#medium').removeClass( 'active' );
-				$('#hard').removeClass( 'active' );
-
-				$('#' + levelName).addClass( 'active');
-				Menu.level = Settings.levels[levelName];
-
-				Menu.changedSettings( true );
-
-			}
-
-		};
 
 		$('#easy').click(function() {
 
-			setLevel( 'easy' );
+			Menu.setLevel( 'easy' );
 
 		});
 
 		$('#medium').click(function() {
 
-			setLevel( 'medium' );
+			Menu.setLevel( 'medium' );
 
 		});
 
 		$('#hard').click(function() {
 
-			setLevel( 'hard' );
+			Menu.setLevel( 'hard' );
 
 		});
 
@@ -234,19 +218,14 @@ var Menu = {
 
 		$('#apply').click(function() {
 
-			if ( $(this).hasClass( 'active' ) ) {
-
-				Menu.applyChanges();
-
-			}
+			Menu.fsm.play();
+			Menu.applyChanges();
 
 		});
 
-		$('#apply').hide();
 
-
-		setMode( Settings.mode );
-		setLevel( Settings.currentLevel.name );
+		this.setMode( Settings.mode );
+		this.setLevel( Settings.currentLevel.name );
 
 		this.animations = Settings.animations;
 		this.recenter = Settings.recenter;
@@ -295,6 +274,41 @@ var Menu = {
 
 	},
 
+	setMode : function( modeName ) {
+
+		$('#classic').removeClass( 'active' );
+		$('#sweep').removeClass( 'active' );
+
+		$('#' + modeName).addClass( 'active' );
+
+		if ( this.mode !== modeName ) {
+
+			this.changedSettings( false );
+
+		}
+
+		this.mode = modeName;
+
+	},
+
+	setLevel : function( levelName ) {
+
+		$('#easy').removeClass( 'active' );
+		$('#medium').removeClass( 'active' );
+		$('#hard').removeClass( 'active' );
+
+		$('#' + levelName).addClass( 'active');
+
+		if ( this.level !== Settings.levels[levelName] ) {
+
+			this.changedSettings( true );
+
+		}
+
+		this.level = Settings.levels[levelName]
+
+	},
+
 	setTime : function( time ) {
 
 		$('#time').text( Math.floor( time * 0.001 ) );
@@ -323,46 +337,29 @@ var Menu = {
 
 	show : function() {
 
-		$('#menu').toggle( true );
+		$('#menu').show();
 		$('#menuButton').addClass( 'active' );
-
-		this.updateOverlay( true );
 
 	},
 
 	hide : function() {
 
-		$('#menu').toggle( false );
+		$('#menu').hide();
 		$('#menuButton').removeClass( 'active' );
-
-		this.updateOverlay( false );
 
 		this.hidePages();
 
 	},
 
-	toggle : function( hideAll ) {
+	toggle : function() {
 
-		if ( $('#menu').is(":visible") ) {
+		if ( this.fsm.hasState( 'play' ) ) {
 
-			this.hide();
-
-			if ( hideAll ) {
-
-				$('#shareButton').removeClass('active');
-				$('#feedbackButton').removeClass('active');
-
-				$('#share').hide();
-				$('#feedback').hide();
-
-				this.overlayCounter = 1;
-				this.updateOverlay( false );
-
-			}
+			this.fsm.showMenu();
 
 		} else {
 
-			this.show();
+			this.fsm.play();
 
 		}
 
@@ -392,18 +389,104 @@ var Menu = {
 
 	},
 
-	showWelcome : function() {
-
-		$('#feedback').hide();
+	enterWelcome : function() {
 
 		$('#overlay').show();
-		$('#welcomeWrapper').show();
+		$('#welcome').show();
+
+		$('#playClassicButton').click( function() {
+
+			Menu.setMode( 'classic' );
+			Menu.fsm.chooseLevel();
+
+		});
+
+		$('#playSweepButton').click( function() {
+
+			Menu.setMode( 'sweep' );
+			Menu.fsm.chooseLevel();
+
+		});
+
+	},
+
+	exitWelcome : function() {
+
+		$('#welcome').hide();
+
+	},
+
+	enterLevel : function() {
+
+		$('#level').show();
+
+		$('#easyButton').click( function() {
+
+			Menu.setLevel( 'easy' );
+			Menu.fsm.play();
+
+		});
+
+		$('#mediumButton').click( function() {
+
+			Menu.setLevel( 'medium' );
+			Menu.fsm.play();
+
+		});
+
+		$('#hardButton').click( function() {
+
+			Menu.setLevel( 'hard' );
+			Menu.fsm.play();
+
+		});
+
+		$('#customButton').click( function() {
+
+			Menu.setLevel( 'easy' );
+			Menu.fsm.play();
+
+		});
+
+	},
+
+	exitLevel : function() {
+
+		this.overlayOut();
+		$('#level').hide();
+
+		this.showHUD();
+		this.applyChanges();
+
+	},
+
+	enterPlay : function() {
+
+		
+
+	},
+
+	onPlay : function() {
+
+		
+
+	},
+
+	enterMenu : function() {
+
+		this.show();
+		this.overlayIn( 1 );
+
+	},
+
+	exitMenu : function() {
+
+		this.hide();
+		this.overlayOut();
 
 	},
 
 	showHUD : function() {
-
-		$('#feedback').hide();
 
 		$('#newButton').show();
 		$('#menuButton').show();
@@ -416,13 +499,9 @@ var Menu = {
 
 		$('#overlay').click(function() {
 
-			Menu.hide();
+			Menu.fsm.play();
 
 		});
-
-		$('#welcomeWrapper').hide();
-
-		this.updateOverlay( false );
 
 		EventHandler.init();
 
@@ -457,7 +536,6 @@ var Menu = {
 
 		}
 
-		$('#apply').addClass( 'active' );
 		$('#apply').show();
 
 	},
@@ -468,9 +546,7 @@ var Menu = {
 		Stats.saveSettings();
 
 		Game.start( this.resize );
-		Menu.hide();
 
-		$('#apply').removeClass( 'active' );
 		$('#apply').hide();
 
 		this.resize = false;
@@ -506,34 +582,20 @@ var Menu = {
 
 	},
 
-	updateOverlay : function( increase ) {
+	overlayIn : function( zIndex ) {
 
-		if ( increase ) {
+		$('#overlay').css( 'z-index', zIndex );
+		$("#overlay").fadeTo( 500, 0.7 );
 
-			this.overlayCounter++;
+	},
 
-			if ( this.overlayCounter === 1 ) {
+	overlayOut : function() {
 
-				$('#overlay').css('z-index', 0);
-				$("#overlay").fadeTo(500, 0.7);
+		$("#overlay").fadeTo( 100, 0.0, function() {
 
-			}
+			$('#overlay').css( 'z-index', -1 );
 
-		} else if ( this.overlayCounter ) {
-
-			this.overlayCounter--;
-
-			if ( !this.overlayCounter ) {
-
-				$("#overlay").fadeTo(100, 0.0, function() {
-
-					$('#overlay').css('z-index', -1);
-
-				});
-
-			}
-
-		}
+		});
 
 	}
 

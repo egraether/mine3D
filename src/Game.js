@@ -4,13 +4,6 @@ var Game = {
 
 	init : function( gl ) {
 
-		Stats.init();
-		Stats.loadSettings();
-
-		Settings.init();
-
-		Menu.init();
-
 		Camera.init();
 
 		Element.init( gl );
