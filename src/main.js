@@ -31,10 +31,11 @@ function init( gl ) {
 
 	if ( showWelcomeScreen) {
 
-		Menu.fsm.showWelcome();
+		Menu.fsm.changeState( 'welcome' );
 
 	} else {
 
+		Menu.fsm.changeState( 'play' );
 		Menu.showHUD();
 
 	}

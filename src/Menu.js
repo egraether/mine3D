@@ -41,29 +41,15 @@ var Menu = {
 				{ name : 'init' },
 				{ name : 'welcome', enter : this.enterWelcome, exit : this.exitWelcome },
 				{ name : 'level', enter : this.enterLevel, exit : this.exitLevel },
-				{ name : 'play', enter : this.enterPlay },
+				{ name : 'play' },
 				{ name : 'menu', enter : this.enterMenu, exit : this.exitMenu },
-				{ name : 'custom'},
-				{ name : 'info'},
 				{ name : 'gameover'},
 				{ name : 'error'}
 			],
 
 			transitions : [
-				{ name : 'showWelcome', from : 'init', to: 'welcome' },
-				{ name : 'chooseLevel', from : 'welcome', to: 'level' },
-
-				{ name : 'play', from : '*', to: 'play', callback : this.onPlay },
-
-				{ name : 'showMenu', from : 'play', to: 'menu', callback : this.onShowMenu },
-
-				{ name : 'setCustom', from : 'menu', to: 'custom', callback : this.onSetCustom },
-				{ name : 'backToMenu', from : 'custom', to: 'menu', callback : this.onBackToMenu },
-
 				{ name : 'win', from : 'play', to: 'gameover', callback : this.onWin },
 				{ name : 'lose', from : 'play', to: 'gameover', callback : this.onLose },
-
-				{ name : 'showInfo', from : 'play', to: 'info', callback : this.onInfo },
 			]
 
 		});
@@ -89,24 +75,18 @@ var Menu = {
 
 		});
 
-		// function toggleButton( name ) {
-		// 
-		// 	$('#' + name + 'Button').toggleClass('active');
-		// 	$('#' + name).toggle();
-		// 
-		// };
+		function toggleButton( name, other ) {
 
-		$('#shareButton').click(function() {
+			$('#' + name + 'Button').toggleClass('active');
+			$('#' + name).toggle();
 
-			// toggleButton( 'share' );
+			$('#' + other + 'Button').removeClass('active');
+			$('#' + other).hide();
 
-		});
+		};
 
-		$('#feedbackButton').click(function() {
-
-			// toggleButton( 'feedback' );
-
-		});
+		$('#shareButton').click(function() { toggleButton( 'share', 'feedback' ); });
+		$('#feedbackButton').click(function() { toggleButton( 'feedback', 'share' ); });
 
 
 		this.initMenu();
@@ -114,6 +94,10 @@ var Menu = {
 		this.initSettings();
 
 		this.initStats();
+
+		this.initCustom();
+
+		$('.button').disableSelection();
 
 	},
 
@@ -145,37 +129,14 @@ var Menu = {
 
 	initSettings : function() {
 
-		$('#classic').click(function() {
+		$('#classic').click( function() { Menu.setMode( 'classic' ); });
+		$('#sweep').click( function() { Menu.setMode( 'sweep' ); });
 
-			Menu.setMode( 'classic' );
+		$('#easy').click( function() { Menu.setLevel( 'easy' ); });
+		$('#medium').click( function() { Menu.setLevel( 'medium' ); });
+		$('#hard').click( function() { Menu.setLevel( 'hard' ); });
 
-		});
-
-		$('#sweep').click(function() {
-
-			Menu.setMode( 'sweep' );
-
-		});
-
-
-		$('#easy').click(function() {
-
-			Menu.setLevel( 'easy' );
-
-		});
-
-		$('#medium').click(function() {
-
-			Menu.setLevel( 'medium' );
-
-		});
-
-		$('#hard').click(function() {
-
-			Menu.setLevel( 'hard' );
-
-		});
-
+		$('#custom').click( function() { Menu.setLevel( 'custom' ); });
 
 		function toggleFunction( name, on ) {
 
@@ -191,34 +152,16 @@ var Menu = {
 
 		};
 
-		$('#animationsOn').click( function() {
+		$('#animationsOn').click( function() { toggleFunction( 'animations', true ); });
+		$('#animationsOff').click( function() { toggleFunction( 'animations', false ); });
 
-			toggleFunction( 'animations', true );
-
-		});
-
-		$('#animationsOff').click( function() {
-
-			toggleFunction( 'animations', false );
-
-		});
-
-		$('#recenterOn').click( function() {
-
-			toggleFunction( 'recenter', true );
-
-		});
-
-		$('#recenterOff').click( function() {
-
-			toggleFunction( 'recenter', false );
-
-		});
+		$('#recenterOn').click( function() { toggleFunction( 'recenter', true ); });
+		$('#recenterOff').click( function() { toggleFunction( 'recenter', false ); });
 
 
 		$('#apply').click(function() {
 
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 			Menu.applyChanges();
 
 		});
@@ -232,6 +175,19 @@ var Menu = {
 
 		$('#animations' + (Settings.animations ? 'On' : 'Off') ).addClass('active');
 		$('#recenter' + (Settings.recenter ? 'On' : 'Off') ).addClass('active');
+
+	},
+
+	initCustom : function() {
+
+		var i;
+
+		for ( i = 0; i < 4; i++ ) {
+
+			$('#customUp' + i).disableSelection();
+			$('#customDown' + i).disableSelection();
+
+		}
 
 	},
 
@@ -296,8 +252,10 @@ var Menu = {
 		$('#easy').removeClass( 'active' );
 		$('#medium').removeClass( 'active' );
 		$('#hard').removeClass( 'active' );
+		$('#custom').removeClass( 'active' );
 
 		$('#' + levelName).addClass( 'active');
+		this.toggleCustom();
 
 		if ( this.level !== Settings.levels[levelName] ) {
 
@@ -355,11 +313,11 @@ var Menu = {
 
 		if ( this.fsm.hasState( 'play' ) ) {
 
-			this.fsm.showMenu();
+			this.fsm.changeState( 'menu' );
 
 		} else {
 
-			this.fsm.play();
+			this.fsm.changeState( 'play' );
 
 		}
 
@@ -397,14 +355,14 @@ var Menu = {
 		$('#playClassicButton').click( function() {
 
 			Menu.setMode( 'classic' );
-			Menu.fsm.chooseLevel();
+			Menu.fsm.changeState( 'level' );
 
 		});
 
 		$('#playSweepButton').click( function() {
 
 			Menu.setMode( 'sweep' );
-			Menu.fsm.chooseLevel();
+			Menu.fsm.changeState( 'level' );
 
 		});
 
@@ -418,33 +376,32 @@ var Menu = {
 
 	enterLevel : function() {
 
-		$('#level').show();
+		$('#levelPanel').show();
 
 		$('#easyButton').click( function() {
 
 			Menu.setLevel( 'easy' );
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
 		$('#mediumButton').click( function() {
 
 			Menu.setLevel( 'medium' );
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
 		$('#hardButton').click( function() {
 
 			Menu.setLevel( 'hard' );
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
 		$('#customButton').click( function() {
 
-			Menu.setLevel( 'easy' );
-			Menu.fsm.play();
+			
 
 		});
 
@@ -452,37 +409,26 @@ var Menu = {
 
 	exitLevel : function() {
 
+		$('#levelPanel').hide();
+
 		this.overlayOut();
-		$('#level').hide();
 
 		this.showHUD();
 		this.applyChanges();
 
 	},
 
-	enterPlay : function() {
-
-		
-
-	},
-
-	onPlay : function() {
-
-		
-
-	},
-
 	enterMenu : function() {
 
 		this.show();
-		this.overlayIn( 1 );
+		this.overlayIn();
 
 	},
 
 	exitMenu : function() {
 
-		this.hide();
 		this.overlayOut();
+		this.hide();
 
 	},
 
@@ -499,7 +445,7 @@ var Menu = {
 
 		$('#overlay').click(function() {
 
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
@@ -582,9 +528,9 @@ var Menu = {
 
 	},
 
-	overlayIn : function( zIndex ) {
+	overlayIn : function() {
 
-		$('#overlay').css( 'z-index', zIndex );
+		$('#overlay').css( 'z-index', 1 );
 		$("#overlay").fadeTo( 500, 0.7 );
 
 	},
@@ -596,6 +542,32 @@ var Menu = {
 			$('#overlay').css( 'z-index', -1 );
 
 		});
+
+	},
+
+	toggleCustom : function() {
+
+		var i;
+
+		if ( $('#custom').hasClass( 'active' ) ) {
+
+			for ( i = 0; i < 4; i++ ) {
+
+				$('#customUp' + i).addClass( 'element button' );
+				$('#customDown' + i).addClass( 'element button' );
+
+			}
+
+		} else {
+
+			for ( i = 0; i < 4; i++ ) {
+
+				$('#customUp' + i).removeClass( 'element button' );
+				$('#customDown' + i).removeClass( 'element button' );
+
+			}
+
+		}
 
 	}
 

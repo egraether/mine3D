@@ -38,7 +38,7 @@ a:hover {
 	margin : 4px;
 	padding : 4px 8px;
 
-	border : 1px solid #555;
+	border : 1px solid #555 !important;
 }
 
 .button {
@@ -135,7 +135,7 @@ a:hover {
 #feedbackButton, #feedback,
 #error, #welcome, #overlay,
 #menu, .page, #clearPrompt,
-#level, #apply {
+#levelPanel, #apply, #customPanel {
 	display: none;
 }
 
@@ -163,8 +163,6 @@ td {
 	font-weight : normal;
 }
 
-
-
 #controls tr:first-child td,
 #stats tr:first-child td {
 	border-bottom : 1px solid #555;
@@ -175,7 +173,8 @@ td {
 	border-right : 1px solid #555;
 }
 
-#settings td:first-child {
+#settings td:first-child, 
+#custom td:first-child {
 	text-align : right;
 }
 
@@ -291,7 +290,31 @@ td {
 	height : 50px;
 }
 
-#level {
+#levelPanel {
 	margin-left: -175px;
 	margin-top: -20%;
+}
+
+.customButtons div {
+	width: 25px;
+	margin: 0 auto;
+
+	padding: 2px 5px 0;
+	border : 1px solid #CCC;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.up div {
+	margin-top: 10px;
+}
+
+.down div {
+	margin-bottom: 20px;
+}
+
+#custom, #customButton {
+	border : 1px dashed #555 !important;
 }

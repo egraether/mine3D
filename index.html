@@ -54,12 +54,14 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = true
+	showWelcomeScreen = false
 
 	invertedControls = false
 	controlSpeed = 1
 
 	invertedNumbers = false
+
+	maxCubes = 100
 
 
 	window.onload = function() {
@@ -138,7 +140,7 @@
 
 				<tr>
 					<td class="label"> mode: </td>
-					<td>
+					<td colspan="4">
 						<div class="element button left" id="classic"> classic </div>
 						<div class="element button left" id="sweep"> sweep </div>
 					</td>
@@ -146,16 +148,49 @@
 
 				<tr>
 					<td class="label"> level: </td>
-					<td>
+					<td colspan="4">
 						<div class="element button left" id="easy"> easy </div>
 						<div class="element button left" id="medium"> medium </div>
 						<div class="element button left" id="hard"> hard </div>
+						<div class="element button left" id="custom"> custom </div>
 					</td>
+				</tr>
+
+				<tr class="up">
+					<td></td>
+					<td><div>X</div></td>
+					<td><div>Y</div></td>
+					<td><div>Z</div></td>
+					<td><div>Mines</div></td>
+				</tr>
+
+				<tr class="customButtons">
+					<td></td>
+					<td><div id="customUp0">&#x25B3;</div></td>
+					<td><div id="customUp1">&#x25B3;</div></td>
+					<td><div id="customUp2">&#x25B3;</div></td>
+					<td><div id="customUp3">&#x25B3;</div></td>
+				</tr>
+
+				<tr>
+					<td></td>
+					<td class="label" id="custom0">5</td>
+					<td class="label" id="custom1">5</td>
+					<td class="label" id="custom2">5</td>
+					<td class="label" id="custom3">10</td>
+				</tr>
+
+				<tr class="customButtons down">
+					<td></td>
+					<td><div id="customDown0">&#x25BD;</div></td>
+					<td><div id="customDown1">&#x25BD;</div></td>
+					<td><div id="customDown2">&#x25BD;</div></td>
+					<td><div id="customDown3">&#x25BD;</div></td>
 				</tr>
 
 				<tr>
 					<td class="label"> animations: </td>
-					<td>
+					<td colspan="4">
 						<div class="element button left" id="animationsOn"> On </div>
 						<div class="element button left" id="animationsOff"> Off </div>
 					</td>
@@ -163,15 +198,14 @@
 
 				<tr>
 					<td class="label"> auto center: </td>
-					<td>
+					<td colspan="4">
 						<div class="element button left" id="recenterOn"> On </div>
 						<div class="element button left" id="recenterOff"> Off </div>
+						<div class="element button right active" id="apply"> apply </div>
 					</td>
 				</tr>
 
 			</table>
-
-			<div class="element button clear right active" id="apply"> apply </div>
 
 		</div>
 
@@ -384,11 +418,25 @@
 
 		</div>
 
-		<div class="element centered" id='level'>
+		<div class="element centered" id="levelPanel">
+			<div class="label clear">choose level:</div>
 			<div class="element left button" id="easyButton"> easy </div>
 			<div class="element left button" id="mediumButton"> medium </div>
 			<div class="element left button" id="hardButton"> hard </div>
 			<div class="element left button" id="customButton"> custom </div>
+		</div>
+
+		<div class="element centered" id='customPanel'>
+			<div class="label">set custom dimensions:</div>
+
+			<input class="left" id="customX" size="3" />
+			<div class="left label">x</div>
+			<input class="left" id="customY" size="3" />
+			<div class="left label">x</div>
+			<input class="left" id="customZ" size="3" />
+
+			<div class="element button clear left" id="customCancelButton"> cancel </div>
+			<div class="element button left" id="customOkButton"> ok </div>
 		</div>
 
 	</div>
