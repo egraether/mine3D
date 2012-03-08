@@ -3,6 +3,9 @@ var Menu = {
 	mode : null,
 	level : null,
 
+	customDimensions : vec3.create(),
+	customMines : 0,
+
 	animations : false,
 	recenter : false,
 
@@ -58,7 +61,7 @@ var Menu = {
 		$('#newButton').click(function () {
 
 			Game.start();
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
@@ -178,19 +181,6 @@ var Menu = {
 
 	},
 
-	initCustom : function() {
-
-		var i;
-
-		for ( i = 0; i < 4; i++ ) {
-
-			$('#customUp' + i).disableSelection();
-			$('#customDown' + i).disableSelection();
-
-		}
-
-	},
-
 	initStats : function() {
 
 		function togglePrompt() {
@@ -263,7 +253,13 @@ var Menu = {
 
 		}
 
-		this.level = Settings.levels[levelName]
+		this.level = Settings.levels[levelName];
+
+		if ( levelName !== 'custom' ) {
+
+			this.updateCustom( this.level );
+
+		}
 
 	},
 
@@ -488,6 +484,19 @@ var Menu = {
 
 	applyChanges : function() {
 
+		if ( this.level.name === 'custom' ) {
+
+			vec3.assign(
+				this.level.dimensions,
+				parseInt( $('#custom0').text() ),
+				parseInt( $('#custom1').text() ),
+				parseInt( $('#custom2').text() )
+			);
+
+			this.level.mines = parseInt( $('#custom3').text() )
+
+		}
+
 		Settings.setFromMenu();
 		Stats.saveSettings();
 
@@ -545,25 +554,127 @@ var Menu = {
 
 	},
 
+	initCustom : function() {
+
+		var i;
+
+		for ( i = 0; i < 4; i++ ) {
+
+			$('#customUp' + i).disableSelection();
+			$('#customDown' + i).disableSelection();
+
+		}
+
+	},
+
+	updateCustom : function( level ) {
+
+		vec3.set( level.dimensions, this.customDimensions );
+		this.customMines = level.mines;
+
+		$('#custom0').text( level.dimensions[0] );
+		$('#custom1').text( level.dimensions[1] );
+		$('#custom2').text( level.dimensions[2] );
+
+		$('#custom3').text( level.mines );
+
+	},
+
+	checkCustomButtons : function() {
+
+		var dim = this.customDimensions,
+			sum = [
+				( dim[0] + 1 ) * dim[1] * dim[2],
+				dim[0] * ( dim[1] + 1 ) * dim[2],
+				dim[0] * dim[1] * ( dim[2] + 1 ),
+				Math.floor( dim[0] * dim[1] * dim[2] * 0.8 )
+			],
+			i;
+
+		for ( i = 0; i < 4; i++ ) {
+
+			if ( i === 3 ? this.customMines >= sum[i] : sum[i] > maxCubes ) {
+
+				this.disableCustomButton( i, true );
+
+			} else if ( !$('#customUp' + i).hasClass( 'button' ) ) {
+
+				this.enableCustomButton( i, true );
+
+			}
+
+			if ( i === 3 ? this.customMines < 1 : dim[i] <= 1 ) {
+
+				this.disableCustomButton( i, false );
+
+			} else if ( !$('#customDown' + i).hasClass( 'button' ) ) {
+
+				this.enableCustomButton( i, false );
+
+			}
+
+		}
+
+		if ( sum[3] < this.customMines ) {
+
+			this.customMines = sum[3];
+			$('#custom3').text( sum[3] );
+
+		}
+
+	},
+
+	enableCustomButton: function( number, isUp ) {
+
+		var name = '#custom' + ( isUp ? 'Up' : 'Down' ) + number;
+
+		$(name).addClass( 'element button' );
+		$(name).click( function() {
+
+			var x;
+
+			if ( number === 3 ) {
+
+				x = isUp ? ++Menu.customMines : --Menu.customMines;
+
+			} else {
+
+				x = isUp ? ++Menu.customDimensions[number] : --Menu.customDimensions[number];
+
+			}
+
+			$('#custom' + number).text( x );
+
+			Menu.checkCustomButtons();
+			Menu.changedSettings( true );
+
+		});
+
+	},
+
+	disableCustomButton: function( number, isUp ) {
+
+		var name = '#custom' + ( isUp ? 'Up' : 'Down' ) + number;
+
+		$( name ).removeClass( 'element button' );
+		$( name ).unbind( 'click' );
+
+	},
+
 	toggleCustom : function() {
 
 		var i;
 
 		if ( $('#custom').hasClass( 'active' ) ) {
 
-			for ( i = 0; i < 4; i++ ) {
-
-				$('#customUp' + i).addClass( 'element button' );
-				$('#customDown' + i).addClass( 'element button' );
-
-			}
+			this.checkCustomButtons();
 
 		} else {
 
 			for ( i = 0; i < 4; i++ ) {
 
-				$('#customUp' + i).removeClass( 'element button' );
-				$('#customDown' + i).removeClass( 'element button' );
+				this.disableCustomButton( i, true );
+				this.disableCustomButton( i, false );
 
 			}
 

@@ -13,7 +13,7 @@ var Settings = {
 		easy : new Level( 'easy', 5, 10 ),
 		medium : new Level( 'medium', 7, 33 ),
 		hard : new Level( 'hard', 10, 99 ),
-		custom : new Level( 'custom', 10, 99 )
+		custom : new Level( 'custom', 3, 3 )
 
 	},
 

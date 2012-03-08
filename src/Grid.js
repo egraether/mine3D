@@ -260,7 +260,6 @@ var Grid = {
 
 		}
 
-
 		if ( elementAmount - openElementIndices.length < mines ) {
 
 			mines = Math.floor( ( elementAmount - openElementIndices.length ) * 0.9 );
