@@ -502,11 +502,24 @@ extend( Cube, {
 
 		}
 
-		for ( i = 0; i < 4; i++ ) {
+		for ( k = 0; k < 2; k++ ) {
+
+			for ( j = 5; j < 8; j++ ) {
+
+				addTexCoords( 0, j * stepY, stepX, stepY );
+
+			}
+
+		}
+
+		stepX = 1 / 6;
+		stepY = 1 / 12;
+
+		for ( i = 3; i < 6; i++ ) {
 
 			for ( k = 0; k < 2; k++ ) {
 
-				for ( j = 5; j < 8; j++ ) {
+				for ( j = 9; j < 12; j++ ) {
 
 					addTexCoords( i * stepX, j * stepY, stepX, stepY );
 

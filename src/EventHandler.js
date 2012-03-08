@@ -98,7 +98,7 @@ var EventHandler = {
 
 			len = vec3.lengthSquared( vec3.subtract( mouse, this.oldMouse, this.vector ) );
 
-			if ( len > 25 ) {
+			if ( len > 60 ) {
 
 				this.state = "drag";
 				clearTimeout( this.timeoutID );

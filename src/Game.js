@@ -32,8 +32,6 @@ var Game = {
 
 				TWEEN.completeAll();
 
-				// Grid.leftClicked = Grid.rightClicked = false;
-
 			}
 
 			TWEEN.update();
@@ -54,9 +52,9 @@ var Game = {
 
 				Camera.updateFaceDirections( gl, Face.vertices, Face.attributeBuffer );
 
-			}
+				Grid.setElementInRay( null );
 
-			Grid.setElementInRay( null );
+			}
 
 			redraw = true;
 
