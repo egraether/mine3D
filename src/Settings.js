@@ -62,20 +62,34 @@ var Settings = {
 
 	setCustom : function( x, y, z, m ) {
 
-		var custom = this.levels.custom;
+		var custom = this.levels.custom,
+			i = 0;
 
-		x = clamp( x, 1, 50 );
-		y = clamp( y, 1, 50 );
-		z = clamp( z, 1, 50 );
+		x = clamp( x, 1, maxCubes );
+		y = clamp( y, 1, maxCubes );
+		z = clamp( z, 1, maxCubes );
 
-		m = clamp( m, 1, x * y * z );
+		while ( x * y * z > maxCubes ) {
+
+			switch ( i % 3 ) {
+				case 0 : x = Math.floor( x * 0.9 ); break;
+				case 1 : y = Math.floor( y * 0.9 ); break;
+				case 2 : z = Math.floor( z * 0.9 ); break;
+			}
+
+			i++;
+
+		}
+
+		m = clamp( m, 0, x * y * z * 0.9 );
 
 		vec3.assign( custom.dimensions, x, y, z );
 		custom.mines = m;
 
 		this.currentLevel = custom;
 
-		// Game.start( true );
+		Menu.setLevel( 'custom' );
+		Menu.updateCustom( this.currentLevel );
 
 	}
 
