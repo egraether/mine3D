@@ -54,7 +54,7 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = false
+	showWelcomeScreen = true
 
 	invertedControls = false
 	controlSpeed = 1
@@ -83,11 +83,11 @@
 
 		<div class="element clear left" id="menu">
 
-			<div class="element button left" id="aboutButton"> about </div>
 			<div class="element button left" id="settingsButton"> settings </div>
 			<div class="element button left" id="statsButton"> stats </div>
 			<div class="element button left" id="instructionsButton"> instructions </div>
 			<div class="element button left" id="controlsButton"> controls </div>
+			<div class="element button left" id="aboutButton"> about </div>
 
 		</div>
 
@@ -100,7 +100,7 @@
 			</div>
 
 			<div class="label">
-				taking up
+				inspired by
 				<a href="http://weegen.home.xs4all.nl/Minesweeper3D/">Minesweeper 3D</a> <br />
 				by Eelis van der Weegen
 			</div>
@@ -149,10 +149,10 @@
 				<tr>
 					<td class="label"> level: </td>
 					<td colspan="4">
-						<div class="element button left" id="easy"> easy </div>
-						<div class="element button left" id="medium"> medium </div>
-						<div class="element button left" id="hard"> hard </div>
-						<div class="element button left" id="custom"> custom </div>
+						<div class="element button left easy"> easy </div>
+						<div class="element button left medium"> medium </div>
+						<div class="element button left hard"> hard </div>
+						<div class="element button left custom"> custom </div>
 					</td>
 				</tr>
 
@@ -166,26 +166,26 @@
 
 				<tr class="customButtons">
 					<td></td>
-					<td><div id="customUp0">&#x25B3;</div></td>
-					<td><div id="customUp1">&#x25B3;</div></td>
-					<td><div id="customUp2">&#x25B3;</div></td>
-					<td><div id="customUp3">&#x25B3;</div></td>
+					<td><div class="element button customUp0">&#x25B3;</div></td>
+					<td><div class="element button customUp1">&#x25B3;</div></td>
+					<td><div class="element button customUp2">&#x25B3;</div></td>
+					<td><div class="element button customUp3">&#x25B3;</div></td>
 				</tr>
 
 				<tr>
 					<td></td>
-					<td class="label" id="custom0">5</td>
-					<td class="label" id="custom1">5</td>
-					<td class="label" id="custom2">5</td>
-					<td class="label" id="custom3">10</td>
+					<td class="label custom0">5</td>
+					<td class="label custom1">5</td>
+					<td class="label custom2">5</td>
+					<td class="label custom3">10</td>
 				</tr>
 
 				<tr class="customButtons down">
 					<td></td>
-					<td><div id="customDown0">&#x25BD;</div></td>
-					<td><div id="customDown1">&#x25BD;</div></td>
-					<td><div id="customDown2">&#x25BD;</div></td>
-					<td><div id="customDown3">&#x25BD;</div></td>
+					<td><div class="element button customDown0">&#x25BD;</div></td>
+					<td><div class="element button customDown1">&#x25BD;</div></td>
+					<td><div class="element button customDown2">&#x25BD;</div></td>
+					<td><div class="element button customDown3">&#x25BD;</div></td>
 				</tr>
 
 				<tr>
@@ -420,10 +420,51 @@
 
 		<div class="element centered" id="levelPanel">
 			<div class="label clear">choose level:</div>
-			<div class="element left button" id="easyButton"> easy </div>
-			<div class="element left button" id="mediumButton"> medium </div>
-			<div class="element left button" id="hardButton"> hard </div>
-			<div class="element left button" id="customButton"> custom </div>
+
+			<table class="clear">
+
+				<tr>
+					<td colspan="4">
+						<div class="element left button easy"> easy </div>
+						<div class="element left button medium"> medium </div>
+						<div class="element left button hard"> hard </div>
+						<div class="element left button custom"> custom </div>
+					</td>
+				</tr>
+
+				<tr class="up">
+					<td><div>X</div></td>
+					<td><div>Y</div></td>
+					<td><div>Z</div></td>
+					<td><div>Mines</div></td>
+				</tr>
+
+				<tr class="customButtons">
+					<td><div class="element button customUp0">&#x25B3;</div></td>
+					<td><div class="element button customUp1">&#x25B3;</div></td>
+					<td><div class="element button customUp2">&#x25B3;</div></td>
+					<td><div class="element button customUp3">&#x25B3;</div></td>
+				</tr>
+
+				<tr>
+					<td class="label custom0">5</td>
+					<td class="label custom1">5</td>
+					<td class="label custom2">5</td>
+					<td class="label custom3">10</td>
+				</tr>
+
+				<tr class="customButtons down">
+					<td><div class="element button customDown0">&#x25BD;</div></td>
+					<td><div class="element button customDown1">&#x25BD;</div></td>
+					<td><div class="element button customDown2">&#x25BD;</div></td>
+					<td><div class="element button customDown3">&#x25BD;</div></td>
+				</tr>
+
+			</table>
+
+			<div class="element button left" id="cancel">back</div>
+			<div class="element button right" id="ok">play</div>
+
 		</div>
 
 		<div class="element centered" id='customPanel'>

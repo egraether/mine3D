@@ -35,8 +35,7 @@ function init( gl ) {
 
 	} else {
 
-		Menu.fsm.changeState( 'play' );
-		Menu.showHUD();
+		Menu.fsm.play();
 
 	}
 

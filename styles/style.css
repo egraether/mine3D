@@ -38,7 +38,7 @@ a:hover {
 	margin : 4px;
 	padding : 4px 8px;
 
-	border : 1px solid #555 !important;
+	border : 1px solid #555;
 }
 
 .button {
@@ -53,7 +53,16 @@ a:hover {
 }
 
 .button:hover {
-	background-color : #B9E09D !important;
+	background-color : #B9E09D;
+}
+
+.disabled {
+	border-color : #CCC;
+	color : #CCC;
+}
+
+.disabled:hover {
+	background-color : transparent;
 }
 
 .label {
@@ -291,8 +300,9 @@ td {
 }
 
 #levelPanel {
-	margin-left: -175px;
-	margin-top: -20%;
+	margin-left: -200px;
+	margin-top: -30%;
+	padding: 16px;
 }
 
 .customButtons div {
@@ -300,11 +310,6 @@ td {
 	margin: 0 auto;
 
 	padding: 2px 5px 0;
-	border : 1px solid #CCC;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
 }
 
 .up div {
@@ -315,6 +320,6 @@ td {
 	margin-bottom: 20px;
 }
 
-#custom, #customButton {
+.custom {
 	border : 1px dashed #555 !important;
 }

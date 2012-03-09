@@ -51,6 +51,8 @@ var Menu = {
 			],
 
 			transitions : [
+				{ name : 'play', from : '*', to: 'play', callback : this.onPlay },
+
 				{ name : 'win', from : 'play', to: 'gameover', callback : this.onWin },
 				{ name : 'lose', from : 'play', to: 'gameover', callback : this.onLose },
 			]
@@ -90,6 +92,34 @@ var Menu = {
 
 		$('#shareButton').click(function() { toggleButton( 'share', 'feedback' ); });
 		$('#feedbackButton').click(function() { toggleButton( 'feedback', 'share' ); });
+
+
+		$('#playClassicButton').click( function() {
+
+			Menu.setMode( 'classic' );
+			Menu.fsm.changeState( 'level' );
+
+		});
+
+		$('#playSweepButton').click( function() {
+
+			Menu.setMode( 'sweep' );
+			Menu.fsm.changeState( 'level' );
+
+		});
+
+
+		$('#cancel').click( function() {
+
+			Menu.fsm.changeState( 'welcome' );
+
+		});
+
+		$('#ok').click( function() {
+
+			Menu.fsm.play();
+
+		});
 
 
 		this.initMenu();
@@ -135,11 +165,11 @@ var Menu = {
 		$('#classic').click( function() { Menu.setMode( 'classic' ); });
 		$('#sweep').click( function() { Menu.setMode( 'sweep' ); });
 
-		$('#easy').click( function() { Menu.setLevel( 'easy' ); });
-		$('#medium').click( function() { Menu.setLevel( 'medium' ); });
-		$('#hard').click( function() { Menu.setLevel( 'hard' ); });
+		$('.easy').click( function() { Menu.setLevel( 'easy' ); });
+		$('.medium').click( function() { Menu.setLevel( 'medium' ); });
+		$('.hard').click( function() { Menu.setLevel( 'hard' ); });
 
-		$('#custom').click( function() { Menu.setLevel( 'custom' ); });
+		$('.custom').click( function() { Menu.setLevel( 'custom' ); });
 
 		function toggleFunction( name, on ) {
 
@@ -239,12 +269,12 @@ var Menu = {
 
 	setLevel : function( levelName ) {
 
-		$('#easy').removeClass( 'active' );
-		$('#medium').removeClass( 'active' );
-		$('#hard').removeClass( 'active' );
-		$('#custom').removeClass( 'active' );
+		$('.easy').removeClass( 'active' );
+		$('.medium').removeClass( 'active' );
+		$('.hard').removeClass( 'active' );
+		$('.custom').removeClass( 'active' );
 
-		$('#' + levelName).addClass( 'active');
+		$('.' + levelName).addClass( 'active');
 		this.toggleCustom();
 
 		if ( this.level !== Settings.levels[levelName] ) {
@@ -348,20 +378,6 @@ var Menu = {
 		$('#overlay').show();
 		$('#welcome').show();
 
-		$('#playClassicButton').click( function() {
-
-			Menu.setMode( 'classic' );
-			Menu.fsm.changeState( 'level' );
-
-		});
-
-		$('#playSweepButton').click( function() {
-
-			Menu.setMode( 'sweep' );
-			Menu.fsm.changeState( 'level' );
-
-		});
-
 	},
 
 	exitWelcome : function() {
@@ -374,38 +390,15 @@ var Menu = {
 
 		$('#levelPanel').show();
 
-		$('#easyButton').click( function() {
-
-			Menu.setLevel( 'easy' );
-			Menu.fsm.changeState( 'play' );
-
-		});
-
-		$('#mediumButton').click( function() {
-
-			Menu.setLevel( 'medium' );
-			Menu.fsm.changeState( 'play' );
-
-		});
-
-		$('#hardButton').click( function() {
-
-			Menu.setLevel( 'hard' );
-			Menu.fsm.changeState( 'play' );
-
-		});
-
-		$('#customButton').click( function() {
-
-			
-
-		});
-
 	},
 
 	exitLevel : function() {
 
 		$('#levelPanel').hide();
+
+	},
+
+	onPlay : function() {
 
 		this.overlayOut();
 
@@ -418,6 +411,8 @@ var Menu = {
 
 		this.show();
 		this.overlayIn();
+
+		$('#settingsButton').trigger( 'click' );
 
 	},
 
@@ -486,14 +481,12 @@ var Menu = {
 
 		if ( this.level.name === 'custom' ) {
 
-			vec3.assign(
-				this.level.dimensions,
-				parseInt( $('#custom0').text() ),
-				parseInt( $('#custom1').text() ),
-				parseInt( $('#custom2').text() )
+			vec3.set(
+				this.customDimensions,
+				this.level.dimensions
 			);
 
-			this.level.mines = parseInt( $('#custom3').text() )
+			this.level.mines = this.customMines;
 
 		}
 
@@ -560,8 +553,8 @@ var Menu = {
 
 		for ( i = 0; i < 4; i++ ) {
 
-			$('#customUp' + i).disableSelection();
-			$('#customDown' + i).disableSelection();
+			$('.customUp' + i).disableSelection();
+			$('.customDown' + i).disableSelection();
 
 		}
 
@@ -572,11 +565,11 @@ var Menu = {
 		vec3.set( level.dimensions, this.customDimensions );
 		this.customMines = level.mines;
 
-		$('#custom0').text( level.dimensions[0] );
-		$('#custom1').text( level.dimensions[1] );
-		$('#custom2').text( level.dimensions[2] );
+		$('.custom0').text( level.dimensions[0] );
+		$('.custom1').text( level.dimensions[1] );
+		$('.custom2').text( level.dimensions[2] );
 
-		$('#custom3').text( level.mines );
+		$('.custom3').text( level.mines );
 
 	},
 
@@ -597,7 +590,7 @@ var Menu = {
 
 				this.disableCustomButton( i, true );
 
-			} else if ( !$('#customUp' + i).hasClass( 'button' ) ) {
+			} else if ( $('.customUp' + i).hasClass( 'disabled' ) ) {
 
 				this.enableCustomButton( i, true );
 
@@ -607,7 +600,7 @@ var Menu = {
 
 				this.disableCustomButton( i, false );
 
-			} else if ( !$('#customDown' + i).hasClass( 'button' ) ) {
+			} else if ( $('.customDown' + i).hasClass( 'disabled' ) ) {
 
 				this.enableCustomButton( i, false );
 
@@ -618,7 +611,7 @@ var Menu = {
 		if ( sum[3] < this.customMines ) {
 
 			this.customMines = sum[3];
-			$('#custom3').text( sum[3] );
+			$('.custom3').text( sum[3] );
 
 		}
 
@@ -626,9 +619,9 @@ var Menu = {
 
 	enableCustomButton: function( number, isUp ) {
 
-		var name = '#custom' + ( isUp ? 'Up' : 'Down' ) + number;
+		var name = '.custom' + ( isUp ? 'Up' : 'Down' ) + number;
 
-		$(name).addClass( 'element button' );
+		$(name).removeClass( 'disabled' );
 		$(name).click( function() {
 
 			var x;
@@ -643,7 +636,7 @@ var Menu = {
 
 			}
 
-			$('#custom' + number).text( x );
+			$('.custom' + number).text( x );
 
 			Menu.checkCustomButtons();
 			Menu.changedSettings( true );
@@ -654,9 +647,9 @@ var Menu = {
 
 	disableCustomButton: function( number, isUp ) {
 
-		var name = '#custom' + ( isUp ? 'Up' : 'Down' ) + number;
+		var name = '.custom' + ( isUp ? 'Up' : 'Down' ) + number;
 
-		$( name ).removeClass( 'element button' );
+		$( name ).addClass( 'disabled' );
 		$( name ).unbind( 'click' );
 
 	},
@@ -665,7 +658,7 @@ var Menu = {
 
 		var i;
 
-		if ( $('#custom').hasClass( 'active' ) ) {
+		if ( $('.custom').hasClass( 'active' ) ) {
 
 			this.checkCustomButtons();
 
