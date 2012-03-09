@@ -28,7 +28,7 @@
 	<script type="text/javascript" charset="utf-8">
 
 
-	texturePath = "textures/tex33.png"
+	texturePath = "textures/tex40.png"
 
 	useBackgroundTextures = false
 
@@ -552,7 +552,7 @@
 	void main(void) {
 
 		gl_FragColor = texture2D( uTexture, vTextureCoord );
-		gl_FragColor.a = min( gl_FragColor.a, uAlpha );
+		gl_FragColor.a = min( gl_FragColor.a, uAlpha ) - 0.01;
 
 	}
 
