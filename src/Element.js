@@ -438,7 +438,7 @@ Element.prototype = {
 
 		var tween;
 
-		if ( this.state === "cube" && !this.opening ) {
+		if ( this.state === "cube" && !this.flagged && !this.opening ) {
 
 			this.opening = true;
 
