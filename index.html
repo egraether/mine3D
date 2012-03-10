@@ -54,7 +54,7 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = false
+	showWelcomeScreen = true
 
 	invertedControls = false
 	controlSpeed = 1
@@ -78,7 +78,7 @@
 	<div id="hud">
 
 		<div class="button left clear" id="menuButton"> menu </div>
-		<div class="button left newButton"> new </div>
+		<div class="button left newButton" id="newButton"> new </div>
 
 		<div class="element clear left" id="menu">
 
@@ -241,8 +241,8 @@
 
 			<div class="button left clear" id="clearButton"> delete </div>
 			<div class="left" id="clearPrompt">
-				<div class="label left" style="clear:none"> sure? </div>
-				<div class="left button" id="clearNowButton"> yes </div>
+				<div class="label left"> sure? </div>
+				<div class="button left" id="clearNowButton"> yes </div>
 			</div>
 
 		</div>
@@ -350,139 +350,124 @@
 
 	</div>
 
-	<div id="overlay">
+	<div id="overlay"></div>
 
-		<div class="element centered" id="winner">
-			<div class="label">you win!</div>
-			<div class="button left newButton"> new </div>
-		</div>
+	<div class="element centered" id="winner">
+		<div class="label">you win!</div>
+		<div class="button left newButton"> new </div>
+	</div>
 
-		<div class="element centered" id="loser">
-			<div class="label">you lose!</div>
-			<div class="button left" id="restartButton"> restart </div>
-			<div class="button left newButton"> new </div>
-		</div>
+	<div class="element centered" id="loser">
+		<div class="label">you lose!</div>
+		<div class="button left" id="restartButton"> restart </div>
+		<div class="button left newButton"> new </div>
+	</div>
 
-		<div class="element centered" id="welcome">
+	<div class="element centered" id="welcome">
 
-			<div class="left" id="intro">
+		<div class="left" id="intro">
 
-				<div class="label">
-					<span class="title highlight"> Mine3D </span>
-					<span class="subtitle"> open beta </span>
-				</div>
-
-				<div class="label text">
-					Can you play Minesweeper in 3D? 
-					Same rules, one more dimension.
-					Click here to give it a try:
-				</div>
-
-				<div class="button" id="playClassicButton"> play classic </div>
-
-				<div class="label text">
-					Or choose an entirely new experience. 
-					Delete mines instead of marking them
-					and reduce the field mine by mine:
-				</div>
-
-				<div class="button" id="playSweepButton"> play sweep </div>
-
+			<div class="label">
+				<span class="title highlight"> Mine3D </span>
+				<span class="subtitle"> open beta </span>
 			</div>
 
-			<div class="left" id="info">
-
-				<div class="label heading highlight"> Info </div>
-
-				<div class="label">
-					release contains most features, but no final graphic design and few animations
-				</div>
-
-				<div class="label">
-					renders only on interaction
-				</div>
-
-				<div class="label">
-					find rules and controls in the menu
-				</div>
-
-				<div class="label">
-					if rendering lags: <br />
-					- decrease size of window <br />
-					- turn off animations
-				</div>
-
-				<div class="label">
-					developed by <a href="http://egraether.com/">egraether</a>
-				</div>
-
+			<div class="label text">
+				Can you play Minesweeper in 3D? 
+				Same rules, one more dimension.
+				Click here to give it a try:
 			</div>
 
-			<div class="clear"></div>
+			<div class="button" id="playClassicButton"> play classic </div>
+
+			<div class="label text">
+				Or choose an entirely new experience. 
+				Delete mines instead of marking them
+				and reduce the field mine by mine:
+			</div>
+
+			<div class="button" id="playSweepButton"> play sweep </div>
 
 		</div>
 
-		<div class="element centered" id="levelPanel">
-			<div class="label clear">choose level:</div>
+		<div class="left" id="info">
 
-			<table class="clear">
+			<div class="label heading highlight"> Info </div>
 
-				<tr>
-					<td colspan="4">
-						<div class="left button easy"> easy </div>
-						<div class="left button medium"> medium </div>
-						<div class="left button hard"> hard </div>
-						<div class="left button custom"> custom </div>
-					</td>
-				</tr>
+			<div class="label">
+				release contains most features, but no final graphic design and few animations
+			</div>
 
-				<tr class="up">
-					<td><div>X</div></td>
-					<td><div>Y</div></td>
-					<td><div>Z</div></td>
-					<td><div>Mines</div></td>
-				</tr>
+			<div class="label">
+				renders only on interaction
+			</div>
 
-				<tr class="customButtons">
-					<td><div class="button customUp0">&#x25B3;</div></td>
-					<td><div class="button customUp1">&#x25B3;</div></td>
-					<td><div class="button customUp2">&#x25B3;</div></td>
-					<td><div class="button customUp3">&#x25B3;</div></td>
-				</tr>
+			<div class="label">
+				find rules and controls in the menu
+			</div>
 
-				<tr>
-					<td class="label custom0">5</td>
-					<td class="label custom1">5</td>
-					<td class="label custom2">5</td>
-					<td class="label custom3">10</td>
-				</tr>
+			<div class="label">
+				if rendering lags: <br />
+				- decrease size of window <br />
+				- turn off animations
+			</div>
 
-				<tr class="customButtons down">
-					<td><div class="button customDown0">&#x25BD;</div></td>
-					<td><div class="button customDown1">&#x25BD;</div></td>
-					<td><div class="button customDown2">&#x25BD;</div></td>
-					<td><div class="button customDown3">&#x25BD;</div></td>
-				</tr>
-
-			</table>
-
-			<div class="button left" id="cancel">back</div>
-			<div class="button right" id="ok">play</div>
+			<div class="label">
+				developed by <a href="http://egraether.com/">egraether</a>
+			</div>
 
 		</div>
 
-		<div class="element centered" id='customPanel'>
-			<div class="label">set custom dimensions:</div>
+		<div class="clear"></div>
 
-			<input class="left" id="customX" size="3" />
-			<div class="left label">x</div>
-			<input class="left" id="customY" size="3" />
-			<div class="left label">x</div>
-			<input class="left" id="customZ" size="3" />
+	</div>
 
-			<div class="button clear left" id="customCancelButton"> cancel </div>
-			<div class="button left" id="customOkButton"> ok </div>
-		</div>
+	<div class="element centered" id="levelPanel">
+		<div class="label clear">choose level:</div>
+
+		<table class="clear">
+
+			<tr>
+				<td colspan="4">
+					<div class="left button easy"> easy </div>
+					<div class="left button medium"> medium </div>
+					<div class="left button hard"> hard </div>
+					<div class="left button custom"> custom </div>
+				</td>
+			</tr>
+
+			<tr class="up">
+				<td><div>X</div></td>
+				<td><div>Y</div></td>
+				<td><div>Z</div></td>
+				<td><div>Mines</div></td>
+			</tr>
+
+			<tr class="customButtons">
+				<td><div class="button customUp0">&#x25B3;</div></td>
+				<td><div class="button customUp1">&#x25B3;</div></td>
+				<td><div class="button customUp2">&#x25B3;</div></td>
+				<td><div class="button customUp3">&#x25B3;</div></td>
+			</tr>
+
+			<tr>
+				<td class="label custom0">5</td>
+				<td class="label custom1">5</td>
+				<td class="label custom2">5</td>
+				<td class="label custom3">10</td>
+			</tr>
+
+			<tr class="customButtons down">
+				<td><div class="button customDown0">&#x25BD;</div></td>
+				<td><div class="button customDown1">&#x25BD;</div></td>
+				<td><div class="button customDown2">&#x25BD;</div></td>
+				<td><div class="button customDown3">&#x25BD;</div></td>
+			</tr>
+
+		</table>
+
+		<div class="button left" id="cancel">back</div>
+		<div class="button right" id="ok">play</div>
 
 	</div>
 

@@ -143,15 +143,19 @@ a:hover {
 	margin-bottom : 12px
 }
 
-#winner, #loser, #newButton, 
-#menuButton,
+#winner, #loser, 
+#newButton, #menuButton,
 #mineDisplay, #timeDisplay,
 #shareButton, #share,
 #feedbackButton, #feedback,
 #error, #welcome, #overlay,
 #menu, .page, #clearPrompt,
-#levelPanel, #apply, #customPanel {
+#levelPanel, #apply {
 	display: none;
+}
+
+#winner, #loser, #welcome, #levelPanel {
+	z-index : 2;
 }
 
 #winner {
@@ -268,8 +272,8 @@ td {
 	float : none;
 	margin : 16px auto;
 
-	-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 
 	-webkit-border-radius: 10px;
