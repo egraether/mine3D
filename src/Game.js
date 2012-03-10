@@ -41,6 +41,13 @@ var Game = {
 		}
 
 
+		if ( this.gameOver ) {
+
+			Grid.leftClicked = Grid.rightClicked = false;
+
+		}
+
+
 		Grid.update();
 
 
@@ -117,6 +124,8 @@ var Game = {
 
 		Camera.reset();
 
+		TWEEN.onComplete( null );
+
 	},
 
 	start : function( resize ) {
@@ -149,13 +158,33 @@ var Game = {
 
 	over : function( won, element ) {
 
-		var name = Settings.getKey();
+		var self = this;
 
 		this.saveStats( Grid.playTime, won );
 
 		this.gameover = true;
 
 		Grid.showMines( won, element );
+
+		if ( Settings.animations && TWEEN.getAll().length ) {
+
+			TWEEN.onComplete( function() {
+
+				self.showEndScreen( won );
+
+			});
+
+		} else {
+
+			this.showEndScreen( won );
+
+		}
+
+	},
+
+	showEndScreen : function( won ) {
+
+		var name = Settings.getKey();
 
 		if ( won ) {
 
@@ -166,11 +195,11 @@ var Game = {
 
 			}
 
-			Menu.win();
+			Menu.fsm.win();
 
 		} else {
 
-			Menu.lose();
+			Menu.fsm.lose();
 
 		}
 

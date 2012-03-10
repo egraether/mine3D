@@ -129,21 +129,17 @@ var EventHandler = {
 
 	onClick : function( ) {
 
-		if ( !Game.gameover ) {
+		if ( this.button === 0 ) {
 
-			if ( this.button === 0 ) {
+			Grid.leftClicked = true;
 
-				Grid.leftClicked = true;
+		} else if ( this.button === 1 ) {
 
-			} else if ( this.button === 1 ) {
+			Camera.reset();
 
-				Camera.reset();
+		} else if ( this.button === 2 ) {
 
-			} else if ( this.button === 2 ) {
-
-				Grid.rightClicked = true;
-
-			}
+			Grid.rightClicked = true;
 
 		}
 

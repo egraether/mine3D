@@ -54,7 +54,7 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = true
+	showWelcomeScreen = false
 
 	invertedControls = false
 	controlSpeed = 1
@@ -342,12 +342,6 @@
 
 		</div>
 
-		<div class="element clear" id="winner"> you win! </div>
-
-		<div class="element clear" id="loser"> you lose! </div>
-
-		<div class="button" id="restartButton"> restart </div>
-
 		<div class="element clear" id="error">
 			WebGL does not work in your browser. Find out why: 
 			<a href="http://get.webgl.org">http://get.webgl.org</a>
@@ -358,6 +352,17 @@
 	</div>
 
 	<div id="overlay">
+
+		<div class="element centered" id="winner">
+			<div class="label">you win!</div>
+			<div class="button left newButton"> new </div>
+		</div>
+
+		<div class="element centered" id="loser">
+			<div class="label">you lose!</div>
+			<div class="button left" id="restartButton"> restart </div>
+			<div class="button left newButton"> new </div>
+		</div>
 
 		<div class="element centered" id="welcome">
 

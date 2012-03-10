@@ -46,7 +46,7 @@ var Menu = {
 				{ name : 'level', enter : this.enterLevel, exit : this.exitLevel },
 				{ name : 'play' },
 				{ name : 'menu', enter : this.enterMenu, exit : this.exitMenu },
-				{ name : 'gameover'},
+				{ name : 'gameover', enter : this.enterGameOver, exit : this.exitGameOver },
 				{ name : 'error'}
 			],
 
@@ -60,7 +60,7 @@ var Menu = {
 		});
 
 
-		$('#newButton').click(function () {
+		$('.newButton').click(function () {
 
 			Game.start();
 			Menu.fsm.changeState( 'play' );
@@ -76,7 +76,7 @@ var Menu = {
 		$('#restartButton').click(function() {
 
 			Game.restart();
-			Menu.fsm.play();
+			Menu.fsm.changeState( 'play' );
 
 		});
 
@@ -128,9 +128,16 @@ var Menu = {
 
 		this.initStats();
 
-		this.initCustom();
-
 		$('.button').disableSelection();
+
+		var i;
+
+		for ( i = 0; i < 4; i++ ) {
+
+			$('.customUp' + i).disableSelection();
+			$('.customDown' + i).disableSelection();
+
+		}
 
 	},
 
@@ -315,8 +322,6 @@ var Menu = {
 		$('#winner').hide();
 		$('#loser').hide();
 
-		$('#restartButton').hide();
-
 	},
 
 	show : function() {
@@ -423,6 +428,33 @@ var Menu = {
 
 	},
 
+	onLose : function() {
+
+		$('#loser').show();
+
+	},
+
+	onWin : function() {
+
+		$('#winner').show();
+
+	},
+
+	enterGameOver : function() {
+
+		this.overlayIn( 1 );
+
+	},
+
+	exitGameOver : function() {
+
+		$('#winner').hide();
+		$('#loser').hide();
+
+		this.overlayOut();
+
+	},
+
 	showHUD : function() {
 
 		$('#newButton').show();
@@ -447,21 +479,6 @@ var Menu = {
 	error : function() {
 
 		$('#error').show();
-
-	},
-
-	lose : function() {
-
-		$('#loser').show();
-		// $('#restartButton').show();
-		$('#newButton').addClass( 'active' );
-
-	},
-
-	win : function() {
-
-		$('#winner').show();
-		$('#newButton').addClass( 'active' );
 
 	},
 
@@ -544,19 +561,6 @@ var Menu = {
 			$('#overlay').css( 'z-index', -1 );
 
 		});
-
-	},
-
-	initCustom : function() {
-
-		var i;
-
-		for ( i = 0; i < 4; i++ ) {
-
-			$('.customUp' + i).disableSelection();
-			$('.customDown' + i).disableSelection();
-
-		}
 
 	},
 
