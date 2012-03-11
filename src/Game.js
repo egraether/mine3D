@@ -15,9 +15,6 @@ var Game = {
 
 		}
 
-		// moved to Menu.showHUD()
-		// EventHandler.init();
-
 		this.reset();
 
 	},

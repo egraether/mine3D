@@ -272,7 +272,6 @@ td {
 
 #welcome {
 	width : 720px;
-	height : 500px;
 
 	margin-left : -360px;
 	margin-top : -250px;
@@ -280,7 +279,7 @@ td {
 
 #intro {
 	width : 408px;
-	margin : 24px 0;
+	margin : 24px 0 0;
 	padding : 0 8px;
 	border-right : 1px solid #555;
 }
@@ -289,7 +288,7 @@ td {
 	width : 276px;
 	font-size : 14pt;
 	padding-left : 16px;
-	margin : 24px 0;
+	margin : 24px 0 0;
 }
 
 #info .heading {
@@ -365,4 +364,8 @@ td {
 
 .custom {
 	border : 1px dashed #555 !important;
+}
+
+#welcomeOption {
+	font-size : 12pt;
 }

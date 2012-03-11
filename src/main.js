@@ -23,13 +23,16 @@ function init( gl ) {
 	Stats.loadSettings();
 
 	Settings.init();
+	EventHandler.init();
 
 	Game.init( gl );
 
 
 	Menu.init();
 
-	if ( showWelcomeScreen) {
+	console.log( showWelcomeScreen, Stats.read( 'hideWelcomeScreen' ))
+
+	if ( showWelcomeScreen || !Stats.read( 'hideWelcomeScreen' ) ) {
 
 		Menu.fsm.changeState( 'welcome' );
 
@@ -81,7 +84,7 @@ function start() {
 
 	if ( !gl ) {
 
-		Menu.error();
+		$('#error').show();
 		return;
 
 	}

@@ -12,6 +12,15 @@ var EventHandler = {
 
 	init : function() {
 
+		window.addEventListener( "resize", bind( this, this.onResize ), false );
+
+		vec3.zero( this.oldMouse );
+		vec3.zero( this.mouse );
+
+	},
+
+	bind : function() {
+
 		canvas.addEventListener( 'mousemove', bind( this, this.onMouseMove ), false );
 		canvas.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 		canvas.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
@@ -22,13 +31,8 @@ var EventHandler = {
 		document.addEventListener( "keydown", bind( this, this.onKeyDown ), false );
 		document.addEventListener( "keyup", bind( this, this.onKeyUp ), false );
 
-		window.addEventListener( "resize", bind( this, this.onResize ), false );
-
 		canvas.addEventListener( 'contextmenu', function( event ) { event.preventDefault(); }, false );
 		canvas.onselectstart = function() { return false; };
-
-		vec3.zero( this.oldMouse );
-		vec3.zero( this.mouse );
 
 	},
 
@@ -157,13 +161,20 @@ var EventHandler = {
 
 	onScroll : function( event ) {
 
+		var delta;
+
 		event.stopPropagation();
-		// event.preventDefault();
 
-		var delta = event.wheelDelta || (event.detail * -5);
-		delta = 1 - delta * 0.0002;
+		if ( Menu.fsm.hasState( 'play' ) ) {
 
-		Camera.zoom( delta );
+			event.preventDefault();
+
+			delta = event.wheelDelta || ( event.detail * -5 );
+			delta = 1 - delta * 0.0002;
+
+			Camera.zoom( delta );
+
+		}
 
 	},
 
@@ -198,7 +209,7 @@ var EventHandler = {
 
 	onKeyDown : function( event ) {
 
-		if ( this.state === "up" && this.isMouseKey( event.keyCode ) ) {
+		if ( this.state === "up" && this.isMouseKey( event.keyCode ) && Menu.fsm.hasState( 'play' ) ) {
 
 			this.onMouseDown( this.augmentEvent( event ) );
 
@@ -210,11 +221,7 @@ var EventHandler = {
 
 		// console.log( event.keyCode );
 
-		if ( this.isMouseKey( event.keyCode ) ) {
-
-			this.onMouseUp( this.augmentEvent( event ) );
-
-		} else if ( event.keyCode === 32  /* SPACE */ ) {
+		if ( event.keyCode === 32  /* SPACE */ ) {
 
 			Game.start();
 			Menu.fsm.changeState( 'play' );
@@ -223,22 +230,25 @@ var EventHandler = {
 
 			Menu.toggle();
 
-		} else if ( event.keyCode === 82 /* R */ ) {
+		} else if ( Menu.fsm.hasState( 'play' ) ) {
 
-			Camera.reset();
+			if ( this.isMouseKey( event.keyCode ) ) {
 
-		} else if ( event.keyCode === 73 /* I */ ) {
+				this.onMouseUp( this.augmentEvent( event ) );
 
-			stats.toggle();
+			} else if ( event.keyCode === 82 /* R */ ) {
 
-		} else if ( event.keyCode === 79 /* O */ ) {
+				Camera.reset();
 
-			stats.switchMode();
+			} else if ( event.keyCode === 73 /* I */ ) {
 
-		} else if ( event.keyCode === 89 /* Y */ ) {
+				stats.toggle();
 
-			Game.restart();
-			Menu.hide();
+			} else if ( event.keyCode === 79 /* O */ ) {
+
+				stats.switchMode();
+
+			}
 
 		}
 

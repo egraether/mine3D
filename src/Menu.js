@@ -64,7 +64,7 @@ var Menu = {
 
 	},
 
-	secretCounter : 2,
+	secretCounter : Math.floor( Math.random() * 100 ),
 
 	init : function() {
 
@@ -80,8 +80,7 @@ var Menu = {
 				{ name : 'level', enter : this.enterLevel, exit : this.exitLevel },
 				{ name : 'play' },
 				{ name : 'menu', enter : this.enterMenu, exit : this.exitMenu },
-				{ name : 'gameover', enter : this.enterGameOver, exit : this.exitGameOver },
-				{ name : 'error'}
+				{ name : 'gameover', enter : this.enterGameOver, exit : this.exitGameOver }
 			],
 
 			transitions : [
@@ -401,13 +400,13 @@ var Menu = {
 
 	toggle : function() {
 
-		if ( this.fsm.hasState( 'play' ) ) {
+		if ( this.fsm.hasState( 'menu' ) ) {
 
-			this.fsm.changeState( 'menu' );
+			this.fsm.changeState( 'play' );
 
 		} else {
 
-			this.fsm.changeState( 'play' );
+			this.fsm.changeState( 'menu' );
 
 		}
 
@@ -446,13 +445,7 @@ var Menu = {
 
 		});
 
-		EventHandler.init();
-
-	},
-
-	error : function() {
-
-		$('#error').show();
+		EventHandler.bind();
 
 	},
 
@@ -478,6 +471,8 @@ var Menu = {
 	exitLevel : function() {
 
 		$('#levelPanel').hide();
+
+		Stats.write( 'hideWelcomeScreen', $('#welcomeCheckbox' ).attr( 'checked' ) ? 1 : 0 );
 
 	},
 
@@ -548,7 +543,7 @@ var Menu = {
 
 	enterGameOver : function() {
 
-		this.overlayIn( 1 );
+		this.overlayIn();
 
 	},
 
@@ -599,8 +594,10 @@ var Menu = {
 
 	overlayIn : function() {
 
+		$('#overlay').stop();
+
 		$('#overlay').css( 'z-index', 1 );
-		$("#overlay").fadeTo( 500, 0.7 );
+		$("#overlay").fadeTo( 500, 0.7, function() {} );
 
 	},
 
