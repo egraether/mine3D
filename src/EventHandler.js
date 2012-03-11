@@ -261,11 +261,11 @@ var EventHandler = {
 		Camera.resize();
 		Element.updateMatrix( gl );
 
-		if ( useBackgroundTextures ) {
-
-			Background.resize();
-
-		}
+		// if ( useBackgroundTextures ) {
+		// 
+		// 	Background.resize();
+		// 
+		// }
 
 		Grid.redraw = true;
 

@@ -9,6 +9,7 @@
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/requestAnimationFrame.js
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/glMatrix.js
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/Tween.js
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/Stats.js
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/jquery-1.6.4.js
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/utilities.js
