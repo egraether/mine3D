@@ -60,7 +60,7 @@ var Menu = {
 
 		'sweephard' : [
 			'drawLines=1'
-		],
+		]
 
 	},
 
@@ -87,7 +87,7 @@ var Menu = {
 				{ name : 'play', from : '*', to: 'play', callback : this.onPlay },
 
 				{ name : 'win', from : 'play', to: 'gameover', callback : this.onWin },
-				{ name : 'lose', from : 'play', to: 'gameover', callback : this.onLose },
+				{ name : 'lose', from : 'play', to: 'gameover', callback : this.onLose }
 			]
 
 		});
