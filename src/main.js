@@ -30,8 +30,6 @@ function init( gl ) {
 
 	Menu.init();
 
-	console.log( showWelcomeScreen, Stats.read( 'hideWelcomeScreen' ))
-
 	if ( showWelcomeScreen || !Stats.read( 'hideWelcomeScreen' ) ) {
 
 		Menu.fsm.changeState( 'welcome' );

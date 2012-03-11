@@ -13,6 +13,7 @@
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/utilities.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/WebGLUtilities.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/StateMachine.js
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Cube.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Face.js
