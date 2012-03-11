@@ -72,6 +72,20 @@ var Camera = new ( function() {
 
 		if ( isRecentering ) {
 
+			if ( isRotating ) {
+
+				getMouseOnBall( mouse, start );
+
+			} else if ( isZooming ) {
+
+				zoomDelta = 1;
+
+			} else if ( isPanning ) {
+
+				getMouseOnScreen( mouse, start );
+
+			}
+
 			isRecentering = false;
 			return true;
 
@@ -79,6 +93,14 @@ var Camera = new ( function() {
 			Settings.recenter && EventHandler.state === 'up' ) {
 
 			return this.recenterView( Settings.animations );
+
+		}
+
+		if ( isRotating ) {
+
+			this.rotateCamera();
+
+			this.updateRotation = true;
 
 		}
 
@@ -91,14 +113,6 @@ var Camera = new ( function() {
 		if ( isPanning ) {
 
 			this.panCamera();
-
-		}
-
-		if ( isRotating ) {
-
-			this.rotateCamera();
-
-			this.updateRotation = true;
 
 		}
 
@@ -309,12 +323,10 @@ var Camera = new ( function() {
 		if ( len > 10000 ) {
 
 			vec3.scale( vec3.normalize( eye ), 100 );
-			zoomDelta = 1;
 
 		} else if ( len < 0.09 ) {
 
 			vec3.scale( vec3.normalize( eye ), 0.3 );
-			zoomDelta = 1;
 
 		}
 
