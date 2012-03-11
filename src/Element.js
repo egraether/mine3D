@@ -435,7 +435,7 @@ Element.prototype = {
 
 	},
 
-	openCube : function() {
+	openCube : function( noDelay ) {
 
 		var tween;
 
@@ -452,7 +452,13 @@ Element.prototype = {
 
 				tween.to( { scale : 0 }, 150 );
 
-				tween.delay( Math.random() * 100 );
+				if ( !noDelay ) {
+
+					tween.delay( Math.random() * 100 );
+
+				}
+
+				tween.easing( TWEEN.Easing.Quadratic.EaseOut );
 
 				tween.onUpdate( Grid.forceRedraw );
 

@@ -337,7 +337,7 @@ var Grid = {
 
 				}
 
-				elementInRay.openCube();
+				elementInRay.openCube( true );
 
 				this.redraw = true;
 
