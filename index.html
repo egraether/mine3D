@@ -37,8 +37,8 @@
 
 	backgroundColor = 0xFFFFFF
 
-	cubeAlpha = 1.0
-	mouseOverAlpha = 0.65
+	mainAlpha = 1.0
+	hoverAlpha = 0.65
 
 	cubeSpacing = 0.1
 
@@ -54,7 +54,7 @@
 	drawBigCubes = false
 	drawLines = false
 
-	showWelcomeScreen = true
+	showWelcomeScreen = false
 
 	invertedControls = false
 	controlSpeed = 1
@@ -353,14 +353,32 @@
 	<div id="overlay"></div>
 
 	<div class="element centered" id="winner">
-		<div class="label">you win!</div>
-		<div class="button left newButton"> new </div>
+		<div class="element">you won the game!</div>
+
+		<div class="times">
+			<div class="label">time: <span class="gameTime"> - </span></div>
+			<div class="label">best time: <span class="bestTime"> - </span></div>
+			<div class="element" id="newBest">new best time!</div>
+		</div>
+
+		<div class="label" id="secret">
+			<div> secret option: </div>
+			<a href="./" id="secretUrl"> ./ </a>
+		</div>
+
+		<div class="button right newButton"> new </div>
 	</div>
 
 	<div class="element centered" id="loser">
-		<div class="label">you lose!</div>
+		<div class="element">you lost the game!</div>
+
+		<div class="times">
+			<div class="label">time: <span class="gameTime"> - </span></div>
+			<div class="label">best time: <span class="bestTime"> - </span></div>
+		</div>
+
 		<div class="button left" id="restartButton"> restart </div>
-		<div class="button left newButton"> new </div>
+		<div class="button right newButton"> new </div>
 	</div>
 
 	<div class="element centered" id="welcome">

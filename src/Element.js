@@ -176,11 +176,11 @@ Element.prototype = {
 
 		if ( this.highlight ) {
 
-			gl.uniform1f( alphaUniform, mouseOverAlpha );
+			gl.uniform1f( alphaUniform, hoverAlpha );
 
 			Cube.draw( gl, shader, stateIndex );
 
-			gl.uniform1f( alphaUniform, cubeAlpha );
+			gl.uniform1f( alphaUniform, mainAlpha );
 
 		} else {
 
@@ -232,7 +232,8 @@ Element.prototype = {
 
 			if ( invertedNumbers ) {
 
-				value = this.neighbors.length - value;
+				// value = this.neighbors.length - value;
+				value = 27 - value;
 
 			}
 
@@ -699,7 +700,7 @@ extend( Element, {
 
 		this.updateMatrix( gl );
 
-		gl.uniform1f( this.shader.alphaUniform, cubeAlpha );
+		gl.uniform1f( this.shader.alphaUniform, mainAlpha );
 
 	},
 

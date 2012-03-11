@@ -41,7 +41,7 @@ var Game = {
 		}
 
 
-		if ( this.gameOver ) {
+		if ( this.gameover ) {
 
 			Grid.leftClicked = Grid.rightClicked = false;
 
@@ -184,16 +184,7 @@ var Game = {
 
 	showEndScreen : function( won ) {
 
-		var name = Settings.getKey();
-
 		if ( won ) {
-
-			if ( Settings.currentLevel.name !== 'custom' && 
-				Stats.updateScores( name, Grid.playTime ) ) {
-
-				Menu.showScores( name );
-
-			}
 
 			Menu.fsm.win();
 

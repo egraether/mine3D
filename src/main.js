@@ -10,9 +10,9 @@ function init( gl ) {
 	gl.clearColor.apply( gl, hexToRGB( backgroundColor ) );
 
 	gl.enable( gl.CULL_FACE );
-	// gl.enable( gl.DEPTH_TEST );
+	gl.disable( gl.DEPTH_TEST );
 
-	gl.lineWidth( 3 );
+	gl.lineWidth( 2 );
 
 	gl.enableAlpha();
 

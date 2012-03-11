@@ -48,7 +48,7 @@ var Stats = {
 
 	},
 
-	updateScores : function( name, time ) {
+	updateScore : function( name, time ) {
 
 		var oldTime = this.read( name );
 

@@ -15,8 +15,7 @@
 
 body {
 	margin : 0;
-	font-family: 'Questrial', sans-serif;
-/*	font-family: sans-serif;*/
+	font-family: 'Questrial', 'Helvetica', 'Arial', sans-serif;
 	font-size : 16pt;
 	line-height : 1.3em;
 	color : #555;
@@ -150,7 +149,8 @@ a:hover {
 #feedbackButton, #feedback,
 #error, #welcome, #overlay,
 #menu, .page, #clearPrompt,
-#levelPanel, #apply {
+#levelPanel, #apply,
+#newBest {
 	display: none;
 }
 
@@ -158,12 +158,45 @@ a:hover {
 	z-index : 2;
 }
 
+#winner, #loser {
+	padding : 8px;
+}
+
 #winner {
+	width : 300px;
+
+	margin-left: -150px;
+	margin-top: -30%;
+}
+
+#winner .element {
 	background-color : #C3E0B1;
+	text-align : center;
+}
+
+.times {
+	padding : 10px 0;
+}
+
+#secret {
+	font-size : 12pt;
+	font-family : 'Helvetica', 'Arial', sans-serif;
+	border : 1px solid black;
+
+	padding : 8px;
+	background-color : #FFFFFF;
 }
 
 #loser {
+	width : 220px;
+
+	margin-left: -110px;
+	margin-top: -30%;
+}
+
+#loser .element {
 	background-color : #FFC2C2;
+	text-align : center;
 }
 
 #stats span {

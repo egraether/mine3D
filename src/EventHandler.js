@@ -217,7 +217,7 @@ var EventHandler = {
 		} else if ( event.keyCode === 32  /* SPACE */ ) {
 
 			Game.start();
-			Menu.hide();
+			Menu.fsm.changeState( 'play' );
 
 		} else if ( event.keyCode === 27 /* ECS */ ) {
 

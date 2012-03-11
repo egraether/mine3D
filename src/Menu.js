@@ -20,17 +20,51 @@ var Menu = {
 	],
 
 	levelNames : [
-		'classic' + 'easy',
-		'sweep' + 'easy',
+		'classiceasy',
+		'sweepeasy',
 
-		'classic' + 'medium',
-		'sweep' + 'medium',
+		'classicmedium',
+		'sweepmedium',
 
-		'classic' + 'hard',
-		'sweep' + 'hard'
+		'classichard',
+		'sweephard'
 	],
 
 	fsm : null,
+
+	secrets : {
+
+		'classiceasy' : [
+			'mainAlpha=0.3&hoverAlpha=1',
+			'grid=30,16,1,99'
+		],
+
+		'sweepeasy' : [
+			'backgroundColor=0x672824',
+			'cubeSpacing=0.5',
+			'numberSize=0.4'
+		],
+
+		'classicmedium' : [
+			'controlSpeed=5'
+		],
+
+		'sweepmedium' : [
+			'invertedControls=1',
+			'invertedNumbers=1'
+		],
+
+		'classichard' : [
+			'drawBigCubes=1'
+		],
+
+		'sweephard' : [
+			'drawLines=1'
+		],
+
+	},
+
+	secretCounter : 2,
 
 	init : function() {
 
@@ -249,11 +283,36 @@ var Menu = {
 
 		for ( i = 0; i < names.length; i++ ) {
 
-			this.setScore( names[i] );
+			this.showScore( names[i] );
 
 		}
 
 		this.updateStats();
+
+	},
+
+	showScore : function( name ) {
+
+		var time = Stats.read( name );
+
+		$('#' + name).text( Math.floor( time * 0.001 ) || '-' );
+
+	},
+
+	updateEndScreenTimes : function() {
+
+		var time = Stats.read( Settings.getKey() );
+
+		$('.gameTime').text( Math.floor( Grid.playTime * 0.001 ) );
+		$('.bestTime').text( Math.floor( time * 0.001 ) || '-' );
+
+	},
+
+	updateStats : function() {
+
+		$('#gamesWon').text( Stats.read( 'gamesWon' ) || 0 );
+		$('#gamesPlayed').text( Stats.read( 'gamesPlayed' ) || 0 );
+		$('#timePlayed').text( Math.floor( Stats.read( 'timePlayed' ) * 0.001 ) || 0 );
 
 	},
 
@@ -356,16 +415,8 @@ var Menu = {
 
 	hidePages : function() {
 
-		var names = this.levelNames,
+		var names = this.pageNames,
 			i;
-
-		for ( i = 0; i < names.length; i++ ) {
-
-			$('#' + names[i]).removeClass('active');
-
-		}
-
-		names = this.pageNames;
 
 		for ( i = 0; i < names.length; i++ ) {
 
@@ -375,6 +426,33 @@ var Menu = {
 		}
 
 		$('#newButton').removeClass( 'active' );
+
+	},
+
+	showHUD : function() {
+
+		$('#newButton').show();
+		$('#menuButton').show();
+
+		$('#shareButton').show();
+		$('#feedbackButton').show();
+
+		$('#timeDisplay').show();
+		$('#mineDisplay').show();
+
+		$('#overlay').click(function() {
+
+			Menu.fsm.changeState( 'play' );
+
+		});
+
+		EventHandler.init();
+
+	},
+
+	error : function() {
+
+		$('#error').show();
 
 	},
 
@@ -430,11 +508,39 @@ var Menu = {
 
 	onLose : function() {
 
+		this.updateEndScreenTimes();
+
 		$('#loser').show();
 
 	},
 
 	onWin : function() {
+
+		var name = Settings.getKey(),
+			secrets, secretUrl;
+
+		$('#newBest').hide();
+		$('#secret').hide();
+
+		if ( Settings.currentLevel.name !== 'custom' ) {
+
+			secrets = this.secrets[ name ];
+			secretUrl = '?' + secrets[this.secretCounter % secrets.length];
+			this.secretCounter++;
+
+			$("#secretUrl").attr( "href", secretUrl ).text( secretUrl );
+			$('#secret').show();
+
+			if ( Stats.updateScore( name, Grid.playTime ) ) {
+
+				this.showScore( name );
+				$('#newBest').show();
+
+			}
+
+		}
+
+		this.updateEndScreenTimes();
 
 		$('#winner').show();
 
@@ -452,33 +558,6 @@ var Menu = {
 		$('#loser').hide();
 
 		this.overlayOut();
-
-	},
-
-	showHUD : function() {
-
-		$('#newButton').show();
-		$('#menuButton').show();
-
-		$('#shareButton').show();
-		$('#feedbackButton').show();
-
-		$('#timeDisplay').show();
-		$('#mineDisplay').show();
-
-		$('#overlay').click(function() {
-
-			Menu.fsm.changeState( 'play' );
-
-		});
-
-		EventHandler.init();
-
-	},
-
-	error : function() {
-
-		$('#error').show();
 
 	},
 
@@ -515,35 +594,6 @@ var Menu = {
 		$('#apply').hide();
 
 		this.resize = false;
-
-	},
-
-	setScore : function( name ) {
-
-		var time = Stats.read( name );
-
-		$('#' + name).text( Math.floor( time * 0.001 ) || '-' );
-
-	},
-
-	showScores : function( name ) {
-
-		this.setScore( name );
-
-		Menu.show();
-
-		$('#' + name).addClass( 'active' );
-
-		$('#statsButton').addClass( 'active' );
-		$('#stats').show();
-
-	},
-
-	updateStats : function() {
-
-		$('#gamesWon').text( Stats.read( 'gamesWon' ) || 0 );
-		$('#gamesPlayed').text( Stats.read( 'gamesPlayed' ) || 0 );
-		$('#timePlayed').text( Math.floor( Stats.read( 'timePlayed' ) * 0.001 ) || 0 );
 
 	},
 

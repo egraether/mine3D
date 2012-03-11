@@ -28,13 +28,13 @@ var Settings = {
 
 		var p = parseFloat;
 
-		// optinally defined in the URL as "d=1,2,3,4"
+		// optinally defined in the URL as "grid=1,2,3,4"
 
-		if ( window.d ) {
+		if ( window.grid ) {
 
-			d = d.split(',');
+			grid = grid.split(',');
 
-			this.setCustom( p( d[0] ), p( d[1] ), p( d[2] ), p( d[3] ) );
+			this.setCustom( p( grid[0] ), p( grid[1] ), p( grid[2] ), p( grid[3] ) );
 
 		} else if ( !this.currentLevel ) {
 
