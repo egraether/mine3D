@@ -166,7 +166,7 @@ a:hover {
 	width : 300px;
 
 	margin-left: -150px;
-	margin-top: -30%;
+	margin-top: -150px;
 }
 
 #winner .element {
@@ -191,7 +191,7 @@ a:hover {
 	width : 220px;
 
 	margin-left: -110px;
-	margin-top: -30%;
+	margin-top: -100px;
 }
 
 #loser .element {
@@ -343,7 +343,7 @@ td {
 
 #levelPanel {
 	margin-left: -200px;
-	margin-top: -30%;
+	margin-top: -180px;
 	padding: 16px;
 }
 
