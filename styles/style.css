@@ -15,10 +15,14 @@
 
 body {
 	margin : 0;
-	font-family: 'Questrial', 'Helvetica', 'Arial', sans-serif;
+	font-family: 'Helvetica', 'Arial', sans-serif;
 	font-size : 16pt;
 	line-height : 1.3em;
 	color : #555;
+}
+
+.useFont {
+	font-family: 'Questrial', 'Helvetica', 'Arial', sans-serif;
 }
 
 a {

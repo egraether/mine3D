@@ -74,7 +74,7 @@ function start() {
 	canvas = document.createElement( "canvas" );
 	gl = null;
 
-	if ( !!window.WebGLRenderingContext ) {
+	if ( System.support.webgl ) {
 
 		gl = canvas.getContext( "experimental-webgl", { antialias : useAntialias } );
 
@@ -95,6 +95,13 @@ function start() {
 
 	canvas.style.width = '100%';
 	canvas.style.height = '100%';
+
+
+	if ( !( System.browser === "Chrome" && System.os === "Windows") ) {
+
+		$('body').addClass( 'useFont' );
+
+	}
 
 
 	stats = new StatsJS();

@@ -1,8 +1,10 @@
 The MIT License
 
-Copyright (c) 2011 egraether http://egraether.com
+Copyright (c) 2012 egraether http://egraether.com
 
 Stats.js Copyright (c) 2011 Mr.doob http://mrdoob.com
+
+System.js Copyright (c) 2011 Mr.doob http://mrdoob.com
 
 Tween.js Copyright (c) 2010 sole http://soledadpenades.com, Mr.doob http://mrdoob.com
 
