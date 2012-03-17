@@ -110,6 +110,10 @@ a:hover {
 	left: 50%;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 #overlay {
 	position : fixed;
 
@@ -372,4 +376,5 @@ td {
 
 #welcomeOption {
 	font-size : 12pt;
+	margin-top : 36px !important;
 }
