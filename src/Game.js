@@ -9,11 +9,11 @@ var Game = {
 		Element.init( gl );
 		Grid.init();
 
-		// if ( useBackgroundTextures ) {
-		// 
-		// 	Background.init( gl );
-		// 
-		// }
+    if ( useBackgroundTextures ) {
+    
+      Background.init( gl );
+    
+    }
 
 		this.reset();
 
@@ -73,15 +73,15 @@ var Game = {
 
 		if ( Grid.redraw || redraw ) {
 
-			// if ( useBackgroundTextures ) {
-			// 
-			// 	Background.draw( gl );
-			// 
-			// } else {
+      if ( useBackgroundTextures ) {
+      
+        Background.draw( gl );
+      
+      } else {
 
 				gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
-			// }
+      }
 
 			Grid.draw( gl );
 
