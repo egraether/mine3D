@@ -145,7 +145,10 @@ var Camera = new ( function() {
 
 	this.getMvMatrix = function() {
 
-		mat4.lookAt( this.getPosition(), vec3.add( center, panVector, vector2 ), up, mvMatrix );
+		var offset = vec3.normalize( right, vec3.create() );
+		vec3.add( vec3.scale( offset, -1 * vec3.length( eye ) * centerOffset ), panVector );
+
+		mat4.lookAt( this.getPosition(), vec3.add( center, offset, vector2 ), up, mvMatrix );
 
 		return mvMatrix;
 
@@ -179,7 +182,7 @@ var Camera = new ( function() {
 
 		return vec3.assign(
 			vector,
-			( mouse[0] - width * 0.5 ) / radius,
+			( mouse[0] - width * ( 0.5 + centerOffset ) ) / radius,
 			( height * 0.5 - mouse[1] ) / radius,
 			0.0
 		);
