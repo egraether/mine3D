@@ -161,17 +161,6 @@ var Menu = {
 
 		this.initStats();
 
-		// $('.button').disableSelection();
-
-		var i;
-
-		for ( i = 0; i < 4; i++ ) {
-
-			// $('.customUp' + i).disableSelection();
-			// $('.customDown' + i).disableSelection();
-
-		}
-
 	},
 
 	initMenu : function() {

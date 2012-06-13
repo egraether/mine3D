@@ -209,7 +209,6 @@ a:hover {
 }
 
 .button {
-
 	margin : 4px;
 	padding : 4px 8px;
 
@@ -217,6 +216,13 @@ a:hover {
 	color : #555;
 
 	text-align : center;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .disabled {
