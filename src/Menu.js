@@ -294,7 +294,7 @@ var Menu = {
 
 		var time = Stats.read( name );
 
-		$('#' + name).text( Math.floor( time * 0.001 ) || '-' );
+		$('#' + name).text( time ? timeToString( time ) : '-' );
 
 	},
 
@@ -302,8 +302,8 @@ var Menu = {
 
 		var time = Stats.read( Settings.getKey() );
 
-		$('.gameTime').text( Math.floor( Grid.playTime * 0.001 ) );
-		$('.bestTime').text( Math.floor( time * 0.001 ) || '-' );
+		$('.gameTime').text( timeToString( Grid.playTime ) );
+		$('.bestTime').text( time ? timeToString( time ) : '-' );
 
 	},
 
@@ -311,7 +311,7 @@ var Menu = {
 
 		$('#gamesWon').text( Stats.read( 'gamesWon' ) || 0 );
 		$('#gamesPlayed').text( Stats.read( 'gamesPlayed' ) || 0 );
-		$('#timePlayed').text( Math.floor( Stats.read( 'timePlayed' ) * 0.001 ) || 0 );
+		$('#timePlayed').text( timeToString( Stats.read( 'timePlayed' ) ) );
 
 	},
 
@@ -360,7 +360,7 @@ var Menu = {
 
 	setTime : function( time ) {
 
-		$('#time').text( Math.floor( time * 0.001 ) );
+		$('#time').text( timeToString( time ) );
 
 	},
 

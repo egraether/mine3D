@@ -102,6 +102,17 @@ function hexToRGB( hex ) {
 
 };
 
+function timeToString( millis ) {
+
+	var secs = Math.floor( millis * 0.001 ),
+		mins = Math.floor( secs / 60 );
+
+	secs %= 60;
+
+	return ( mins < 10 ? '0' : '' ) + mins + ':' + ( secs < 10 ? '0' : '' ) + secs;
+
+}
+
 vec3.assign = function( dest, x, y, z ) {
 
 	dest[0] = x = typeof x === 'number' ? x : 0;
