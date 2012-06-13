@@ -659,10 +659,10 @@ var Menu = {
 
 	enableCustomButton: function( number, isUp ) {
 
-		var name = '.custom' + ( isUp ? 'Up' : 'Down' ) + number;
-
-		$(name).removeClass( 'disabled' );
-		$(name).click( function() {
+		var name = '.custom' + ( isUp ? 'Up' : 'Down' ) + number,
+			isDown = false,
+			timeoutID = 0,
+			change = function() {
 
 			var x;
 
@@ -681,6 +681,38 @@ var Menu = {
 			Menu.checkCustomButtons();
 			Menu.changedSettings( true );
 
+			timeoutID = 0;
+
+			if ( isDown && !$(name).hasClass( 'disabled' ) ) {
+
+				timeoutID = setTimeout( change, 100 );
+
+			}
+
+		};
+
+		$(name).removeClass( 'disabled' );
+		$(name).mousedown( function() {
+
+			isDown = true;
+
+			timeoutID = setTimeout( change, 500 );
+
+		}).mouseup( function() {
+
+			isDown = false;
+
+			if ( timeoutID ) {
+
+				clearTimeout( timeoutID );
+				change();
+
+			}
+
+		}).mouseout(function() {
+
+			isDown = false;
+
 		});
 
 	},
@@ -690,7 +722,7 @@ var Menu = {
 		var name = '.custom' + ( isUp ? 'Up' : 'Down' ) + number;
 
 		$( name ).addClass( 'disabled' );
-		$( name ).unbind( 'click' );
+		$( name ).unbind( 'mousedown' );
 
 	},
 
