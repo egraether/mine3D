@@ -6,8 +6,8 @@
 
 	<title>Mine3D</title>
 
-	<link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" media="all" href="styles/style.css"/>
+    <link rel="stylesheet" media="all" href="fonts/osp-din/stylesheet.css" >
 
 <!-- Google Analytics -->
 	<!-- <script type="text/javascript">
@@ -17,9 +17,9 @@
 	  _gaq.push(['_trackPageview']);
 
 	  (function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 
 	</script> -->
@@ -28,21 +28,21 @@
 	<script type="text/javascript" charset="utf-8">
 
 
-	texturePath = "textures/tex40.png"
+	texturePath = "textures/tex1.png"
 
-	useBackgroundTextures = false
+    useBackgroundTextures = true
 
-	backgroundPatternTexture = "textures/back.png"
-	backgroundGlowTexture = "textures/glow.png"
+    backgroundPatternTexture = "textures/backneu.png"
+    backgroundGlowTexture = "textures/glow.png"
 
 	backgroundColor = 0xFFFFFF
 
-	mainAlpha = 1.0
-	hoverAlpha = 0.65
+	mainAlpha = 0.85
+	hoverAlpha = 0.45
 
 	cubeSpacing = 0.1
 
-	numberSize = 0.17
+	numberSize = 0.10
 	mineSize = 0.3
 
 	useIcosahedron = false
@@ -76,17 +76,28 @@
 <body>
 
 	<div id="hud">
-
-		<div class="button left clear" id="menuButton"> menu </div>
+    <h1>3D-Mine</h1>
+		<div class="button left clear" id="menuButton">
+                    <!--<img src="img/tree-chart.png" alt="Total Primary Energy Consumption" />-->
+                    <div class="blobs">
+                        <div class="pb-1">
+                            <span class="cube-blob"></span>
+                        </div>
+                        
+                    </div>
+      
+                    
+                    
+        </div>
 		<div class="button left newButton" id="newButton"> new </div>
 
 		<div class="element clear left" id="menu">
 
-			<div class="button left" id="settingsButton"> settings </div>
-			<div class="button left" id="statsButton"> stats </div>
-			<div class="button left" id="instructionsButton"> rules </div>
-			<div class="button left" id="controlsButton"> controls </div>
-			<div class="button left" id="aboutButton"> about </div>
+			<div class="button left settings" id="settingsButton"> settings </div>
+			<div class="button left settings" id="statsButton"> stats </div>
+			<div class="button left settings" id="instructionsButton"> rules </div>
+			<div class="button left settings" id="controlsButton"> controls </div>
+			<div class="button left settings" id="aboutButton"> about </div>
 
 		</div>
 
@@ -106,14 +117,13 @@
 
 			<div class="label">
 				developed by <a href="http://egraether.com/">egraether</a><br />
+                designed by <a href="www.mattglanz.com">Sarah Kvasznizca</a> <a href="www.ricardodesign.at">Ricardo Gantschnigg</a><br/>
 				with help from 
 				<a href="http://hempt.at/">mph</a>, 
 				<a href="http://www.findologic.com/">felix hummel</a>, <br />
 				<a href="http://stravid.com/">stravid</a>,
 				<a href="http://cwinkler.multimediatechnology.at/">cwinkler</a>,
 				<a href="http://www.walmink.com/">wouter walmink</a>,  <br />
-				<a href="http://multimediaart.at/~fhs32351/index.html">sarah</a>
-				and <a href="http://multimediaart.at/~fhs33196/blog/">ricardo</a>
 			</div>
 
 			<div class="label">
@@ -522,9 +532,28 @@
 
 	</div>
 
-	<div class="element" id="timeDisplay"> time: <span id="time"> 0 </span> </div>
+	<div id="info">
+    <div class="element" id="timeDisplay"><img class="mine-time" src="images/mine.png"><br/><span id="time"> 0 </span> /
+     <div class="element" id="mineDisplay"><span id="mines"> 10 </span> </div></div>
+     </div>
+    
+<!-- Wolken -->
 
-	<div class="element clear" id="mineDisplay"> mines: <span id="mines"> 10 </span> </div>
+	<img class="clouds1"src="images/wolken_01.png">
+    <img class="faehnchen" src="images/faehnchen_menue.png">
+
+    
+<!-- Würfel 
+    
+    <img class="quadcluster2" src="textures/quad2.png">
+    <img class="onequad1" src="textures/wuerfel_01.png">
+    <img class="onequad2" src="textures/wuerfel_02.png">
+    <img class="onequad3" src="textures/wuerfel_02.png">
+    <img class="onequad4" src="textures/wuerfel_01.png">
+    <img class="onequad5" src="textures/wuerfel_01.png">
+    
+    <img class="quadcluster3" src="images/wuerfel_03.png">
+    
 
 <!-- DO NOT CHANGE BELOW HERE -->
 

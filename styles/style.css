@@ -1,5 +1,6 @@
 /* DO NOT CHANGE */
 
+
 #container {
 	width : 100%;
 	height : 100%;
@@ -11,37 +12,200 @@
 	z-index: -1;
 }
 
+h1{
+	font-size:60px;
+	letter-spacing:0.07em;
+}
+
+#menuButton{
+	float:left;
+	cursor:pointer;
+	height:153px; width:133px;
+}
+
+<!-- Menu BLOB -->
+            
+            .blobs {position: relative;cursor:pointer;}
+            .blobs div {position: absolute;}
+            .blobs span {display: block; position: absolute;}
+            .cube-blob {width: 133px;height: 153px;left:0;}
+            
+        
+            @-webkit-keyframes blob {
+                0% {-webkit-transform: scale(1);}
+                50% {-webkit-transform: scale(1.09);}                
+                100% {-webkit-transform: scale(1);}                           
+            }
+			
+            .blobs div:hover .cube-blob {-webkit-animation: blob .3s ease-in-out;cursor:pointer;}
+            .pb-1 {width: 133px;height:153px;left:0px;}
+                .pb-1 .cube-blob {background-image:url(../images/quadmenu.png);display:block;}              
+ 
+				
+<!-- --------------------------------------- -->
+
+.quadcluster1{
+	position:absolute;
+	top:500px;
+	left:164px;
+	-webkit-animation: togglelr 5s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.onequad1{
+	position:absolute;
+	top:550px;
+	left:140px;
+	-webkit-animation: toggle2 12s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.onequad2{
+	position:absolute;
+	top:750px;
+	left:340px;
+	-webkit-animation: toggle 46s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.onequad4{
+	position:absolute;
+	top:750px;
+	left:150px;
+	-webkit-animation: raise 60s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.onequad5{
+	position:absolute;
+	top:750px;
+	left:50px;
+	-webkit-animation: raise2 60s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.quadcluster2{
+	position:absolute;
+	left:10px;
+	-webkit-animation: toggle3 16s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.quadcluster3{
+	position:absolute;
+	top:655px;
+	left:190px;
+	-webkit-animation: togglewaagrecht 12s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes toggle {
+                0% {top:480px; left:520px;}
+                50% {top:680px;left:215px;}                
+                100% {top:480px;left:520px;}                
+            }
+			
+@-webkit-keyframes toggle2 {
+                0% {top:790px;}
+                50% {top:550px;}                
+                100% {top:790px;}                
+            }
+			
+@-webkit-keyframes toggle3 {
+                0% {bottom:80px;}
+                50% {bottom:50px;}                
+				100% {bottom:80px;}                 
+            }
+			
+@-webkit-keyframes togglewaagrecht {
+                0% {top:580px;left:230px;}
+                50% {top:550px;left:190px;}                
+				100% {top:580px;left:230px;}                 
+            }
+			
+@-webkit-keyframes raise {
+                0% {bottom:150px;opacity:0;}    
+				20%{opacity:1;}           
+				50% {top:100px;} 
+				75%{opacity:1;}
+				100% {bottom:150px; opacity:0;}                
+            }
+			
+@-webkit-keyframes raise2 {
+                0% {bottom:200px;opacity:0;}    
+				20%{opacity:1;}           
+				50% {top:100px;} 
+				75%{opacity:1;}
+				100% {bottom:150px; opacity:0;}                
+            }
+			
+
 /* ------------- */
+
+.clouds1{
+	position:absolute;
+	top:100px;
+	left:30px;
+	-webkit-animation: clouds1 14s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+}
+
+
+@-webkit-keyframes clouds1 {
+                0% {top:150px;} 
+				50% {top:103px;}            
+				100% {top:150px;}                 
+            }
+
+.faehnchen{
+	position:absolute;
+	top:20px;
+	left:165px;
+	-webkit-animation: faehnchen 1.6s ease-in-out;
+	-webkit-animation-iteration-count: infinite;
+	z-index:3;
+}
+
+@-webkit-keyframes faehnchen {
+                0% {top:15px;} 
+				50% {top:20px;}            
+				100% {top:15px;}                 
+            }
+
+
+/* --------------------- */
 
 body {
 	margin : 0;
-	font-family: 'Helvetica', 'Arial', sans-serif;
-	font-size : 16pt;
+	font-family: 'OSPDIN',sans-serif;
+	text-transform:uppercase;
+	letter-spacing:0.015em;
+	font-size : 12pt;
 	line-height : 1.3em;
 	color : #555;
 }
 
 .useFont {
-	font-family: 'Questrial', 'Helvetica', 'Arial', sans-serif;
+	font-family: 'OSPDIN', sans-serif;
 }
 
 a {
-	color : #618F46;
+	color : #8d8d8d;
+	text-decoration:none;
 }
 
 a:visited {
-	color : #75AD55;
+	color : #8d8d8d;
+	text-decoration:none;
 }
 
 a:hover {
-	color : #476933;
+	color : #89c8c0;
 }
 
 .element {
 	margin : 4px;
 	padding : 4px 8px;
-
-	border : 1px solid #555;
 }
 
 .button {
@@ -49,20 +213,10 @@ a:hover {
 	margin : 4px;
 	padding : 4px 8px;
 
-	border : 1px solid #555;
-
 	cursor : pointer;
 	color : #555;
 
 	text-align : center;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-
-.button:hover {
-	background-color : #B9E09D;
 }
 
 .disabled {
@@ -88,7 +242,7 @@ a:hover {
 }
 
 .active {
-	background-color : #C3E0B1;
+	color:#e3405f;
 }
 
 .clear {
@@ -131,14 +285,19 @@ a:hover {
 
 #hud {
 	position : absolute;
-	top : 4px;
-	left : 4px;
+	top : 40px;
+	left : 100px;
 
 	z-index : 2;
 }
 
 #menu {
 	padding: 8px;
+	font-size:24px;
+}
+
+.settings{
+	font-size:36px;
 }
 
 .page {
@@ -239,7 +398,7 @@ td {
 }
 
 #controls tr:first-child td:first-child {
-	color : #618F46;
+	color : #8d8d8d;
 }
 
 #clearPrompt > * {
@@ -273,9 +432,14 @@ td {
 }
 
 #mineDisplay {
-	position : fixed;
-	bottom : 4px;
-	right : 4px;
+	text-align:center;
+	background-color:none;
+}
+
+#info{
+	position:fixed;
+	bottom:20px;
+	left:120px;
 }
 
 #welcome {
