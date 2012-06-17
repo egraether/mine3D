@@ -10,19 +10,19 @@
     <link rel="stylesheet" media="all" href="fonts/osp-din/stylesheet.css" >
 
 <!-- Google Analytics -->
-	<!-- <script type="text/javascript">
+  <script type="text/javascript">
 
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-18871992-3']);
-	  _gaq.push(['_trackPageview']);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18871992-3']);
+    _gaq.push(['_trackPageview']);
 
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
 
-	</script> -->
+  </script>
 
 <!-- SETTINGS -->
 	<script type="text/javascript" charset="utf-8">
@@ -63,7 +63,7 @@
 
 	maxCubes = 10000
 
-	centerOffset = 0.15
+	centerOffset = 0.20
 
 
 	window.onload = function() {
@@ -77,8 +77,9 @@
 </head>
 <body>
 
+<h1><img src="images/mine3d.png"></h1>
+
 	<div id="hud">
-    <h1>3D-Mine</h1>
 		<div class="button left clear" id="menuButton">
                     <!--<img src="img/tree-chart.png" alt="Total Primary Energy Consumption" />-->
                     <div class="blobs">
@@ -91,9 +92,17 @@
                     
                     
         </div>
-		<div class="button left newButton" id="newButton"> new </div>
+		<div class="left newButton" id="newButton">
+        <div class="blobs">
+                        <div class="pb-1">
+                            <span class="cube-blob"></span>
+                        </div>
+                        
+                    </div>
+        
+        </div>
 
-		<div class="element clear left" id="menu">
+		<div class="element clear left settingsmenu" id="menu">
 
 			<div class="button left settings" id="settingsButton"> settings </div>
 			<div class="button left settings" id="statsButton"> stats </div>
@@ -119,16 +128,19 @@
 
 			<div class="label">
 				developed by <a href="http://egraether.com/">egraether</a><br />
-                designed by <a href="www.mattglanz.com">Sarah Kvasznizca</a> <a href="www.ricardodesign.at">Ricardo Gantschnigg</a><br/>
-				with help from 
+                designed by <a href="http://www.mattglanz.com">Sarah Kvasznizca</a>, <a href="http://www.ricardodesign.at/">Ricardo Gantschnigg</a><br/><br/>
+				
+                <div class="help">with help from 
 				<a href="http://hempt.at/">mph</a>, 
 				<a href="http://www.findologic.com/">felix hummel</a>, <br />
 				<a href="http://stravid.com/">stravid</a>,
 				<a href="http://cwinkler.multimediatechnology.at/">cwinkler</a>,
 				<a href="http://www.walmink.com/">wouter walmink</a>,  <br />
+                </div>
 			</div>
 
 			<div class="label">
+            <div class="help">
 				powered by 
 				<a href="http://code.google.com/p/glmatrix/">glMatrix.js</a>, 
 				<a href="https://github.com/sole/tween.js/">tween.js</a> <br />
@@ -139,33 +151,38 @@
 				released under <a href="https://github.com/egraether/mine3D/blob/master/LICENSE.txt">MIT Licence</a>
 			</div>
 
-			<div class="label">
-				source available on <a href="https://github.com/egraether/mine3D">github</a>
+      <div class="label">
+        source available on <a href="https://github.com/egraether/mine3D">github</a>
+      </div>
+      
+      <div class="label">
+        <a href="./beta">to old design</a>
+      </div>
+			
+			
 			</div>
 
 		</div>
 
 		<div class="page element left clear" id="settings">
 
-			<div class="label heading"> Settings </div>
-
 			<table>
 
 				<tr>
 					<td class="label"> mode: </td>
 					<td colspan="4">
-						<div class="button left" id="classic"> classic </div>
-						<div class="button left" id="sweep"> sweep </div>
+						<div class="button left border" id="classic"> classic </div>
+						<div class="button left border" id="sweep"> sweep </div>
 					</td>
 				</tr>
 
 				<tr>
 					<td class="label"> level: </td>
 					<td colspan="4">
-						<div class="button left easy"> easy </div>
-						<div class="button left medium"> medium </div>
-						<div class="button left hard"> hard </div>
-						<div class="button left custom"> custom </div>
+						<div class="button left border easy"><img src="images/easy.png"><br/> easy </div>
+						<div class="button left border medium"><img src="images/medium.png"><br/> medium </div>
+						<div class="button left border hard"><img src="images/hard.png"><br/> hard </div>
+						<div class="button left border custom"><img src="images/custom.png"><br/> custom </div>
 					</td>
 				</tr>
 
@@ -179,10 +196,10 @@
 
 				<tr class="customButtons">
 					<td></td>
-					<td><div class="button customUp0">&#x25B3;</div></td>
-					<td><div class="button customUp1">&#x25B3;</div></td>
-					<td><div class="button customUp2">&#x25B3;</div></td>
-					<td><div class="button customUp3">&#x25B3;</div></td>
+					<td><div class="button border customUp0">&#x25B3;</div></td>
+					<td><div class="button border customUp1">&#x25B3;</div></td>
+					<td><div class="button border customUp2">&#x25B3;</div></td>
+					<td><div class="button border customUp3">&#x25B3;</div></td>
 				</tr>
 
 				<tr>
@@ -224,36 +241,39 @@
 
 		<div class="page element left clear" id="stats">
 
-			<div class="label heading"> Stats </div>
-
+			<br/>
 			<table>
-				<tr>
-					<td> times </td>
-					<td> classic </td>
-					<td> sweep </td>
+            
+            <tr>
 				</tr>
 				<tr>
-					<td> easy </td>
+                	<td class="statsue label"> times </td>
+                    <td class="easy"> <img class="stats" src="images/easy.png"><br/>
+                    easy </td>
+                    <td class="medium"> <img class="stats" src="images/medium.png"><br/>
+                    medium </td>
+                    <td class="hard"> <img class="stats" src="images/hard.png"><br/>
+                    hard </td>
+				</tr>
+				<tr>
+					<td>classic</td>
 					<td id="classiceasy"> - </td>
+                    <td id="classicmedium"> - </td>
+                    <td id="classichard"> - </td>
+				</tr>
+				<tr>
+					<td>sweep</td>
 					<td id="sweepeasy"> - </td>
-				</tr>
-				<tr>
-					<td> medium </td>
-					<td id="classicmedium"> - </td>
 					<td id="sweepmedium"> - </td>
-				</tr>
-				<tr>
-					<td> hard </td>
-					<td id="classichard"> - </td>
-					<td id="sweephard"> - </td>
+                    <td id="sweepehard"> - </td>
 				</tr>
 			</table>
-
+<br/>
 			<div class="label"> games won: <span id="gamesWon"> 0 </span> </div>
 			<div class="label"> games played: <span id="gamesPlayed"> 0 </span> </div>
 			<div class="label"> time played: <span id="timePlayed"> 0 </span> </div>
 
-			<div class="button left clear" id="clearButton"> delete </div>
+			<div class="button left clear" id="clearButton"><img src="images/bricks_red_middle.png"><br/> delete </div>
 			<div class="left" id="clearPrompt">
 				<div class="label left"> sure? </div>
 				<div class="button left" id="clearNowButton"> yes </div>
@@ -262,8 +282,6 @@
 		</div>
 
 		<div class="page element left clear" id="instructions">
-
-			<div class="label heading"> Rules </div>
 
 			<ul>
 				<li> 
@@ -304,16 +322,15 @@
 
 		<div class="page element left clear" id="controls">
 
-			<div class="label heading"> Controls </div>
 
 			<table class="clear">
 				<tr>
-					<td> mouse <br /> button </td>
+					<td><img src="images/mouse_icon.png"></td>
 					<td> click </td>
 					<td> drag </td>
 				</tr>
 				<tr>
-					<td> left </td>
+					<td class="keyboard-left"> left </td>
 					<td> open cube </td>
 					<td> rotate grid </td>
 				</tr>
@@ -328,11 +345,11 @@
 				</tr>
 			</table>
 
-			<div class="label"> <span class="highlight">scroll</span> to zoom </div>
+			<div class="label zoom"> <span class="highlight">scroll to zoom </span></div>
 
 			<table class="clear">
 				<tr>
-					<td> keyboard <br /> button </td>
+					<td><img src="images/keyboard_icon.png"></td>
 					<td> action </td>
 				</tr>
 				<tr>
@@ -367,6 +384,16 @@
 	<div id="overlay"></div>
 
 	<div class="element centered" id="winner">
+    	<img class="win-bricks-1" src="images/bricks_red_middle.png">
+        <img class="win-bricks-2" src="images/bricks_red_small.png">
+        <img class="win-bricks-6" src="images/bricks_red_small.png">
+        <img class="win-bricks-5" src="images/bricks_red_small.png">
+        <img class="win-bricks-3" src="images/bricks_yellow_middle.png">
+        <img class="win-bricks-4" src="images/bricks_yellow_small.png">
+        <img class="win-bricks-7" src="images/bricks_yellow_small.png">
+        <img class="win-bricks-8" src="images/bricks_yellow_small.png">
+      
+    	<img class="pokal" src="images/pokal.png">
 		<div class="element">you won the game!</div>
 
 		<div class="times">
@@ -384,6 +411,8 @@
 	</div>
 
 	<div class="element centered" id="loser">
+    
+    	<img class="mine-lose" src="images/mine.png">
 		<div class="element">you lost the game!</div>
 
 		<div class="times">
@@ -398,10 +427,12 @@
 	<div class="element centered" id="welcome">
 
 		<div class="left" id="intro">
+        
+        <img class="mine-lose" src="images/mine.png"><br/><br/>
 
 			<div class="label">
-				<span class="title highlight"> Mine3D </span>
-				<span class="subtitle"> open beta </span>
+				<h2><span class="title highlight"> Mine3D </span></h2>
+        <h3><span class="subtitle">open beta</span></h3>
 			</div>
 
 			<div class="label text">
@@ -410,7 +441,7 @@
 				Click here to give it a try:
 			</div>
 
-			<div class="button" id="playClassicButton"> play classic </div>
+			<div class="button" id="playClassicButton"> classic mode </div>
 
 			<div class="label text">
 				Or choose an entirely new experience. 
@@ -418,36 +449,15 @@
 				and reduce the field mine by mine:
 			</div>
 
-			<div class="button" id="playSweepButton"> play sweep </div>
-
-		</div>
-
-		<div class="left" id="info">
-
-			<div class="label heading highlight"> Info </div>
-
-			<div class="label">
-				find <span class="bold">rules</span> and <span class="bold">controls</span> in the menu
-			</div>
-
-			<div class="label">
-				if the game lags:<br/> 
-				- <span class="bold">decrease</span> window size<br />
-				- <span class="bold">turn off</span> animations
-			</div>
-
-			<div class="label">
-				discover <span class="bold">secret options</span> through winning the different modes
-			</div>
-
-			<div class="label">
-				developed by <a href="http://egraether.com/">egraether</a>
-			</div>
+			<div class="button" id="playSweepButton"> sweep mode </div>
 
 			<div class="label right" id="welcomeOption">
-				<input id="welcomeCheckbox" type="checkbox" />
-				<label for="welcomeCheckbox"> don't show this again </label>
+			  <a href="./beta">to old design</a>
+        <!-- <input id="welcomeCheckbox" type="checkbox" /> -->
+        <!-- <label for="welcomeCheckbox"> don't show this again </label> -->
 			</div>
+            
+		</div>
 
 		</div>
 
@@ -456,16 +466,16 @@
 	</div>
 
 	<div class="element centered" id="levelPanel">
-		<div class="label clear">choose level:</div>
+		<div class="label clear chooselevel">choose level</div>
 
 		<table class="clear">
 
 			<tr>
 				<td colspan="4">
-					<div class="left button easy"> easy </div>
-					<div class="left button medium"> medium </div>
-					<div class="left button hard"> hard </div>
-					<div class="left button custom"> custom </div>
+					<div class="left button easy back"><img src="images/easy.png"><br/> easy </div>
+					<div class="left button medium back"><img src="images/medium.png"><br/> medium </div>
+					<div class="left button hard back"><img src="images/hard.png"><br/> hard </div>
+					<div class="left button custom back"><img src="images/custom.png"><br/> custom </div>
 				</td>
 			</tr>
 
@@ -506,9 +516,9 @@
 
 	<div id="externals">
 
-		<div class="button right" id="feedbackButton"> feedback </div>
+		<div class="button right" id="feedbackButton"><img class="none" src="images/feedback.png"></div>
 
-		<div class="button right" id="shareButton"> share </div>
+		<div class="button right" id="shareButton"><img class="none" src="images/share_button.png"></div>
 
 		<div class="element clear right" id="share">
 
@@ -535,26 +545,30 @@
 	</div>
 
 	<div id="info">
-    <div class="element" id="timeDisplay"><img class="mine-time" src="images/mine.png"><br/><span id="time"> 0 </span> /
-     <div class="element" id="mineDisplay"><span id="mines"> 10 </span> </div></div>
+    <div class="element" id="timeDisplay"><img class="mine-time" src="images/mine-time.png"><br/>
+    <span id="time"> 0 </span> /
+    <span id="mines"> 10 </span> </div>
      </div>
+     <img class="time-mine-brick" src="images/uhrzeiger.png">
     
 <!-- Wolken -->
 
-	<img class="clouds1"src="images/wolken_01.png">
-    <img class="faehnchen" src="images/faehnchen_menue.png">
+	<img class="clouds1 none"src="images/clouds_01.png">
+    <img class="clouds2 none" src="images/wolken_01.png">
+    <img class="clouds3 none" src="images/clouds_02.png">
+    <img class="brick1 none" src="images/bricks_green_middle.png">
+    
+    <img class="faehnchen-menu" src="images/faehnchen_menue.png">
+    <img class="faehnchen-new" src="images/faehnchen_new.png">
 
     
-<!-- Würfel 
+    <!--<img class="quadcluster2" src="textures/quad2.png"> -->
+    <img class="onequad4 none" src="textures/wuerfel_01.png">
+    <img class="onequad5 none" src="textures/wuerfel_01.png">
     
-    <img class="quadcluster2" src="textures/quad2.png">
-    <img class="onequad1" src="textures/wuerfel_01.png">
-    <img class="onequad2" src="textures/wuerfel_02.png">
-    <img class="onequad3" src="textures/wuerfel_02.png">
-    <img class="onequad4" src="textures/wuerfel_01.png">
-    <img class="onequad5" src="textures/wuerfel_01.png">
-    
-    <img class="quadcluster3" src="images/wuerfel_03.png">
+    <img class="clouds4 none" src="images/clouds_04.png">
+    <img class="clouds5 none" src="images/clouds_05.png">
+    <img class="brick2 none" src="images/bricks_yellow_small.png">
     
 
 <!-- DO NOT CHANGE BELOW HERE -->

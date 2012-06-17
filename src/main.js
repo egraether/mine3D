@@ -30,15 +30,15 @@ function init( gl ) {
 
 	Menu.init();
 
-	if ( showWelcomeScreen || !Stats.read( 'hideWelcomeScreen' ) ) {
+  // if ( showWelcomeScreen || !Stats.read( 'hideWelcomeScreen' ) ) {
 
 		Menu.fsm.changeState( 'welcome' );
 
-	} else {
+  // } else {
 
-		Menu.fsm.play();
+    // Menu.fsm.play();
 
-	}
+  // }
 
 };
 
