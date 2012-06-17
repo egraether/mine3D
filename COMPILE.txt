@@ -28,6 +28,7 @@
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Settings.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Stats.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Menu.js
+// @code_url https://raw.github.com/egraether/mine3D/master/src/Background.js
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Grid.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/Camera.js
