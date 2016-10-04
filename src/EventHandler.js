@@ -48,7 +48,8 @@ var EventHandler = {
 	onMouseDown : function( event ) {
 
 		event.stopPropagation();
-
+		canvas.setCapture();
+		
 		this.state = "down";
 		this.button = event.button;
 
@@ -77,6 +78,7 @@ var EventHandler = {
 	onMouseUp : function( event ) {
 
 		event.stopPropagation();
+		document.releaseCapture();
 
 		if ( this.state === "down" ) {
 

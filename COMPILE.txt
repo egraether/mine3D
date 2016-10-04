@@ -12,6 +12,7 @@
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/Stats.js
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/System.js
 // @code_url https://raw.github.com/egraether/mine3D/master/lib/jquery-1.7.1.js
+// @code_url https://raw.github.com/egraether/mine3D/master/lib/setCapture-polyfill.js
 
 // @code_url https://raw.github.com/egraether/mine3D/master/src/utilities.js
 // @code_url https://raw.github.com/egraether/mine3D/master/src/WebGLUtilities.js
